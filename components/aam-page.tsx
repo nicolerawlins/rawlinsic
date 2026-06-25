@@ -693,7 +693,7 @@ const AAMPage = () => {
                         {/* Glow */}
                         <circle cx={nx} cy={ny} r={hl ? 48 : 36} fill="url(#lsNodeGlow)" opacity={hl ? 1 : 0.6} />
                         {/* Circle bg */}
-                        <circle cx={nx} cy={ny} r={26} fill="rgba(6,12,22,0.92)" stroke={sc} strokeWidth={hl ? 2 : 1} />
+                        <circle cx={nx} cy={ny} r={26} fill="rgba(19, 36, 58, 0.92)" stroke={sc} strokeWidth={hl ? 2 : 1} />
                         {/* Icon */}
                         <g
                           transform={`translate(${nx - 13},${ny - 13})`}
@@ -752,7 +752,7 @@ const AAMPage = () => {
         className="parallax-panel aam-parallax-fixed"
         style={{ backgroundImage: `url(${HIGHWAY_AERIAL_IMG})` }}
       >
-        <div className="aam-parallax-overlay" style={{ background: "rgba(6,12,22,0.8)" }} />
+        <div className="aam-parallax-overlay" style={{ background: "rgba(19, 36, 58, 0.8)" }} />
         <p className="parallax-text1 reveal" style={{ position: 'relative', zIndex: 2 }}>
           Led by a team that helped shape early AAM guidance—<br className="parallax-break" />& <em>continues to support its evolution</em>
         </p>
@@ -919,7 +919,7 @@ const AAMPage = () => {
                   <circle cx="400" cy="400" r="68" fill="none" stroke="#c9a84c" strokeWidth="0.8" className="eco-center-pulse" opacity="0.2" />
 
                   {/* Center hub */}
-                  <circle cx="400" cy="400" r="80" fill="rgba(6,12,22,0.95)" stroke="rgba(201,168,76,0.3)" strokeWidth="1" />
+                  <circle cx="400" cy="400" r="80" fill="rgba(19, 36, 58, 0.95)" stroke="rgba(201,168,76,0.3)" strokeWidth="1" />
                   <text x="400" y="390" textAnchor="middle" fill="url(#titleGoldGrad)" fontFamily="'DM Sans', sans-serif" fontSize="16" fontWeight="700" letterSpacing="4" style={{ textTransform: 'uppercase' }}>RAWLINS</text>
                   <text x="400" y="412" textAnchor="middle" fill="url(#titleGoldGrad)" fontFamily="'DM Sans', sans-serif" fontSize="14" fontWeight="600" letterSpacing="3" style={{ textTransform: 'uppercase' }}>AERO TEAM</text>
 
@@ -1027,7 +1027,7 @@ const AAMPage = () => {
         className="parallax-panel aam-parallax-fixed"
         style={{ backgroundImage: `url(${SKYLINE_IMG})` }}
       >
-        <div className="aam-parallax-overlay" style={{ background: "rgba(6,12,22,0.8)" }} />
+        <div className="aam-parallax-overlay" style={{ background: "rgba(19, 36, 58, 0.8)" }} />
         <p className="parallax-text1 reveal" style={{ position: 'relative', zIndex: 2 }}>
           <em>Leading</em> the integration of multimodal solutions into<br className="parallax-break" /> <em>next-generation</em> transportation networks
         </p>
@@ -1191,7 +1191,7 @@ const AAMPage = () => {
         style={{ backgroundImage: `url(${HELICOPTER_IMG})` }}
       >
         <Image src={HELICOPTER_IMG} alt="" fill priority sizes="100vw" className="aam-cta-bg-img" />
-        <div className="aam-cta-overlay" style={{ background: "rgba(6,12,22,0.8)" }} />
+        <div className="aam-cta-overlay" style={{ background: "rgba(19, 36, 58, 0.8)" }} />
         <div className="aam-container" style={{ position: 'relative', zIndex: 2 }}>
           <div className="aam-cta-wrap reveal" style={{ textAlign: "center", margin: "0 auto" }}>
             <p className="section-label"><span className="gold-text">Get Started</span></p>

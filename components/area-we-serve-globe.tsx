@@ -605,7 +605,7 @@ export default function AreaWeServeGlobe() {
         .globe-page-wrapper {
           position: relative;
           width: 100%;
-          background: #0a1628;
+          background: #1A3251;
           color: #e8e0d0;
           font-family: var(--font-dm-sans, 'DM Sans'), sans-serif;
         }
@@ -741,7 +741,7 @@ export default function AreaWeServeGlobe() {
         .globe-tooltip.expansion-location .tooltip-close { color: #e8d5a0; }
         .globe-tooltip .tooltip-link {
           display: block; margin-top: 10px; padding: 10px 0 2px;
-          border-top: 1px solid rgba(6,12,22,0.2);
+          border-top: 1px solid rgba(19, 36, 58, 0.2);
           font-size: 14px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;
           text-decoration: none; color: #0a1628; transition: all 0.2s;
         }
@@ -751,10 +751,10 @@ export default function AreaWeServeGlobe() {
           box-shadow: 0 4px 20px rgba(184,154,62,0.4);
         }
         .globe-tooltip.past-location {
-          background: linear-gradient(145deg, #0e2340, #122c4f, #0a1c36);
+          background: linear-gradient(145deg, #1D3759, #1A3251, #13243A);
           color: #ffffff;
           border: 1px solid rgba(111,176,224,0.45);
-          box-shadow: 0 6px 24px rgba(6,12,22,0.6);
+          box-shadow: 0 6px 24px rgba(19, 36, 58, 0.6);
         }
         .globe-tooltip.past-location .tooltip-label { color: #ffffff; opacity: 1; }
         .globe-tooltip.past-location .tooltip-name { color: #ffffff; }
@@ -788,7 +788,7 @@ export default function AreaWeServeGlobe() {
         .globe-footer-wrapper {
           position: relative;
           z-index: 5;
-          background: var(--rawlins-bg, #060c16);
+          background: var(--rawlins-bg, #1A3251);
           overflow: hidden;
         }
         .globe-footer-wrapper::before {
@@ -799,7 +799,7 @@ export default function AreaWeServeGlobe() {
           background:
             radial-gradient(ellipse 60% 50% at 18% 25%, rgba(229,203,135,0.04) 0%, transparent 60%),
             radial-gradient(ellipse 55% 45% at 82% 75%, rgba(14,30,60,0.55) 0%, transparent 55%),
-            linear-gradient(180deg, #091528 0%, #060c16 55%, #060c16 100%);
+            linear-gradient(180deg, #1A3251 0%, #15293F 55%, #13243A 100%);
         }
         .globe-footer-wrapper > * {
           position: relative;

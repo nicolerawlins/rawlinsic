@@ -189,7 +189,7 @@ export default function AutomationPage() {
       {/* ── Hero ── */}
       <section className="aam-hero aam-parallax-fixed" style={{ backgroundImage: `url(${HERO_IMG})` }}>
         <Image src={HERO_IMG} alt="" fill priority sizes="100vw" className="aam-hero-img" />
-        <div className="aam-hero-overlay" style={{ background: "rgba(6,12,22,0.82)" }} />
+        <div className="aam-hero-overlay" style={{ background: "rgba(19, 36, 58, 0.82)" }} />
         <div className="aam-hero-content">
           <span className="hero-label"><span className="gold-text"><span className="hero-label-segment">Smarter Systems &bull;</span> <span className="hero-label-segment">Empowered Teams</span></span></span>
           <h1 className="hero-title">Data Governance,<br /><em>Automation</em> &amp; AI</h1>
@@ -241,7 +241,7 @@ export default function AutomationPage() {
 
       {/* ── 2. Parallax Quote ── */}
       <div className="parallax-panel aam-parallax-fixed" style={{ backgroundImage: "url(/images/pages/auto-parallax.webp" }}>
-        <div className="aam-parallax-overlay" style={{ background: "rgba(6,12,22,0.8)" }} />
+        <div className="aam-parallax-overlay" style={{ background: "rgba(19, 36, 58, 0.8)" }} />
         <p className="parallax-text1 reveal" style={{ position: "relative", zIndex: 2 }}>
           The <em>future</em> of work requires designing systems where people, data, and AI work <em>together</em> with clarity, trust, and purpose.
         </p>
@@ -331,7 +331,7 @@ export default function AutomationPage() {
 
       {/* Parallax Quote 2 */}
       <div className="parallax-panel aam-parallax-fixed" style={{ backgroundImage: `url(${WORKFLOW_IMG})` }}>
-        <div className="aam-parallax-overlay" style={{ background: "rgba(6,12,22,0.8)" }} />
+        <div className="aam-parallax-overlay" style={{ background: "rgba(19, 36, 58, 0.8)" }} />
         <p className="parallax-text1 reveal" style={{ position: "relative", zIndex: 2 }}>
           Explore the <em>possibilities</em>
         </p>
@@ -350,7 +350,7 @@ export default function AutomationPage() {
             <div className="reveal">
               <div style={{ position: "relative", borderRadius: "12px", overflow: "hidden", aspectRatio: "4/3" }}>
                 <Image src="/images/pages/auto-collab.webp" alt="Team collaborating on digital transformation" fill sizes="(max-width: 768px) 100vw, 50vw" style={{ objectFit: "cover" }} />
-                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(6,12,22,0.15), rgba(6,12,22,0.45))" }} />
+                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(19, 36, 58, 0.15), rgba(19, 36, 58, 0.45))" }} />
               </div>
             </div>
             <div className="reveal">
@@ -404,17 +404,17 @@ export default function AutomationPage() {
                     >
                       <source src={c.videoUrl} type="video/mp4" />
                     </video>
-                    <button onClick={() => setActiveVideo(null)} style={{ position: "absolute", top: "12px", right: "12px", width: "36px", height: "36px", borderRadius: "50%", border: "1px solid rgba(255,255,255,0.5)", background: "rgba(6,12,22,0.8)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", zIndex: 3 }}>
+                    <button onClick={() => setActiveVideo(null)} style={{ position: "absolute", top: "12px", right: "12px", width: "36px", height: "36px", borderRadius: "50%", border: "1px solid rgba(255,255,255,0.5)", background: "rgba(19, 36, 58, 0.8)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", zIndex: 3 }}>
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2"><path d="M18 6L6 18M6 6l12 12" /></svg>
                     </button>
                   </div>
                 ) : (
                   <div style={{ position: "relative", height: "240px", cursor: hasVideo ? "pointer" : "default" }} onClick={() => hasVideo && setActiveVideo(i)}>
                     <Image src={c.img} alt={c.title} fill sizes="(max-width: 768px) 100vw, 50vw" style={{ objectFit: "cover" }} />
-                    <div style={{ position: "absolute", inset: 0, background: "rgba(6,12,22,0.75)" }} />
+                    <div style={{ position: "absolute", inset: 0, background: "rgba(19, 36, 58, 0.75)" }} />
                     {hasVideo && (
                       <>
-                        <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "64px", height: "64px", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.6)", background: "rgba(6,12,22,0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2 }}>
+                        <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: "64px", height: "64px", borderRadius: "50%", border: "2px solid rgba(255,255,255,0.6)", background: "rgba(19, 36, 58, 0.5)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 2 }}>
                           <svg width="24" height="24" viewBox="0 0 24 24" fill="#fff" stroke="none"><polygon points="8,5 20,12 8,19" /></svg>
                         </div>
                         <span style={{ position: "absolute", top: "16px", left: "16px", zIndex: 2, fontSize: "11px", fontWeight: 600, letterSpacing: "2px", textTransform: "uppercase", color: "#fff" }}>Watch Video</span>
@@ -424,7 +424,7 @@ export default function AutomationPage() {
                 )}
 
                 {/* Title + expand — always visible */}
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "24px 28px", background: "rgba(6,12,22,0.5)", cursor: "pointer" }} onClick={() => setOpenChallenge(isOpen ? null : i)}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "24px 28px", background: "rgba(19, 36, 58, 0.5)", cursor: "pointer" }} onClick={() => setOpenChallenge(isOpen ? null : i)}>
                   <div>
                     <span style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "2px", textTransform: "uppercase", background: "linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>Challenge</span>
                     <h3 style={{ fontFamily: "var(--font-cormorant), 'Cormorant Garamond', Georgia, serif", fontSize: "28px", fontWeight: 400, color: "#fff", marginTop: "4px" }}>{c.title}</h3>
@@ -437,7 +437,7 @@ export default function AutomationPage() {
 
                 {/* Expandable description only */}
                 <div style={{ maxHeight: isOpen ? "300px" : "0", overflow: "hidden", transition: "max-height 0.5s ease" }}>
-                  <div style={{ padding: "0 28px 24px", background: "rgba(6,12,22,0.5)" }}>
+                  <div style={{ padding: "0 28px 24px", background: "rgba(19, 36, 58, 0.5)" }}>
                     <p style={{ fontSize: "16px", color: "#fff", lineHeight: 1.8 }}>{c.solution}</p>
                   </div>
                 </div>
@@ -453,7 +453,7 @@ export default function AutomationPage() {
       {/* ── CTA ── */}
       <section className="aam-section aam-cta-section aam-parallax-fixed">
         <Image src={TEAM_IMG} alt="" fill priority sizes="100vw" className="aam-cta-bg-img" />
-        <div className="aam-parallax-overlay" style={{ background: "rgba(6,12,22,0.8)" }} />
+        <div className="aam-parallax-overlay" style={{ background: "rgba(19, 36, 58, 0.8)" }} />
         <div style={{ position: "relative", zIndex: 2, textAlign: "center", padding: "0 32px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: "100%", maxWidth: "800px", margin: "0 auto" }}>
           <p className="section-label"><span className="gold-text">Let&rsquo;s Connect</span></p>
           <h2 className="section-title auto-cta-title" style={{ color: "#fff", marginBottom: "20px", textAlign: "center" }}>Ready to <em>reshape</em> how your organization works?</h2>

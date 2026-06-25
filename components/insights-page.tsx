@@ -127,7 +127,7 @@ export default function InsightsPage() {
       {/* ── Hero ── */}
       <section className="aam-hero aam-parallax-fixed" id="top" style={{ backgroundImage: `url(${HERO_IMG})` }}>
         <Image src={HERO_IMG} alt="" fill priority sizes="100vw" className="aam-hero-img" />
-        <div className="aam-hero-overlay" style={{ background: "rgba(6,12,22,0.82)" }} />
+        <div className="aam-hero-overlay" style={{ background: "rgba(19, 36, 58, 0.82)" }} />
         <div className="aam-hero-content">
           <span className="hero-label"><span className="gold-text">Knowledge &amp; Perspective</span></span>
           <h1 className="hero-title">Insights that <em>Inform</em> Action</h1>
