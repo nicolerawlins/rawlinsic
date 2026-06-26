@@ -664,8 +664,8 @@ color: #fff;
 
 .hero-title {
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
- font-size: clamp(2.7rem, 4vw, 4.5rem);
-  line-height: 1.15;
+  font-size: clamp(2.2rem, 3.2vw, 3.6rem);
+  line-height: 1.18;
   font-weight: 400;
   margin-bottom: 28px;
   opacity: 0; transform: translateY(40px);
