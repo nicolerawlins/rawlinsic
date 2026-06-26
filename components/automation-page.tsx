@@ -272,7 +272,7 @@ export default function AutomationPage() {
                     </button>
                   </div>
                   <div className={`aam-framework-expand${openBenefits.has(i) ? " open" : ""}`}>
-                    <p style={{ fontSize: "16px", color: "#e8e6e1", lineHeight: 1.8 }}>{card.desc}</p>
+                    <p style={{ fontSize: "16px", color: "#000", fontWeight: 600, lineHeight: 1.8 }}>{card.desc}</p>
                   </div>
                 </div>
               </div>
