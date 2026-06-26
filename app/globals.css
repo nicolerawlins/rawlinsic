@@ -1666,10 +1666,13 @@ font-size: 11px;
 /* Dark gradient overlay */
 .pillar-card-overlay {
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(19, 36, 58,0.05) 0%, rgba(19, 36, 58,0.6) 45%, rgba(19, 36, 58,0.95) 100%);
-  transition: opacity 0.5s;
+  /* Lightened so the photography reads through clearly — top is
+     fully transparent, only the bottom band darkens enough to keep
+     the title/number readable. */
+  background: linear-gradient(180deg, rgba(19, 36, 58,0) 0%, rgba(19, 36, 58,0.18) 45%, rgba(19, 36, 58,0.85) 100%);
+  transition: opacity 0.5s, background 0.4s;
 }
-.pillar-card:hover .pillar-card-overlay { opacity: 1; background: linear-gradient(180deg, rgba(19, 36, 58,0.2) 0%, rgba(19, 36, 58,0.75) 45%, rgba(19, 36, 58,0.98) 100%); }
+.pillar-card:hover .pillar-card-overlay { opacity: 1; background: linear-gradient(180deg, rgba(19, 36, 58,0.05) 0%, rgba(19, 36, 58,0.35) 45%, rgba(19, 36, 58,0.92) 100%); }
 /* Content sits at the bottom */
 .pillar-card-content {
   position: absolute; bottom: 0; left: 0; right: 0;
@@ -2052,11 +2055,15 @@ font-size: 11px;
 .explore-card-overlay {
 position: absolute;
   inset: 0;
-  background: linear-gradient(to top, rgba(19, 36, 58,0.94) 20%, rgba(19, 36, 58,0.72) 60%, rgba(19, 36, 58,0.5) 100%);
+  /* Lifted opacity so the background photography reads through —
+     top of the image now visible (10%), middle subtly darkened
+     (40%), bottom band still strong enough (85%) for the title +
+     description text to stay legible. */
+  background: linear-gradient(to top, rgba(19, 36, 58,0.85) 20%, rgba(19, 36, 58,0.4) 60%, rgba(19, 36, 58,0.1) 100%);
   transition: background 0.4s;
 }
 .explore-card:hover .explore-card-overlay {
-background: linear-gradient(to top, rgba(19, 36, 58,0.96) 20%, rgba(19, 36, 58,0.78) 60%, rgba(19, 36, 58,0.58) 100%);
+background: linear-gradient(to top, rgba(19, 36, 58,0.9) 20%, rgba(19, 36, 58,0.5) 60%, rgba(19, 36, 58,0.18) 100%);
 }
 /* Text content */
 .explore-card-inner {
