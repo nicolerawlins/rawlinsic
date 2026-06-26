@@ -6735,10 +6735,10 @@ color: #fff;
 .cap-hero-img { object-fit: cover; object-position: center 30%; }
 .cap-hero-overlay {
   position: absolute; inset: 0; z-index: 1;
-  /* Lighter brand-tinted overlay so the underlying hero photo
-     reads through. Top stays softer, bottom darkens enough to
-     hold the title. */
-  background: linear-gradient(180deg, rgba(29, 55, 89, 0.45) 0%, rgba(19, 36, 58, 0.65) 60%, rgba(19, 36, 58, 0.82) 100%);
+  /* Middle-ground brand-tinted overlay — darker than the previous
+     too-light pass but still letting the underlying photograph
+     show through. */
+  background: linear-gradient(180deg, rgba(19, 36, 58, 0.65) 0%, rgba(19, 36, 58, 0.82) 60%, rgba(19, 36, 58, 0.92) 100%);
 }
 .cap-grid-canvas {
   position: absolute; inset: 0; z-index: 2; pointer-events: none; width: 100%; height: 100%;
@@ -6821,12 +6821,15 @@ color: #fff;
 }
 .cap-tab::after {
   content: ""; position: absolute; bottom: 0; left: 50%; width: 0; height: 2px;
-  background: linear-gradient(145deg, #b89a3e, #d4be78, #c9a84c, #e0cfa0, #b89a3e);
+  background: #000;
   transition: width 0.35s ease, left 0.35s ease;
 }
 .cap-tab:hover {
-  background: linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
+  /* On the light-blue tab bar, keep the text black on hover and
+     reveal a black underline underneath via .cap-tab::after. */
+  background: none;
+  -webkit-background-clip: initial; background-clip: initial;
+  color: #000;
 }
 .cap-tab:hover::after { width: 100%; left: 0; }
 .cap-tab.active::after { width: 100%; left: 0; }
