@@ -1666,13 +1666,19 @@ font-size: 11px;
 /* Dark gradient overlay */
 .pillar-card-overlay {
   position: absolute; inset: 0;
-  /* Lightened so the photography reads through clearly — top is
-     fully transparent, only the bottom band darkens enough to keep
-     the title/number readable. */
-  background: linear-gradient(180deg, rgba(19, 36, 58,0) 0%, rgba(19, 36, 58,0.18) 45%, rgba(19, 36, 58,0.85) 100%);
+  /* Default (idle) — photo reads through, only the bottom dims for
+     the title/number. Bottom uses a darker near-black-navy mix so
+     the cards stand out from the brand-blue page background. */
+  background: linear-gradient(180deg, rgba(13, 13, 13, 0) 0%, rgba(13, 13, 13, 0.25) 45%, rgba(13, 13, 13, 0.9) 100%);
   transition: opacity 0.5s, background 0.4s;
 }
-.pillar-card:hover .pillar-card-overlay { opacity: 1; background: linear-gradient(180deg, rgba(19, 36, 58,0.05) 0%, rgba(19, 36, 58,0.35) 45%, rgba(19, 36, 58,0.92) 100%); }
+/* Hover state — push the bottom darker so the expanded
+   description text and Explore link stay easy to read. */
+.pillar-card:hover .pillar-card-overlay,
+.pillar-card.active .pillar-card-overlay {
+  opacity: 1;
+  background: linear-gradient(180deg, rgba(13, 13, 13, 0.15) 0%, rgba(13, 13, 13, 0.7) 45%, rgba(13, 13, 13, 0.97) 100%);
+}
 /* Content sits at the bottom */
 .pillar-card-content {
   position: absolute; bottom: 0; left: 0; right: 0;
@@ -1806,11 +1812,14 @@ font-size: 11px;
   inset: 0;
   border-radius: 6px;
   z-index: 0;
-  background: rgba(19, 36, 58,0.3);
+  /* Was brand-blue at 0.3 — same hue as the page bg, so cards
+     blended together. Switched to near-black at moderate opacity
+     for a clear "recessed panel" feel against the brand blue. */
+  background: rgba(13, 13, 13, 0.42);
   transition: background 0.4s;
 }
 .story-card:hover .story-card-overlay {
-  background: rgba(19, 36, 58,0.6);
+  background: rgba(13, 13, 13, 0.62);
 }
 
 .story-card {
@@ -2055,15 +2064,15 @@ font-size: 11px;
 .explore-card-overlay {
 position: absolute;
   inset: 0;
-  /* Lifted opacity so the background photography reads through —
-     top of the image now visible (10%), middle subtly darkened
-     (40%), bottom band still strong enough (85%) for the title +
-     description text to stay legible. */
-  background: linear-gradient(to top, rgba(19, 36, 58,0.85) 20%, rgba(19, 36, 58,0.4) 60%, rgba(19, 36, 58,0.1) 100%);
+  /* Switched from brand-blue tint to near-black so the cards
+     contrast clearly against the brand-blue page background instead
+     of fading into it. Top stays lightly darkened so the image
+     reads; bottom hits 0.88 for legible title + description. */
+  background: linear-gradient(to top, rgba(13, 13, 13, 0.88) 20%, rgba(13, 13, 13, 0.45) 60%, rgba(13, 13, 13, 0.1) 100%);
   transition: background 0.4s;
 }
 .explore-card:hover .explore-card-overlay {
-background: linear-gradient(to top, rgba(19, 36, 58,0.9) 20%, rgba(19, 36, 58,0.5) 60%, rgba(19, 36, 58,0.18) 100%);
+background: linear-gradient(to top, rgba(13, 13, 13, 0.92) 20%, rgba(13, 13, 13, 0.55) 60%, rgba(13, 13, 13, 0.2) 100%);
 }
 /* Text content */
 .explore-card-inner {
