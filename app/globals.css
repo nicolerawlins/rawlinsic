@@ -1524,7 +1524,9 @@ text-align: center;
   width: 40vw; height: 40vw;
   max-width: 620px; max-height: 620px;
   top: 35%; left: 30%;
-  background: radial-gradient(circle, rgba(201, 168, 76, 0.32) 0%, transparent 70%);
+  /* Was gold — swapped to a deeper mid-blue so the aurora stays
+     entirely within the brand-blue family. */
+  background: radial-gradient(circle, rgba(77, 104, 140, 0.4) 0%, transparent 70%);
   animation: heroAurora4 58s ease-in-out -22s infinite alternate;
 }
 @keyframes heroAurora1 {
