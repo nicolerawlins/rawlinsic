@@ -444,13 +444,13 @@ export default function HomePage() {
             </button>
             <div className={`intro-expandable${introOpen ? " expanded" : ""}`}>
               <p className="section-text">
-                Like many organizations today, yours may be facing complex, interconnected challenges such as technology-driven transformation, resource constraints, and regulatory demands. While other organizations encounter similar pressures, unique priorities shape how you respond and the choices you make.
+                Like many organizations today, you&rsquo;re facing complex, interconnected challenges &mdash; technology-driven transformation, resource constraints, and shifting regulatory demands. Others face the same pressures, but your priorities shape how you respond and the choices you make.
               </p>
               <p className="section-text" style={{ marginTop: "16px" }}>
-                This is where we add value—guiding you through challenges with proven frameworks that enable confident decision-making.
+                This is where we come in. We don&rsquo;t just advise &mdash; we deliver. From strategy and proven frameworks to the systems and products that put them to work, we help you turn decisions into action.
               </p>
               <p style={{ marginTop: "20px", fontWeight: 600, color: "#d0b86c" }}>
-                We bring clarity to complexity to deliver measurable long-term outcomes.
+                We bring clarity to complexity, and stay through execution, to deliver measurable, long-term outcomes.
               </p>
               <a href="#story" className="about-us-link" style={{ marginTop: "28px", display: "inline-flex", alignItems: "center", gap: "12px", fontSize: "0.85rem", fontWeight: 600, letterSpacing: "3px", textTransform: "uppercase" as const, color: "#fff", transition: "all 0.3s" }}>
                 <span style={{ textDecoration: "underline", textUnderlineOffset: "4px" }}>ABOUT US</span>
