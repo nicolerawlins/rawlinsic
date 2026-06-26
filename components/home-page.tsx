@@ -375,9 +375,6 @@ export default function HomePage() {
           <h1 className="hero-title">
             Solving complex challenges &amp; delivering digital solutions at the intersection of <em>strategy, operations</em> &amp; <em>technology</em>
           </h1>
-          <p className="hero-sub">
-            We partner to strengthen the capabilities essential for high-performing enterprises and modern transportation systems.
-          </p>
           <a href="#pillars" className="auto-hero-btn"><span>Consider Our Approach</span></a>
         </div>
         <div className="hero-scroll">
