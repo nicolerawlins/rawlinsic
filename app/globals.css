@@ -1423,19 +1423,25 @@ text-align: center;
   padding-bottom: 40px;
 }
 .hero-video-wrap {
-  position: absolute; inset: 0; z-index: 0; overflow: hidden;
+  /* Video background removed per design pass — hero now sits on the
+     site ambient background with the radial light in the middle. */
+  display: none;
 }
 .hero-video {
   width: 100%; height: 100%; object-fit: cover; opacity: 0.45;
 }
 .hero-bg-overlay {
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, rgba(19, 36, 58,0.3) 0%, rgba(19, 36, 58,0.15) 50%, rgba(19, 36, 58,0.6) 100%);
+  /* Very light overlay so the brand-navy page bg + ambient orbs read
+     through cleanly. Subtle top/bottom shading only. */
+  background: linear-gradient(180deg, rgba(13, 13, 13, 0.10) 0%, transparent 50%, rgba(13, 13, 13, 0.20) 100%);
   z-index: 1;
 }
 .hero-depth {
   position: absolute; inset: 0;
-  background: radial-gradient(ellipse at 50% 30%, rgba(201,168,76,0.06) 0%, transparent 60%);
+  /* Brighter radial "light in the middle" so the spotlight remains
+     the dominant atmospheric element. */
+  background: radial-gradient(ellipse at 50% 35%, rgba(201,168,76,0.14) 0%, transparent 55%);
   z-index: 1;
 }
 .hero-grid {
@@ -6805,10 +6811,7 @@ color: #fff;
   border-bottom: none; padding: 0 32px;
   position: sticky; /* keep sticky */
 }
-.cap-tab-bar::after {
-  content: ""; position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
-  background: linear-gradient(90deg, transparent, #b89a3e, #e8d5a0, #c9a84c, transparent);
-}
+/* Gold underline below the tab bar removed. */
 .cap-tab-bar-inner {
   max-width: 600px; margin: 0 auto; display: flex; gap: 0;
 }
@@ -6820,9 +6823,12 @@ color: #fff;
   cursor: pointer; position: relative; transition: color 0.3s;
 }
 .cap-tab::after {
-  content: ""; position: absolute; bottom: 0; left: 50%; width: 0; height: 2px;
+  /* Hover underline — thicker and pulled up close to the word so it
+     reads as an underline on the word itself, not a separate bar at
+     the bottom of the tab. */
+  content: ""; position: absolute; bottom: 12px; left: 50%; width: 0; height: 3px;
   background: #000;
-  transition: width 0.35s ease, left 0.35s ease;
+  transition: width 0.3s ease, left 0.3s ease;
 }
 .cap-tab:hover {
   /* On the light-blue tab bar, keep the text black on hover and
@@ -6831,8 +6837,8 @@ color: #fff;
   -webkit-background-clip: initial; background-clip: initial;
   color: #000;
 }
-.cap-tab:hover::after { width: 100%; left: 0; }
-.cap-tab.active::after { width: 100%; left: 0; }
+.cap-tab:hover::after { width: 60%; left: 20%; }
+.cap-tab.active::after { width: 60%; left: 20%; }
 .cap-tab-bar:hover .cap-tab.active { background: none; -webkit-background-clip: unset; background-clip: unset; color: #000; }
 .cap-tab-bar:hover .cap-tab.active::after { width: 0; left: 50%; }
 .cap-tab-bar:hover .cap-tab.active:hover { background: linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878); -webkit-background-clip: text; background-clip: text; color: transparent; }
