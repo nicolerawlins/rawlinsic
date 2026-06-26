@@ -664,8 +664,8 @@ color: #fff;
 
 .hero-title {
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(2.2rem, 3.2vw, 3.6rem);
-  line-height: 1.18;
+  font-size: clamp(1.8rem, 2.6vw, 3rem);
+  line-height: 1.2;
   font-weight: 400;
   margin-bottom: 28px;
   opacity: 0; transform: translateY(40px);
@@ -4974,11 +4974,10 @@ color: #fff;
 }
 .csd-project-tile {
   padding: 32px 28px;
-  /* Light-blue palette tiles (#C4D8F2) — pairs with the gold-gradient
-     intro panel above so the case-study page reads as a layered
-     gold-then-blue progression. Text inside is dark navy / black. */
-  background: #C4D8F2;
-  border: 1px solid rgba(196, 216, 242, 0.6);
+  /* White tiles below the gold intro panel — matches the "feature
+     tile" pattern used everywhere else. Text inside is black. */
+  background: #fff;
+  border: 1px solid rgba(26, 50, 81, 0.12);
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -5863,9 +5862,9 @@ color: #fff;
   border: 0;
   border-left: 3px solid transparent;
   border-image: linear-gradient(180deg, #1A3251, #2A4870, #1A3251) 1;
-  /* White quote panel — matches the rest of the "feature tile"
-     bottoms across the site. */
-  background: #fff;
+  /* Gold-gradient quote panel — kept gold before expand for the
+     "key takeaway" callout. Expanded body below is white. */
+  background: linear-gradient(135deg, #c9a84c 0%, #e8d5a0 50%, #d4b878 100%);
   border-radius: 0 10px 10px 0;
   text-align: left;
   cursor: pointer;
@@ -5874,7 +5873,7 @@ color: #fff;
   transition: background 0.25s ease;
 }
 .tla-final-thought-quote:hover {
-  background: #f4f4f4;
+  background: linear-gradient(135deg, #d4b878 0%, #f0dba8 50%, #c9a84c 100%);
 }
 .tla-final-thought-quote:disabled {
   cursor: default;
@@ -6823,10 +6822,8 @@ color: #fff;
   cursor: pointer; position: relative; transition: color 0.3s;
 }
 .cap-tab::after {
-  /* Hover underline — thicker and pulled up close to the word so it
-     reads as an underline on the word itself, not a separate bar at
-     the bottom of the tab. */
-  content: ""; position: absolute; bottom: 12px; left: 50%; width: 0; height: 3px;
+  /* Hover underline — sits close to the word, 2px thick. */
+  content: ""; position: absolute; bottom: 12px; left: 50%; width: 0; height: 2px;
   background: #000;
   transition: width 0.3s ease, left 0.3s ease;
 }
