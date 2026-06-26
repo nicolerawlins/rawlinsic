@@ -361,6 +361,32 @@ export default function HomePage() {
         <div className="hero-bg-overlay" />
         <div className="hero-depth" />
         <div className="hero-grid" />
+        {/* Subtle flow lines — long curved sweeps in brand light-blue
+            and gold, drifting very slowly. Decorative only. */}
+        <svg
+          className="hero-flow-lines"
+          viewBox="0 0 1920 1080"
+          preserveAspectRatio="xMidYMid slice"
+          aria-hidden="true"
+        >
+          <defs>
+            <linearGradient id="hfl-gold" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="rgba(201,168,76,0)" />
+              <stop offset="50%" stopColor="rgba(201,168,76,0.55)" />
+              <stop offset="100%" stopColor="rgba(201,168,76,0)" />
+            </linearGradient>
+            <linearGradient id="hfl-blue" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0%" stopColor="rgba(196,216,242,0)" />
+              <stop offset="50%" stopColor="rgba(196,216,242,0.6)" />
+              <stop offset="100%" stopColor="rgba(196,216,242,0)" />
+            </linearGradient>
+          </defs>
+          <path className="hfl hfl-1" d="M -400 180 Q 480 80 960 230 T 2320 200" stroke="url(#hfl-blue)" />
+          <path className="hfl hfl-2" d="M -400 360 Q 600 460 1200 340 T 2320 400" stroke="url(#hfl-gold)" />
+          <path className="hfl hfl-3" d="M -400 540 Q 480 440 960 580 T 2320 540" stroke="url(#hfl-blue)" />
+          <path className="hfl hfl-4" d="M -400 720 Q 720 800 1200 680 T 2320 740" stroke="url(#hfl-gold)" />
+          <path className="hfl hfl-5" d="M -400 880 Q 480 780 960 900 T 2320 870" stroke="url(#hfl-blue)" />
+        </svg>
         <div className="hero-content">
           <Image
             src="/images/pages/hero-bg.webp"

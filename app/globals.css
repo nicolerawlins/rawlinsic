@@ -1478,6 +1478,40 @@ text-align: center;
   background-size: 80px 80px;
   z-index: 1;
 }
+
+/* ── Hero flow lines ──────────────────────────────────────────────
+   Five long, low-opacity bezier sweeps in brand light-blue + gold
+   that drift very slowly across the hero. Decorative only — keeps
+   the hero from feeling static without competing with the wordmark
+   and title. Sits above the depth / grid layers (z-index 1) but
+   below the hero content (z-index 5). */
+.hero-flow-lines {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  z-index: 2;
+  pointer-events: none;
+  overflow: hidden;
+}
+.hero-flow-lines .hfl {
+  fill: none;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+  transform-box: fill-box;
+  will-change: transform;
+}
+.hero-flow-lines .hfl-1 { animation: heroFlow1 38s ease-in-out infinite alternate; }
+.hero-flow-lines .hfl-2 { animation: heroFlow2 44s ease-in-out -8s infinite alternate; }
+.hero-flow-lines .hfl-3 { animation: heroFlow3 40s ease-in-out -16s infinite alternate; }
+.hero-flow-lines .hfl-4 { animation: heroFlow4 46s ease-in-out -4s infinite alternate; }
+.hero-flow-lines .hfl-5 { animation: heroFlow5 42s ease-in-out -12s infinite alternate; }
+@keyframes heroFlow1 { 0% { transform: translate(0, 0); } 100% { transform: translate(-70px, -18px); } }
+@keyframes heroFlow2 { 0% { transform: translate(0, 0); } 100% { transform: translate(-90px, 14px); } }
+@keyframes heroFlow3 { 0% { transform: translate(0, 0); } 100% { transform: translate(-60px, -22px); } }
+@keyframes heroFlow4 { 0% { transform: translate(0, 0); } 100% { transform: translate(-80px, 18px); } }
+@keyframes heroFlow5 { 0% { transform: translate(0, 0); } 100% { transform: translate(-100px, -12px); } }
+@media (prefers-reduced-motion: reduce) {
+  .hero-flow-lines .hfl { animation: none !important; }
+}
 .hero-content {
   position: relative; z-index: 5;
   grid-row: 1;
