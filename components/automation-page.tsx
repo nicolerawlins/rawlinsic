@@ -288,7 +288,7 @@ export default function AutomationPage() {
         <div className="aam-container" style={{ padding: "0 48px" }}>
           <div className="aam-section-header reveal">
             <p className="section-label"><span className="gold-text">Organizational Impact</span></p>
-            <h2 className="section-title">How automation delivers organizational <em>value</em></h2>
+            <h2 className="section-title">How <em>automation</em> delivers organizational <em>value</em></h2>
           </div>
         </div>
 
