@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import Link from "next/link";
+import { useEffect, useMemo, useRef, useState, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { SEARCH_INDEX, type SearchEntry } from "@/components/site-search-index";
 
 type ScoredEntry = SearchEntry & { score: number };
@@ -43,6 +43,16 @@ export default function SiteSearch({ open, onClose }: Props) {
   const [activeIdx, setActiveIdx] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
+  const router = useRouter();
+
+  /* Single navigation path used by both Enter and click, so the two
+     paths behave identically (per the "Enter select" hint in the
+     footer): close the panel, then push the new route via Next.js
+     client-side navigation for a smooth transition. */
+  const goTo = useCallback((href: string) => {
+    onClose();
+    router.push(href);
+  }, [onClose, router]);
 
   const results: ScoredEntry[] = useMemo(() => {
     const q = query.trim();
@@ -93,8 +103,7 @@ export default function SiteSearch({ open, onClose }: Props) {
         const target = results[activeIdx];
         if (target) {
           e.preventDefault();
-          onClose();
-          window.location.href = target.href;
+          goTo(target.href);
         }
       }
     };
@@ -201,9 +210,12 @@ export default function SiteSearch({ open, onClose }: Props) {
           <ul className="site-search-results" ref={listRef} role="listbox">
             {results.map((r, i) => (
               <li key={`${r.href}-${i}`} className={activeIdx === i ? "active" : ""} role="option" aria-selected={activeIdx === i}>
-                <Link
+                <a
                   href={r.href}
-                  onClick={onClose}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    goTo(r.href);
+                  }}
                   onMouseEnter={() => setActiveIdx(i)}
                   className="site-search-result"
                 >
@@ -212,7 +224,7 @@ export default function SiteSearch({ open, onClose }: Props) {
                     <span className="site-search-result-title">{r.title}</span>
                   </div>
                   <p className="site-search-result-desc">{r.description}</p>
-                </Link>
+                </a>
               </li>
             ))}
           </ul>
