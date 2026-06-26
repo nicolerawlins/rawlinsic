@@ -1459,16 +1459,21 @@ text-align: center;
   background: radial-gradient(ellipse at 50% 38%, rgba(196, 216, 242, 0.18) 0%, transparent 55%);
   z-index: 1;
 }
-/* Big script wordmark sitting above the hero title. Sized down on
-   narrow viewports so it doesn't dominate the screen on phones. */
+/* Big script wordmark sitting above the hero title. Sized so the
+   wordmark stays prominent across breakpoints — desktop scales via
+   clamp, mobile gets an explicit larger override since the clamp's
+   220px floor was too small on phones. */
 .hero-logo-mark {
   display: block;
   width: clamp(220px, 32vw, 440px);
   height: auto;
   margin: 0 auto 36px;
 }
+@media (max-width: 768px) {
+  .hero-logo-mark { width: min(82vw, 380px); margin-bottom: 32px; }
+}
 @media (max-width: 480px) {
-  .hero-logo-mark { margin-bottom: 28px; }
+  .hero-logo-mark { width: min(86vw, 340px); margin-bottom: 28px; }
 }
 .hero-grid {
   position: absolute; inset: 0;
@@ -7738,9 +7743,8 @@ color: #fff;
   left: 0;
   right: 0;
   z-index: 9999;
-  background: rgba(6, 12, 22, 0.97);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  /* Solid brand-navy bar with a gold accent line at top. */
+  background: #1A3251;
   border-top: 1px solid;
   border-image: linear-gradient(90deg, transparent, #c9a84c, #e8d5a0, #c9a84c, transparent) 1;
   animation: cookieSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
