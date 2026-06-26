@@ -364,7 +364,7 @@ export default function HomePage() {
         <div className="hero-content">
           <span className="hero-label"><span className="gold-text"><span className="hero-label-segment">Trusted Advisor &bull;</span> <span className="hero-label-segment">Global Consultancy</span></span></span>
           <h1 className="hero-title">
-            Solving complex challenges and delivering solutions at the intersection of <em>strategy, operations</em> &amp; <em>technology</em>
+            Solving complex challenges &amp; delivering solutions at the intersection of <em>strategy, operations</em> &amp; <em>technology</em>
           </h1>
           <p className="hero-sub">
             We partner to strengthen the capabilities essential for high-performing enterprises and modern transportation systems.
