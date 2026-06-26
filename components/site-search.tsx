@@ -46,11 +46,31 @@ export default function SiteSearch({ open, onClose }: Props) {
   const router = useRouter();
 
   /* Single navigation path used by both Enter and click, so the two
-     paths behave identically (per the "Enter select" hint in the
-     footer): close the panel, then push the new route via Next.js
-     client-side navigation for a smooth transition. */
+     behave identically (per the "Enter select" hint in the footer).
+     Subtlety: results that link to a team-member popup use hash deep
+     links (e.g. /about/our-people#satheesh-vivekanandan) that the
+     team page opens via a `hashchange` listener. Next.js router.push
+     for a same-path hash change doesn't reliably fire `hashchange`,
+     so for that case we set window.location.hash directly. For
+     cross-page navigation router.push gives smooth client-side
+     transitions and the team page's mount effect picks up the hash. */
   const goTo = useCallback((href: string) => {
     onClose();
+    try {
+      const url = new URL(href, window.location.origin);
+      const samePath = url.pathname === window.location.pathname;
+      if (samePath && url.hash) {
+        /* If the same hash is already set, the browser won't fire
+           hashchange — clear it first so the next set always fires. */
+        if (window.location.hash === url.hash) {
+          history.replaceState(null, "", url.pathname + url.search);
+        }
+        window.location.hash = url.hash;
+        return;
+      }
+    } catch {
+      /* fall through to router.push on URL parse failure */
+    }
     router.push(href);
   }, [onClose, router]);
 
