@@ -180,7 +180,7 @@ export default function InsightsPage() {
       </section>
 
       {/* ── Quote Panel ── */}
-      <div className="parallax-panel">
+      <div className="parallax-panel parallax-panel-blue">
         <p className="parallax-text reveal">
           Organizations that <em>thrive</em> are the ones that never stop <em>learning</em>.
         </p>
