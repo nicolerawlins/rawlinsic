@@ -339,41 +339,198 @@ export default function AutomationPage() {
 
       <div className="section-divider"><div className="gold-line" /></div>
 
-      {/* ── 5. What We Deliver ── */}
+      {/* ── 5. What We Deliver — honeycomb capability tiles (PREVIEW) ── */}
       <section className="aam-section">
         <div className="aam-container">
           <div className="aam-section-header reveal">
             <p className="section-label"><span className="gold-text">Driving Transformation</span></p>
             <h2 className="section-title">What we <em>deliver</em></h2>
           </div>
-          <div className="auto-deliver-grid" style={{ display: "grid", gap: "60px", marginTop: "60px", alignItems: "center" }}>
-            <div className="reveal">
-              <div style={{ position: "relative", borderRadius: "12px", overflow: "hidden", aspectRatio: "4/3" }}>
-                <Image src="/images/pages/auto-collab.webp" alt="Team collaborating on digital transformation" fill sizes="(max-width: 768px) 100vw, 50vw" style={{ objectFit: "cover" }} />
-                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(19, 36, 58, 0.15), rgba(19, 36, 58, 0.45))" }} />
+          <div className="deliver-honeycomb reveal">
+            {/* Tile 1 — Data Governance */}
+            <div className="deliver-tile">
+              <div className="deliver-tile-inner">
+                <div className="deliver-tile-num">01</div>
+                <svg className="deliver-tile-icon" width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <ellipse cx="12" cy="5" rx="9" ry="3" />
+                  <path d="M3 5v6c0 1.7 4 3 9 3s9-1.3 9-3V5" />
+                  <path d="M3 11v6c0 1.7 4 3 9 3s9-1.3 9-3v-6" />
+                </svg>
+                <h3 className="deliver-tile-title">Data Governance</h3>
+                <p className="deliver-tile-desc">
+                  We establish effective <Link href="/capabilities#data-governance" className="deliver-tile-link">data governance</Link> practices.
+                </p>
               </div>
             </div>
-            <div className="reveal">
-              <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "36px" }}>
-                <li style={{ paddingLeft: "24px", borderLeft: "2px solid", borderImage: "linear-gradient(180deg, #c9a84c, #e8d5a0) 1", fontSize: "17px", color: "#fff", lineHeight: 1.8 }}>
-                  We establish effective <Link href="/capabilities#data-governance" className="gold-text" style={{ textDecoration: "underline", textUnderlineOffset: "4px" }}>data governance</Link> practices.
-                </li>
-                <li style={{ paddingLeft: "24px", borderLeft: "2px solid", borderImage: "linear-gradient(180deg, #c9a84c, #e8d5a0) 1", fontSize: "17px", color: "#fff", lineHeight: 1.8 }}>
+
+            {/* Tile 2 — Digital Solutions */}
+            <div className="deliver-tile">
+              <div className="deliver-tile-inner">
+                <div className="deliver-tile-num">02</div>
+                <svg className="deliver-tile-icon" width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="3" width="20" height="14" rx="2" />
+                  <line x1="8" y1="21" x2="16" y2="21" />
+                  <line x1="12" y1="17" x2="12" y2="21" />
+                  <path d="M7 10l3 3 7-7" />
+                </svg>
+                <h3 className="deliver-tile-title">Digital Solutions</h3>
+                <p className="deliver-tile-desc">
                   We design and implement digital solutions that help people work smarter and more creatively.
-                </li>
-                <li style={{ paddingLeft: "24px", borderLeft: "2px solid", borderImage: "linear-gradient(180deg, #c9a84c, #e8d5a0) 1", fontSize: "17px", color: "#fff", lineHeight: 1.8 }}>
+                </p>
+              </div>
+            </div>
+
+            {/* Tile 3 — Workflows */}
+            <div className="deliver-tile">
+              <div className="deliver-tile-inner">
+                <div className="deliver-tile-num">03</div>
+                <svg className="deliver-tile-icon" width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                </svg>
+                <h3 className="deliver-tile-title">Connected Workflows</h3>
+                <p className="deliver-tile-desc">
                   We streamline and connect workflows to reduce manual effort and improve efficiency.
-                </li>
-                <li style={{ paddingLeft: "24px", borderLeft: "2px solid", borderImage: "linear-gradient(180deg, #c9a84c, #e8d5a0) 1", fontSize: "17px", color: "#fff", lineHeight: 1.8 }}>
+                </p>
+              </div>
+            </div>
+
+            {/* Tile 4 — AI Roadmap */}
+            <div className="deliver-tile">
+              <div className="deliver-tile-inner">
+                <div className="deliver-tile-num">04</div>
+                <svg className="deliver-tile-icon" width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="3" />
+                  <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                </svg>
+                <h3 className="deliver-tile-title">AI Use Cases</h3>
+                <p className="deliver-tile-desc">
                   We develop high-value AI use cases and a roadmap for adoption and scaling.
-                </li>
-                <li style={{ paddingLeft: "24px", borderLeft: "2px solid", borderImage: "linear-gradient(180deg, #c9a84c, #e8d5a0) 1", fontSize: "17px", color: "#fff", lineHeight: 1.8 }}>
-                  We guide <Link href="/capabilities#organizational-change-management" className="gold-text" style={{ textDecoration: "underline", textUnderlineOffset: "4px" }}>organizational change</Link> by cultivating the culture required for new ways of working.
-                </li>
-              </ul>
+                </p>
+              </div>
+            </div>
+
+            {/* Tile 5 — Organizational Change */}
+            <div className="deliver-tile">
+              <div className="deliver-tile-inner">
+                <div className="deliver-tile-num">05</div>
+                <svg className="deliver-tile-icon" width="42" height="42" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+                <h3 className="deliver-tile-title">Organizational Change</h3>
+                <p className="deliver-tile-desc">
+                  We guide <Link href="/capabilities#organizational-change-management" className="deliver-tile-link">organizational change</Link> by cultivating the culture required for new ways of working.
+                </p>
+              </div>
             </div>
           </div>
         </div>
+
+        <style jsx global>{`
+          .deliver-honeycomb {
+            margin-top: 80px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 32px;
+            max-width: 1100px;
+            margin-left: auto;
+            margin-right: auto;
+          }
+          /* Stagger the second row so it reads as a honeycomb */
+          .deliver-honeycomb .deliver-tile:nth-child(4) { grid-column: 1 / span 1; transform: translateX(50%); }
+          .deliver-honeycomb .deliver-tile:nth-child(5) { grid-column: 2 / span 1; transform: translateX(50%); }
+          .deliver-tile {
+            position: relative;
+            aspect-ratio: 1 / 1.1;
+          }
+          .deliver-tile-inner {
+            position: absolute;
+            inset: 0;
+            background: #13243A;
+            clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+            padding: 24px 28px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            transition: transform 0.35s ease, background 0.35s ease;
+          }
+          .deliver-tile::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #c9a84c, #e8d5a0, #d4b878);
+            clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+            transition: opacity 0.35s ease;
+          }
+          .deliver-tile::after {
+            content: '';
+            position: absolute;
+            inset: 1.5px;
+            background: #13243A;
+            clip-path: polygon(50% 0, 100% 25%, 100% 75%, 50% 100%, 0 75%, 0 25%);
+            pointer-events: none;
+            transition: background 0.35s ease;
+          }
+          .deliver-tile-inner { z-index: 2; background: transparent; }
+          .deliver-tile:hover .deliver-tile-inner { transform: scale(1.03); }
+          .deliver-tile:hover::after { background: #1A3251; }
+          .deliver-tile:hover::before {
+            box-shadow: 0 0 40px rgba(201, 168, 76, 0.35);
+          }
+          .deliver-tile-num {
+            font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 4px;
+            background: linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            margin-bottom: 12px;
+          }
+          .deliver-tile-icon {
+            color: #c9a84c;
+            margin-bottom: 14px;
+          }
+          .deliver-tile-title {
+            font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
+            font-size: 19px;
+            font-weight: 500;
+            color: #fff;
+            margin-bottom: 10px;
+            line-height: 1.2;
+          }
+          .deliver-tile-desc {
+            font-family: var(--font-dm-sans), sans-serif;
+            font-size: 12.5px;
+            line-height: 1.55;
+            color: #fff;
+            margin: 0;
+          }
+          .deliver-tile-link {
+            background: linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-decoration: underline;
+            text-decoration-color: rgba(201, 168, 76, 0.6);
+            text-underline-offset: 3px;
+          }
+          @media (max-width: 900px) {
+            .deliver-honeycomb { grid-template-columns: repeat(2, 1fr); max-width: 720px; }
+            .deliver-honeycomb .deliver-tile:nth-child(4),
+            .deliver-honeycomb .deliver-tile:nth-child(5) { grid-column: auto; transform: none; }
+          }
+          @media (max-width: 600px) {
+            .deliver-honeycomb { grid-template-columns: 1fr; max-width: 380px; gap: 24px; }
+            .deliver-tile { aspect-ratio: 1 / 0.85; }
+            .deliver-tile-desc { font-size: 14px; }
+          }
+        `}</style>
       </section>
 
       <div className="section-divider"><div className="gold-line" /></div>

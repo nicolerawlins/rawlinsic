@@ -4859,14 +4859,16 @@ color: #fff;
 .csd-description {
   font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
   font-size: 18px;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.85;
-  color: #fff;
+  /* Light-blue palette accent (#C4D8F2) panel with black text — gives
+     the intro callout a clear pop against the brand-navy page. */
+  color: #000;
   margin: 0 0 56px;
   padding: 28px 32px;
   border-left: 3px solid;
   border-image: linear-gradient(180deg, #b89a3e, #d4be78, #c9a84c) 1;
-  background: rgba(201,168,76,0.03);
+  background: #C4D8F2;
   border-radius: 0 8px 8px 0;
 }
 .csd-wide-section {
@@ -4927,7 +4929,10 @@ color: #fff;
 }
 .csd-project-tile {
   padding: 32px 28px;
-  background: rgba(19, 36, 58,0.6);
+  /* Gold gradient panel — same treatment as the AAM pillar / framework
+     cards so all "feature tile" surfaces feel like a set. Text/icons
+     inside swap to black for legibility against gold. */
+  background: linear-gradient(135deg, #c9a84c 0%, #e8d5a0 50%, #d4b878 100%);
   border: 1px solid rgba(201,168,76,0.08);
   border-radius: 10px;
   display: flex;
@@ -4935,6 +4940,43 @@ color: #fff;
   position: relative;
   overflow: hidden;
   transition: border-color 0.4s, transform 0.45s;
+}
+/* Number badge — pure black, bolder so it pops on gold (was a gold
+   gradient that disappeared against the gold tile). */
+.csd-project-tile .csd-tile-subtitle {
+  color: #000 !important;
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: #000 !important;
+  font-weight: 800;
+}
+.csd-project-tile .csd-tile-title { color: #000; font-weight: 600; }
+.csd-project-tile .csd-tile-budget {
+  color: #000 !important;
+  background: none !important;
+  -webkit-background-clip: initial !important;
+  background-clip: initial !important;
+  -webkit-text-fill-color: #000 !important;
+  font-weight: 700;
+  border-color: rgba(0, 0, 0, 0.35);
+}
+/* Bullets + dots in black, separator-style spacing already handled */
+.csd-project-tile .csd-tile-bullets li { color: #000; font-weight: 600; }
+.csd-project-tile .csd-tile-bullets li::before {
+  background: #000;
+  opacity: 1;
+}
+/* Expand +/- button — solid dark navy fill, white icon, matching the
+   chevron treatment on the AAM gold-panel cards. */
+.csd-project-tile .csd-tile-expand-hint {
+  background: #1A3251;
+  border-color: #1A3251;
+}
+.csd-project-tile .csd-tile-expand-hint svg { stroke: #fff; }
+.csd-project-tile .csd-tile-expand-hint:hover {
+  background: #0D0D0D;
+  border-color: #0D0D0D;
 }
 .csd-project-tile::before {
   content: ''; position: absolute;
