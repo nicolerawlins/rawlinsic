@@ -4905,15 +4905,15 @@ color: #fff;
   font-size: 18px;
   font-weight: 600;
   line-height: 1.85;
-  /* White intro panel with black text — matches the rest of the
-     "feature tile" bottoms across the site. Navy left border for
-     accent. */
+  /* Gold-gradient intro panel with black text — kept gold on case
+     study pages per spec (other "feature tile" bottoms across the
+     site are white). Navy left-border for accent. */
   color: #000;
   margin: 0 0 56px;
   padding: 28px 32px;
   border-left: 3px solid;
   border-image: linear-gradient(180deg, #1A3251, #2A4870, #1A3251) 1;
-  background: #fff;
+  background: linear-gradient(135deg, #c9a84c 0%, #e8d5a0 50%, #d4b878 100%);
   border-radius: 0 8px 8px 0;
 }
 .csd-wide-section {
@@ -6129,10 +6129,10 @@ color: #fff;
   margin-bottom: 12px;
   border-radius: 10px;
   border: 1px solid rgba(26, 50, 81, 0.18);
-  /* Light-blue palette bubble (#C4D8F2) — same surface whether the
-     accordion item is closed or open. Q/number badges sit on a solid
-     navy circle, question text is black. */
-  background: #C4D8F2;
+  /* White bubble — same surface whether the accordion item is
+     closed or open. Q/number badges sit on a navy outlined square,
+     question text is black. */
+  background: #fff;
   overflow: hidden;
   transition: border-color 0.4s ease, box-shadow 0.4s ease;
   /* When toggleSection() calls scrollIntoView({block:'start'}) to reveal
@@ -6224,11 +6224,11 @@ color: #fff;
 .tla-accordion-body.open {
   max-height: 3000px;
 }
-/* When the accordion is open, the body sits on a light-blue panel
-   with black text — matches the "key takeaway" palette used on the
-   case-study intro and TL "Final Thought" callouts. */
+/* When the accordion is open, the body continues on the same white
+   surface as the closed bubble — just adds a faint navy divider so
+   the question and answer are visually separated. */
 .tla-accordion-item.open .tla-accordion-body-inner {
-  background: #C4D8F2;
+  background: #fff;
   border-top: 1px solid rgba(26, 50, 81, 0.12);
   padding-top: 22px;
 }
@@ -7258,15 +7258,16 @@ color: #fff;
   position: absolute; inset: 0;
   background: linear-gradient(180deg, transparent 40%, rgba(19, 36, 58,0.8) 100%);
 }
-/* Insights channel cards: light-blue panel (#C4D8F2) under the hero
-   image, black text + dark-navy expand button. */
+/* Insights channel cards: white panel under the hero image, black
+   text + dark-navy expand button. Matches the rest of the "feature
+   tile" bottoms across the site. */
 .ins-channel-body {
   padding: 24px 28px;
   flex: 1;
   display: flex;
   flex-direction: column;
   transition: padding 0.3s;
-  background: #C4D8F2;
+  background: #fff;
 }
 .ins-channel-card.active .ins-channel-body { padding: 32px 28px; }
 .ins-channel-subtitle {
