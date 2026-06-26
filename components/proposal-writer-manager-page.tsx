@@ -592,14 +592,14 @@ export default function ProposalWriterManagerPage() {
                     onChange={(e) => setResumeFile(e.target.files?.[0] ?? null)}
                     required
                   />
-                  <span style={{ color: "#fff", fontSize: 12, marginTop: 4 }}>
+                  <span style={{ color: "#000", fontSize: 12, marginTop: 4 }}>
                     PDF, DOC, or DOCX &middot; Max 2 MB
                   </span>
                 </div>
 
                 <div className="form-group">
                   <label className="form-label" htmlFor="coverLetter">
-                    Cover Letter <span style={{ color: "#fff", fontWeight: 400 }}>(optional)</span>
+                    Cover Letter <span style={{ color: "#000", fontWeight: 400 }}>(optional)</span>
                   </label>
                   <input
                     className="form-input"
@@ -609,7 +609,7 @@ export default function ProposalWriterManagerPage() {
                     accept={ACCEPT_DOC}
                     onChange={(e) => setCoverFile(e.target.files?.[0] ?? null)}
                   />
-                  <span style={{ color: "#fff", fontSize: 12, marginTop: 4 }}>
+                  <span style={{ color: "#000", fontSize: 12, marginTop: 4 }}>
                     PDF, DOC, or DOCX &middot; Max 2 MB
                   </span>
                 </div>
@@ -637,7 +637,7 @@ export default function ProposalWriterManagerPage() {
                     display: "flex",
                     alignItems: "flex-start",
                     gap: 12,
-                    color: "#fff",
+                    color: "#000",
                     fontSize: 14,
                     lineHeight: 1.6,
                     cursor: "pointer",
@@ -693,7 +693,7 @@ export default function ProposalWriterManagerPage() {
 
                 <p
                   style={{
-                    color: "#fff",
+                    color: "#000",
                     fontSize: 13,
                     lineHeight: 1.7,
                     marginTop: 4,
@@ -704,7 +704,7 @@ export default function ProposalWriterManagerPage() {
                   hiring and recruitment purposes. See our{" "}
                   <a
                     href="/privacy-policy"
-                    style={{ color: "#c9a84c", textDecoration: "underline" }}
+                    style={{ color: "#1A3251", textDecoration: "underline", fontWeight: 700 }}
                   >
                     Privacy Policy
                   </a>{" "}

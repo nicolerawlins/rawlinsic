@@ -439,9 +439,11 @@ export default function AutomationPage() {
                   </span>
                 </div>
 
-                {/* Expandable description — same gold panel continues */}
+                {/* Expandable description — white panel below the gold
+                    title strip so the gold reads as a single clean band
+                    instead of stacking two gold gradients that drift. */}
                 <div style={{ maxHeight: isOpen ? "300px" : "0", overflow: "hidden", transition: "max-height 0.5s ease" }}>
-                  <div style={{ padding: "0 28px 24px", background: "linear-gradient(135deg, #c9a84c 0%, #e8d5a0 50%, #d4b878 100%)" }}>
+                  <div style={{ padding: "20px 28px 24px", background: "#fff" }}>
                     <p style={{ fontSize: "16px", color: "#000", fontWeight: 600, lineHeight: 1.8 }}>{c.solution}</p>
                   </div>
                 </div>

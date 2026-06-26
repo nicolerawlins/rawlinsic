@@ -894,38 +894,36 @@ a.contact-detail-value:hover { color: #fff; }
 .form-submit {
   display: flex; align-items: center; justify-content: center;
   padding: 18px 40px;
-  background: linear-gradient(90deg, #d4be78, #c9a84c);
+  /* Dark-navy solid CTA — replaces the gold gradient so the button
+     pops cleanly against the light-blue form panel. */
+  background: #1A3251;
   background-size: 100% 100%;
   background-repeat: no-repeat; background-position: right center;
-  border: 1px solid transparent;
-  color: #060c16;
+  border: 1px solid #1A3251;
+  color: #fff;
   font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
   font-size: 0.75rem; font-weight: 700;
   letter-spacing: 3px; text-transform: uppercase;
-  border-radius: 0;
+  border-radius: 6px;
   cursor: pointer;
   position: relative; overflow: hidden;
-  transition: background-size 0.5s cubic-bezier(0.25, 0.8, 0.25, 1), color 0.4s, border-color 0.4s;
+  transition: background 0.35s ease, color 0.35s ease, border-color 0.35s ease;
   margin-top: 8px;
   width: 100%;
 }
 .form-submit:hover {
-  /* On hover the gold gradient shrinks away, revealing the light-blue
-     form panel underneath. Switch text to black + dark-navy border so
-     the button stays clearly readable. */
-  background-size: 0% 100%;
-  color: #000;
-  border-color: #1A3251;
-  font-weight: 800;
+  background: #0D0D0D;
+  border-color: #0D0D0D;
+  color: #fff;
 }
-.form-submit:hover svg { stroke: #000; }
+.form-submit:hover svg { stroke: #fff; }
 .form-submit:disabled { opacity: 0.7; cursor: not-allowed; }
 .form-submit-inner {
   display: flex; align-items: center; gap: 12px;
   position: relative; z-index: 1;
 }
-.form-submit svg { transition: transform 0.4s ease; }
-.form-submit:hover svg { transform: translateX(5px); stroke: #000; }
+.form-submit svg { transition: transform 0.4s ease; stroke: #fff; }
+.form-submit:hover svg { transform: translateX(5px); stroke: #fff; }
 .form-spinner {
   width: 16px; height: 16px;
   border: 1.5px solid rgba(19, 36, 58,0.25);
@@ -5914,11 +5912,12 @@ color: #fff;
   max-height: 600px;
   opacity: 1;
   padding: 22px 32px 24px;
-  /* Continue the gold panel down into the expanded body so the
-     callout reads as one connected surface. */
-  background: linear-gradient(135deg, #c9a84c 0%, #e8d5a0 50%, #d4b878 100%);
+  /* White expanded body so the gold quote header stays a single
+     unbroken gold panel above and the description sits cleanly on
+     white below. Gold left-border continues for visual continuity. */
+  background: #fff;
   border-left: 3px solid transparent;
-  border-image: linear-gradient(180deg, #1A3251, #2A4870, #1A3251) 1;
+  border-image: linear-gradient(180deg, #c9a84c, #e8d5a0, #d4b878) 1;
   margin-top: -1px;
   border-radius: 0 0 10px 0;
 }
