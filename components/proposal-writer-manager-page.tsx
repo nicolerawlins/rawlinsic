@@ -100,7 +100,7 @@ export default function ProposalWriterManagerPage() {
   useEffect(() => {
     const container = document.getElementById("microParticles");
     if (!container) return;
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 10; i++) {
       const p = document.createElement("div");
       p.className = "micro-particle";
       p.style.left = Math.random() * 100 + "%";
@@ -125,7 +125,7 @@ export default function ProposalWriterManagerPage() {
       if (nav) nav.classList.toggle("scrolled", window.scrollY > 60);
       if (backToTop) backToTop.classList.toggle("visible", window.scrollY > 500);
     };
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 

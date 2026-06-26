@@ -34,7 +34,7 @@ export default function PrivacyPolicyPage() {
   useEffect(() => {
     const nav = document.getElementById("mainNav");
     const onScroll = () => { if (nav) nav.classList.toggle("scrolled", window.scrollY > 60); };
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 

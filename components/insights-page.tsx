@@ -85,7 +85,7 @@ export default function InsightsPage() {
       const backToTop = document.getElementById("backToTop");
       if (backToTop) backToTop.classList.toggle("visible", window.scrollY > 500);
     };
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 

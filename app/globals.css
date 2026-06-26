@@ -202,9 +202,21 @@ body.keyboard-nav .cursor-ring {
 .orb {
   position: absolute;
   border-radius: 50%;
-  filter: blur(80px);
+  /* Was blur(80px) — one of the most expensive paint operations the
+     browser can do. At 0.08 opacity, reducing to 40px is visually
+     imperceptible but ~2-3x cheaper per frame, which translates to
+     smoother scrolling on lower-end devices. */
+  filter: blur(40px);
   opacity: 0.08;
   will-change: transform;
+}
+/* Respect users who've asked the OS to reduce motion — turns off
+   orb/particle animations entirely. */
+@media (prefers-reduced-motion: reduce) {
+  .orb,
+  .micro-particle {
+    animation: none !important;
+  }
 }
 .orb-1 {
   width: 500px; height: 500px;

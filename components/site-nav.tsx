@@ -21,7 +21,7 @@ export default function SiteNav({ ctaHref = "/contact" }: SiteNavProps) {
     const onScroll = () => {
       if (navRef.current) navRef.current.classList.toggle("scrolled", window.scrollY > 60);
     };
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
