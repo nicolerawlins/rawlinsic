@@ -371,6 +371,7 @@ export default function HomePage() {
             priority
             fetchPriority="high"
           />
+          <span className="hero-logo-rule" aria-hidden="true" />
           <h1 className="hero-title">
             Solving complex challenges &amp; delivering digital solutions at the intersection of <em>strategy, operations</em> &amp; <em>technology</em>
           </h1>

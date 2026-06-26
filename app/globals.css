@@ -1440,11 +1440,11 @@ text-align: center;
   width: 100%; height: 100%; object-fit: cover; opacity: 0.45;
 }
 .hero-bg-overlay {
-  position: absolute; inset: 0;
-  /* Very light overlay so the brand-navy page bg + ambient orbs read
-     through cleanly. Subtle top/bottom shading only. */
-  background: linear-gradient(180deg, rgba(13, 13, 13, 0.10) 0%, transparent 50%, rgba(13, 13, 13, 0.20) 100%);
-  z-index: 1;
+  /* Removed — the hero now sits directly on the site's ambient bg
+     so the brand-navy reads the same in the hero as it does on the
+     content below. The light-blue radial spotlight (.hero-depth)
+     is still layered on top. */
+  display: none;
 }
 .hero-depth {
   position: absolute; inset: 0;
@@ -1460,10 +1460,20 @@ text-align: center;
   display: block;
   width: clamp(260px, 38vw, 520px);
   height: auto;
-  margin: 0 auto 36px;
+  margin: 0 auto 18px;
+}
+/* Thin gold accent rule beneath the wordmark — short horizontal bar
+   centered under the logo with a soft gold gradient. */
+.hero-logo-rule {
+  display: block;
+  width: 64px;
+  height: 2px;
+  margin: 0 auto 32px;
+  background: linear-gradient(90deg, transparent, #c9a84c, #e8d5a0, #c9a84c, transparent);
 }
 @media (max-width: 480px) {
-  .hero-logo-mark { margin-bottom: 24px; }
+  .hero-logo-mark { margin-bottom: 14px; }
+  .hero-logo-rule { width: 48px; margin-bottom: 24px; }
 }
 .hero-grid {
   position: absolute; inset: 0;
