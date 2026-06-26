@@ -189,7 +189,7 @@ export default function AutomationPage() {
       {/* ── Hero ── */}
       <section className="aam-hero aam-parallax-fixed" style={{ backgroundImage: `url(${HERO_IMG})` }}>
         <Image src={HERO_IMG} alt="" fill priority sizes="100vw" className="aam-hero-img" />
-        <div className="aam-hero-overlay" style={{ background: "rgba(19, 36, 58, 0.82)" }} />
+        <div className="aam-hero-overlay" style={{ background: "linear-gradient(180deg, rgba(29, 55, 89, 0.45) 0%, rgba(19, 36, 58, 0.65) 60%, rgba(19, 36, 58, 0.80) 100%)" }} />
         <div className="aam-hero-content">
           <span className="hero-label"><span className="gold-text"><span className="hero-label-segment">Smarter Systems &bull;</span> <span className="hero-label-segment">Empowered Teams</span></span></span>
           <h1 className="hero-title">Data Governance,<br /><em>Automation</em> &amp; AI</h1>

@@ -777,12 +777,12 @@ export default function ProposalWriterManagerPage() {
         .pwm-section h2,
         .pwm-section h3 { color: #fff; }
         .pwm-form .form-label,
-        .pwm-form .form-label * { color: #fff !important; }
-        .pwm-form .form-required { color: #c9a84c !important; }
-        .pwm-form .form-input { color: #fff; }
-        .pwm-form .form-input::placeholder { color: rgba(255,255,255,0.85); }
+        .pwm-form .form-label * { color: #1A3251 !important; }
+        .pwm-form .form-required { color: #1A3251 !important; }
+        .pwm-form .form-input { color: #000; }
+        .pwm-form .form-input::placeholder { color: rgba(26, 50, 81, 0.55); }
         .pwm-form .form-recaptcha-notice,
-        .pwm-form .form-recaptcha-notice a { color: #fff !important; }
+        .pwm-form .form-recaptcha-notice a { color: #1A3251 !important; }
 
         /* Hero tagline */
         .pwm-hero-tagline {
@@ -807,12 +807,14 @@ export default function ProposalWriterManagerPage() {
           display: inline-flex;
           align-items: center;
           padding: 10px 22px;
-          border: 1px solid rgba(201, 168, 76, 0.55);
+          border: 1px solid rgba(196, 216, 242, 0.6);
           border-radius: 999px;
-          background: rgba(6, 12, 22, 0.4);
-          color: #fff;
+          /* Light-blue palette pills (#C4D8F2) — punchy little chips
+             against the brand-navy hero. Dark navy text for legibility. */
+          background: #C4D8F2;
+          color: #1A3251;
           font-size: 14px;
-          font-weight: 500;
+          font-weight: 700;
           letter-spacing: 0.3px;
           line-height: 1.4;
         }

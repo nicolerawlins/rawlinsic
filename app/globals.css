@@ -788,19 +788,21 @@ color: #fff;
 .contact-detail-icon {
   width: 44px; height: 44px;
   flex-shrink: 0;
-  border: 1px solid rgba(201,168,76,0.2);
+  border: 1px solid rgba(196, 216, 242, 0.5);
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
-  background: rgba(201,168,76,0.04);
+  /* Light-blue palette accent (#C4D8F2) for the icon circle —
+     matches the case-study intro and TL "Final Thought" surfaces. */
+  background: #C4D8F2;
   transition: all 0.3s;
 }
 .contact-detail-item:hover .contact-detail-icon {
-  border-color: rgba(201,168,76,0.5);
-  background: rgba(201,168,76,0.08);
+  border-color: #C4D8F2;
+  background: #DCE6F2;
 }
 .contact-detail-icon svg {
   width: 18px; height: 18px;
-  stroke: #c9a84c;
+  stroke: #1A3251;
 }
 .contact-detail-label {
   font-size: 0.75rem; font-weight: 600;
@@ -827,8 +829,11 @@ a.contact-detail-value:hover { color: #fff; }
 
 /* Contact Form Column */
 .contact-form-wrap {
-  background: rgba(229,203,135,0.02);
-  border: 1px solid rgba(229,203,135,0.07);
+  /* Light-blue palette panel (#C4D8F2) — the form now reads as a
+     bright, inviting card against the brand-navy page. Labels and
+     inputs below switch to dark navy text. */
+  background: #C4D8F2;
+  border: 1px solid rgba(196, 216, 242, 0.6);
   border-radius: 12px;
   padding: 52px 48px;
   position: relative;
@@ -837,38 +842,38 @@ a.contact-detail-value:hover { color: #fff; }
 .contact-form-wrap::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, rgba(201,168,76,0.4), rgba(232,213,160,0.6), rgba(201,168,76,0.4), transparent);
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(201,168,76,0.6), rgba(232,213,160,0.85), rgba(201,168,76,0.6), transparent);
 }
 .contact-form { display: flex; flex-direction: column; gap: 24px; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
 .form-group { display: flex; flex-direction: column; gap: 10px; }
 .form-label {
-  font-size: 0.8rem; font-weight: 600;
+  font-size: 0.8rem; font-weight: 700;
   letter-spacing: 2.5px; text-transform: uppercase;
-  color: rgba(255,255,255,0.85);
+  color: #1A3251;
 }
-.form-required { color: #c9a84c; }
+.form-required { color: #1A3251; }
 .form-input {
   width: 100%;
   padding: 16px 20px;
-  background: rgba(229,203,135,0.03);
-  border: 1px solid rgba(229,203,135,0.1);
+  background: #fff;
+  border: 1px solid rgba(26, 50, 81, 0.18);
   border-radius: 6px;
-  color: #fff;
+  color: #000;
   font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
   font-size: 1rem;
-  font-weight: 300;
+  font-weight: 500;
   transition: border-color 0.3s, background 0.3s, box-shadow 0.3s;
   outline: none;
   -webkit-appearance: none;
   appearance: none;
 }
-.form-input::placeholder { color: rgba(255,255,255,0.7); }
+.form-input::placeholder { color: rgba(26, 50, 81, 0.55); }
 .form-input:focus {
-  border-color: rgba(201,168,76,0.45);
-  background: rgba(229,203,135,0.05);
-  box-shadow: 0 0 0 3px rgba(201,168,76,0.06);
+  border-color: #1A3251;
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(26, 50, 81, 0.1);
 }
 .form-select {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23c9a84c' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
@@ -1009,18 +1014,18 @@ a.contact-detail-value:hover { color: #fff; }
    as a cohesive blue callout. Used on the Insights page so far. */
 .parallax-panel.parallax-panel-blue {
   background: linear-gradient(180deg,
-    rgba(220, 230, 242, 0.04) 0%,
-    rgba(220, 230, 242, 0.10) 50%,
-    rgba(220, 230, 242, 0.04) 100%);
-  border-top-color: rgba(220, 230, 242, 0.14);
-  border-bottom-color: rgba(220, 230, 242, 0.14);
+    rgba(196, 216, 242, 0.18) 0%,
+    rgba(196, 216, 242, 0.32) 50%,
+    rgba(196, 216, 242, 0.18) 100%);
+  border-top-color: rgba(196, 216, 242, 0.35);
+  border-bottom-color: rgba(196, 216, 242, 0.35);
 }
 .parallax-panel.parallax-panel-blue::before {
-  background: radial-gradient(ellipse at 50% 50%, rgba(196, 216, 242, 0.10) 0%, transparent 60%);
+  background: radial-gradient(ellipse at 50% 50%, rgba(196, 216, 242, 0.28) 0%, transparent 60%);
 }
 .parallax-panel.parallax-panel-blue::after {
   color: #C4D8F2;
-  opacity: 0.12;
+  opacity: 0.28;
 }
 .parallax-panel.parallax-panel-img::before {
   background: rgba(19, 36, 58,0.75);
@@ -2968,9 +2973,11 @@ font-size: 15px;
 .aam-hero-overlay {
   position: absolute;
   inset: 0;
+  /* Lighter brand-tinted gradient so the underlying hero photograph
+     shows through more clearly. Bottom darkens for title legibility. */
   background:
     radial-gradient(ellipse at 50% 70%, rgba(201,168,76,0.06) 0%, transparent 55%),
-    linear-gradient(180deg, rgba(19, 36, 58,0.6) 0%, rgba(19, 36, 58,0.2) 50%, rgba(19, 36, 58,0.9) 100%);
+    linear-gradient(180deg, rgba(29, 55, 89, 0.42) 0%, rgba(29, 55, 89, 0.12) 50%, rgba(19, 36, 58, 0.72) 100%);
 }
 .aam-hero-content {
   position: relative;
@@ -6198,6 +6205,22 @@ color: #fff;
 .tla-accordion-body.open {
   max-height: 3000px;
 }
+/* When the accordion is open, the body sits on a light-blue panel
+   with black text — matches the "key takeaway" palette used on the
+   case-study intro and TL "Final Thought" callouts. */
+.tla-accordion-item.open .tla-accordion-body-inner {
+  background: #C4D8F2;
+  border-top: 1px solid rgba(26, 50, 81, 0.12);
+  padding-top: 22px;
+}
+.tla-accordion-item.open .tla-paragraph,
+.tla-accordion-item.open .tla-accordion-body-inner p,
+.tla-accordion-item.open .tla-accordion-body-inner li,
+.tla-accordion-item.open .tla-accordion-body-inner h3,
+.tla-accordion-item.open .tla-accordion-body-inner h4 {
+  color: #000 !important;
+}
+.tla-accordion-item.open .tla-accordion-body-inner strong { color: #000; }
 .tla-accordion-body-inner {
   padding: 0 28px 32px 100px;
 }
@@ -7144,13 +7167,13 @@ color: #fff;
 .ins-hero-img { object-fit: cover; }
 .ins-hero-overlay {
   position: absolute; inset: 0; z-index: 1;
-  /* Heavier brand-tinted overlay with a subtle gold radial accent in
-     the upper-right so the hero reads as part of the brand rather
-     than just a darkened image. */
+  /* Lighter brand-tinted overlay so the underlying photograph still
+     reads through. Subtle gold radial accent in the upper-right and
+     a soft dark grounding at the bottom-left keep it on-brand. */
   background:
-    radial-gradient(ellipse 60% 50% at 85% 15%, rgba(201, 168, 76, 0.10) 0%, transparent 60%),
-    radial-gradient(ellipse 70% 60% at 15% 85%, rgba(13, 13, 13, 0.30) 0%, transparent 60%),
-    linear-gradient(180deg, rgba(29, 55, 89, 0.78) 0%, rgba(19, 36, 58, 0.92) 60%, rgba(13, 13, 13, 0.85) 100%);
+    radial-gradient(ellipse 60% 50% at 85% 15%, rgba(201, 168, 76, 0.08) 0%, transparent 60%),
+    radial-gradient(ellipse 70% 60% at 15% 85%, rgba(13, 13, 13, 0.18) 0%, transparent 60%),
+    linear-gradient(180deg, rgba(29, 55, 89, 0.45) 0%, rgba(19, 36, 58, 0.6) 60%, rgba(19, 36, 58, 0.78) 100%);
 }
 .ins-wave-canvas {
   position: absolute; bottom: 0; left: 0; width: 100%; height: 120px; z-index: 2; pointer-events: none;
