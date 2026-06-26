@@ -294,7 +294,7 @@ export default function CapabilitiesPage() {
       <section className="cap-hero">
         <div className="cap-hero-overlay" />
         <div className="cap-hero-content reveal">
-          <span className="hero-label"><span className="gold-text">Integrated Advisory</span></span>
+          <span className="hero-label"><span className="gold-text">Integrated Advisory &amp; Solutions</span></span>
           <h1 className="cap-hero-title">
             Strategy, Operations<br />&amp; <em>Technology</em>
           </h1>
