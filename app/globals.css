@@ -6164,8 +6164,9 @@ color: #fff;
    to the Q&A variant so Ron's accordion functions like April's. */
 .tla-accordion-noq .tla-q-icon { font-size: 26px; }
 
-/* Q (or number) badge — solid navy square with white character.
-   Used for both the Q&A variant and the numbered-section variant. */
+/* Q (or number) badge — transparent square with a navy border and
+   black character. Used for both the Q&A variant and the numbered-
+   section variant. */
 .tla-q-icon {
   flex-shrink: 0;
   display: flex;
@@ -6173,16 +6174,16 @@ color: #fff;
   justify-content: center;
   width: 58px;
   height: 58px;
-  border: 1px solid #1A3251;
+  border: 2px solid #1A3251;
   border-radius: 10px;
   font-family: var(--font-cormorant), serif;
   font-size: 30px;
   font-weight: 700;
-  background: #1A3251;
-  color: #fff;
+  background: transparent;
+  color: #000;
   -webkit-background-clip: initial;
   background-clip: initial;
-  -webkit-text-fill-color: #fff;
+  -webkit-text-fill-color: #000;
   position: relative;
 }
 .tla-q-icon::before {
