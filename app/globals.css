@@ -3049,22 +3049,41 @@ color: #fff;
      #1A3251 for legibility against gold. */
   background: linear-gradient(135deg, #c9a84c 0%, #e8d5a0 50%, #d4b878 100%);
 }
-/* Text inside the gold-panel cards — switch from white to dark
-   navy so it reads against gold. */
-.aam-pillar-inner .aam-pillar-title,
+/* Title + description text on the gold panel — pure black and
+   bolder so it reads cleanly against the gold gradient. */
+.aam-pillar-inner .aam-pillar-title {
+  color: #000 !important;
+  font-weight: 600;
+}
 .aam-pillar-inner .aam-pillar-desc,
 .aam-pillar-inner .aam-pillar-desc * {
-  color: #1A3251 !important;
+  color: #000 !important;
+  font-weight: 600;
 }
-/* Expand chevron stays on-brand but darker against gold */
+/* Bullet list inside the gold panel:
+   - text + bullet dots in pure black
+   - separator lines bumped from invisible (white at 4%) to a clearly
+     visible black at 18% so each row is distinct on the gold */
+.aam-pillar-inner .aam-bullet-list li {
+  color: #000;
+  font-weight: 600;
+  border-bottom-color: rgba(0, 0, 0, 0.18);
+}
+.aam-pillar-inner .aam-bullet-list li::before {
+  background: #000;
+  opacity: 1;
+}
+/* Expand chevron button — solid dark fill with a white arrow so it
+   pops on the gold panel. */
 .aam-pillar-inner .aam-expand-btn {
-  color: #1A3251;
-  border-color: rgba(26, 50, 81, 0.35);
-  background: rgba(26, 50, 81, 0.08);
+  color: #fff;
+  background: #1A3251;
+  border-color: #1A3251;
 }
 .aam-pillar-inner .aam-expand-btn:hover {
-  background: rgba(26, 50, 81, 0.18);
-  border-color: #1A3251;
+  background: #0D0D0D;
+  border-color: #0D0D0D;
+  color: #fff;
 }
 .aam-pillar-title-row {
   display: flex;
