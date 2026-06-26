@@ -457,7 +457,7 @@ export default function AutomationPage() {
       {/* ── CTA ── */}
       <section className="aam-section aam-cta-section aam-parallax-fixed">
         <Image src={TEAM_IMG} alt="" fill priority sizes="100vw" className="aam-cta-bg-img" />
-        <div className="aam-parallax-overlay" style={{ background: "rgba(19, 36, 58, 0.8)" }} />
+        <div className="aam-parallax-overlay" style={{ background: "rgba(26, 50, 81, 0.95)" }} />
         <div style={{ position: "relative", zIndex: 2, textAlign: "center", padding: "0 32px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", width: "100%", maxWidth: "800px", margin: "0 auto" }}>
           <p className="section-label"><span className="gold-text">Let&rsquo;s Connect</span></p>
           <h2 className="section-title auto-cta-title" style={{ color: "#fff", marginBottom: "20px", textAlign: "center" }}>Ready to <em>reshape</em> how your organization works?</h2>

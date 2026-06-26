@@ -910,9 +910,15 @@ a.contact-detail-value:hover { color: #fff; }
   width: 100%;
 }
 .form-submit:hover {
+  /* On hover the gold gradient shrinks away, revealing the light-blue
+     form panel underneath. Switch text to black + dark-navy border so
+     the button stays clearly readable. */
   background-size: 0% 100%;
-  color: #fff; border-color: rgba(201,168,76,0.5); font-weight: 800;
+  color: #000;
+  border-color: #1A3251;
+  font-weight: 800;
 }
+.form-submit:hover svg { stroke: #000; }
 .form-submit:disabled { opacity: 0.7; cursor: not-allowed; }
 .form-submit-inner {
   display: flex; align-items: center; gap: 12px;
@@ -2359,23 +2365,27 @@ body nextjs-portal { display: none; }
   align-items: center;
 }
 .scott-featured-quote-card {
-  background: transparent;
+  /* Light-blue palette (#C4D8F2) quote panel with black/navy text —
+     same key-takeaway treatment as the TL "Final Thought" callout. */
+  background: #C4D8F2;
   border: none;
-  border-radius: 0;
+  border-left: 4px solid;
+  border-image: linear-gradient(180deg, #c9a84c, #e8d5a0, #d4b878) 1;
+  border-radius: 0 12px 12px 0;
   padding: 40px 36px;
   position: relative;
 }
 .scott-quote-icon {
-  color: rgba(201,168,76,0.18);
+  color: rgba(26, 50, 81, 0.55);
   margin-bottom: 16px;
 }
 .scott-featured-quote-text {
   font-family: var(--font-playfair), 'Playfair Display', serif;
   font-size: 1.15rem;
   line-height: 1.7;
-  color: var(--rawlins-text-light);
+  color: #000;
   font-style: italic;
-  font-weight: 400;
+  font-weight: 600;
   margin: 0 0 24px;
 }
 .scott-featured-quote-attribution {
@@ -2387,9 +2397,14 @@ body nextjs-portal { display: none; }
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  background: linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878);
-  -webkit-background-clip: text; background-clip: text;
-  color: transparent;
+  color: #1A3251;
+}
+.scott-featured-quote-attribution .gold-text {
+  color: #1A3251;
+  background: none;
+  -webkit-background-clip: initial;
+  background-clip: initial;
+  -webkit-text-fill-color: #1A3251;
 }
 .scott-featured-quote-dash {
   font-size: 1.1rem;
@@ -7233,16 +7248,15 @@ color: #fff;
   position: absolute; inset: 0;
   background: linear-gradient(180deg, transparent 40%, rgba(19, 36, 58,0.8) 100%);
 }
-/* Insights channel cards: gold panel under the hero image, black
-   text + dark-navy expand button — same treatment as the AAM pillar
-   / framework / Key Projects tiles for visual consistency. */
+/* Insights channel cards: light-blue panel (#C4D8F2) under the hero
+   image, black text + dark-navy expand button. */
 .ins-channel-body {
   padding: 24px 28px;
   flex: 1;
   display: flex;
   flex-direction: column;
   transition: padding 0.3s;
-  background: linear-gradient(135deg, #c9a84c 0%, #e8d5a0 50%, #d4b878 100%);
+  background: #C4D8F2;
 }
 .ins-channel-card.active .ins-channel-body { padding: 32px 28px; }
 .ins-channel-subtitle {
