@@ -724,7 +724,7 @@ export default function HomePage() {
             <span className="gold-text">Our People</span>
           </p>
           <h2 className="section-title">
-            Meet the <em>team</em>
+            Meet the <em>Team</em>
           </h2>
           <p className="team-desc">
             Our team brings decades of combined professional experience working within and alongside complex organizations. We pride ourselves on establishing long-term relationships with our family of clients.
