@@ -423,10 +423,10 @@ export default function AutomationPage() {
                   </div>
                 )}
 
-                {/* Title + expand — always visible. Gold panel so it
-                    matches the AAM pillar / framework / Key Projects
-                    treatment elsewhere on the site. */}
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "24px 28px", background: "linear-gradient(135deg, #c9a84c 0%, #e8d5a0 50%, #d4b878 100%)", cursor: "pointer" }} onClick={() => setOpenChallenge(isOpen ? null : i)}>
+                {/* Title + expand — always visible. White panel so it
+                    matches the rest of the "feature tile" bottoms
+                    across the site. */}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "24px 28px", background: "#fff", cursor: "pointer" }} onClick={() => setOpenChallenge(isOpen ? null : i)}>
                   <div>
                     <span style={{ fontSize: "12px", fontWeight: 800, letterSpacing: "2px", textTransform: "uppercase", color: "#000" }}>Challenge</span>
                     <h3 style={{ fontFamily: "var(--font-cormorant), 'Cormorant Garamond', Georgia, serif", fontSize: "28px", fontWeight: 600, color: "#000", marginTop: "4px" }}>{c.title}</h3>

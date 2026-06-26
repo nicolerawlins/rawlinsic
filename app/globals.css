@@ -3091,10 +3091,9 @@ color: #fff;
 }
 .aam-pillar-inner {
   padding: 32px 28px 28px;
-  /* PREVIEW: gold gradient on the bottom panel so it pops away from
-     the page background. Text colors below switched to dark navy
-     #1A3251 for legibility against gold. */
-  background: linear-gradient(135deg, #c9a84c 0%, #e8d5a0 50%, #d4b878 100%);
+  /* White panel under the pillar image — all the "feature tile"
+     bottoms across the site now use this clean white treatment. */
+  background: #fff;
 }
 /* Title + description text on the gold panel — pure black and
    bolder so it reads cleanly against the gold gradient. */
@@ -3468,10 +3467,8 @@ color: #fff;
 }
 .aam-framework-inner {
   padding: 32px 28px 24px;
-  /* Same gold gradient as the AAM pillar cards' bottom panel so the
-     "Our Approach" framework cards feel like a matched set. Text
-     colors below switch to black for legibility against gold. */
-  background: linear-gradient(135deg, #c9a84c 0%, #e8d5a0 50%, #d4b878 100%);
+  /* White panel — matches the rest of the "feature tile" bottoms. */
+  background: #fff;
 }
 .aam-framework-inner .aam-framework-phase {
   color: #000 !important;
@@ -4902,16 +4899,15 @@ color: #fff;
   font-size: 18px;
   font-weight: 600;
   line-height: 1.85;
-  /* Gold-gradient intro panel with black text — same treatment as
-     the AAM pillar / framework / Insights channel cards. Bottom
-     tiles below use the light-blue palette so the two surfaces
-     create a clear hierarchy. */
+  /* White intro panel with black text — matches the rest of the
+     "feature tile" bottoms across the site. Navy left border for
+     accent. */
   color: #000;
   margin: 0 0 56px;
   padding: 28px 32px;
   border-left: 3px solid;
   border-image: linear-gradient(180deg, #1A3251, #2A4870, #1A3251) 1;
-  background: linear-gradient(135deg, #c9a84c 0%, #e8d5a0 50%, #d4b878 100%);
+  background: #fff;
   border-radius: 0 8px 8px 0;
 }
 .csd-wide-section {
@@ -5861,8 +5857,9 @@ color: #fff;
   border: 0;
   border-left: 3px solid transparent;
   border-image: linear-gradient(180deg, #1A3251, #2A4870, #1A3251) 1;
-  /* Gold gradient panel — matches the case-study intro callout. */
-  background: linear-gradient(135deg, #c9a84c 0%, #e8d5a0 50%, #d4b878 100%);
+  /* White quote panel — matches the rest of the "feature tile"
+     bottoms across the site. */
+  background: #fff;
   border-radius: 0 10px 10px 0;
   text-align: left;
   cursor: pointer;
@@ -5871,7 +5868,7 @@ color: #fff;
   transition: background 0.25s ease;
 }
 .tla-final-thought-quote:hover {
-  background: linear-gradient(135deg, #d4b878 0%, #f0dba8 50%, #c9a84c 100%);
+  background: #f4f4f4;
 }
 .tla-final-thought-quote:disabled {
   cursor: default;
