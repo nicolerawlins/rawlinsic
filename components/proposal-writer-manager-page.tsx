@@ -807,14 +807,14 @@ export default function ProposalWriterManagerPage() {
           display: inline-flex;
           align-items: center;
           padding: 10px 22px;
-          border: 1px solid rgba(196, 216, 242, 0.6);
+          /* Transparent chip with a white outline + white text —
+             clean and quiet against the brand-navy hero. */
+          border: 1px solid #fff;
           border-radius: 999px;
-          /* Light-blue palette pills (#C4D8F2) — punchy little chips
-             against the brand-navy hero. Black text for legibility. */
-          background: #C4D8F2;
-          color: #000;
+          background: transparent;
+          color: #fff;
           font-size: 14px;
-          font-weight: 700;
+          font-weight: 600;
           letter-spacing: 0.3px;
           line-height: 1.4;
         }
