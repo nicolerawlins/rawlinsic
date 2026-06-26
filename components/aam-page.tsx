@@ -920,8 +920,8 @@ const AAMPage = () => {
 
                   {/* Center hub */}
                   <circle cx="400" cy="400" r="80" fill="rgba(19, 36, 58, 0.95)" stroke="rgba(201,168,76,0.3)" strokeWidth="1" />
-                  <text x="400" y="390" textAnchor="middle" fill="url(#titleGoldGrad)" fontFamily="'DM Sans', sans-serif" fontSize="16" fontWeight="700" letterSpacing="4" style={{ textTransform: 'uppercase' }}>RAWLINS</text>
-                  <text x="400" y="412" textAnchor="middle" fill="url(#titleGoldGrad)" fontFamily="'DM Sans', sans-serif" fontSize="14" fontWeight="600" letterSpacing="3" style={{ textTransform: 'uppercase' }}>AERO TEAM</text>
+                  <text x="400" y="390" textAnchor="middle" fill="#fff" fontFamily="'DM Sans', sans-serif" fontSize="16" fontWeight="700" letterSpacing="4" style={{ textTransform: 'uppercase' }}>RAWLINS</text>
+                  <text x="400" y="412" textAnchor="middle" fill="#fff" fontFamily="'DM Sans', sans-serif" fontSize="14" fontWeight="600" letterSpacing="3" style={{ textTransform: 'uppercase' }}>AERO TEAM</text>
 
                   {/* Stakeholder nodes */}
                   {ecosystemNodes.map((node) => {
@@ -939,11 +939,11 @@ const AAMPage = () => {
                         <circle cx={nx} cy={ny} r="65" fill="transparent" />
                         <g transform={`translate(${nx - iconSize / 2}, ${ny - iconSize / 2})`} style={{ transition: 'all 0.3s' }}>
                           <svg width={iconSize} height={iconSize} viewBox="0 0 24 24">
-                            <path d={iconPath} fill="url(#titleGoldGrad)" opacity={highlighted ? 1 : 0.7} style={{ filter: highlighted ? 'drop-shadow(0 0 10px rgba(201,168,76,0.6))' : 'none' }} />
+                            <path d={iconPath} fill="url(#titleGoldGrad)" opacity={1} style={{ filter: highlighted ? 'drop-shadow(0 0 10px rgba(201,168,76,0.6))' : 'none' }} />
                           </svg>
                         </g>
                         {node.label.split('\n').map((line, li) => (
-                          <text key={li} x={nx} y={ny + (isMobile ? (highlighted ? 70 : 64) : (highlighted ? 42 : 36)) + li * (isMobile ? 28 : 20)} textAnchor="middle" fill={highlighted ? "#e8d5a0" : "rgba(232,230,225,1)"} fontFamily="'DM Sans', sans-serif" fontSize={isMobile ? "22" : "16"} fontWeight={highlighted ? "600" : "500"} letterSpacing="1.5" style={{ textTransform: 'uppercase', transition: 'all 0.3s' }}>
+                          <text key={li} x={nx} y={ny + (isMobile ? (highlighted ? 70 : 64) : (highlighted ? 42 : 36)) + li * (isMobile ? 28 : 20)} textAnchor="middle" fill="#fff" fontFamily="'DM Sans', sans-serif" fontSize={isMobile ? "22" : "16"} fontWeight={highlighted ? "600" : "500"} letterSpacing="1.5" style={{ textTransform: 'uppercase', transition: 'all 0.3s' }}>
                             {line}
                           </text>
                         ))}
@@ -983,9 +983,12 @@ const AAMPage = () => {
                   })}
                 </svg>
 
-                {/* Detail panel */}
-                {activeNode && (() => {
-                  const node = ecosystemNodes.find(n => n.id === activeNode);
+                {/* Detail panel — shows on hover (desktop) OR click (any).
+                    On desktop, hovering any node reveals the popup; clicking
+                    pins it. On mobile/touch (no hover), only click opens. */}
+                {(activeNode || (!isMobile && hoveredNode)) && (() => {
+                  const showId = activeNode || hoveredNode;
+                  const node = ecosystemNodes.find(n => n.id === showId);
                   if (!node) return null;
                   const rad = (node.angle * Math.PI) / 180;
                   const cosA = Math.cos(rad);
