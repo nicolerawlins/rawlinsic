@@ -5862,10 +5862,9 @@ color: #fff;
   padding: 28px 32px;
   border: 0;
   border-left: 3px solid transparent;
-  border-image: linear-gradient(180deg, #c9a84c, #e8d5a0, #d4b878) 1;
-  /* Light-blue palette accent — same #C4D8F2 surface as the case-study
-     intro callout so all "key takeaway" panels read consistently. */
-  background: #C4D8F2;
+  border-image: linear-gradient(180deg, #1A3251, #2A4870, #1A3251) 1;
+  /* Gold gradient panel — matches the case-study intro callout. */
+  background: linear-gradient(135deg, #c9a84c 0%, #e8d5a0 50%, #d4b878 100%);
   border-radius: 0 10px 10px 0;
   text-align: left;
   cursor: pointer;
@@ -5874,7 +5873,7 @@ color: #fff;
   transition: background 0.25s ease;
 }
 .tla-final-thought-quote:hover {
-  background: #B6CDE8;
+  background: linear-gradient(135deg, #d4b878 0%, #f0dba8 50%, #c9a84c 100%);
 }
 .tla-final-thought-quote:disabled {
   cursor: default;
@@ -5915,11 +5914,11 @@ color: #fff;
   max-height: 600px;
   opacity: 1;
   padding: 22px 32px 24px;
-  /* Continue the light-blue panel down into the expanded body so the
+  /* Continue the gold panel down into the expanded body so the
      callout reads as one connected surface. */
-  background: #C4D8F2;
+  background: linear-gradient(135deg, #c9a84c 0%, #e8d5a0 50%, #d4b878 100%);
   border-left: 3px solid transparent;
-  border-image: linear-gradient(180deg, #c9a84c, #e8d5a0, #d4b878) 1;
+  border-image: linear-gradient(180deg, #1A3251, #2A4870, #1A3251) 1;
   margin-top: -1px;
   border-radius: 0 0 10px 0;
 }
