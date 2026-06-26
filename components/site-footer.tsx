@@ -11,9 +11,9 @@ export default function SiteFooter() {
         <div>
           <Image src={LOGO_URL} alt="Rawlins" width={160} height={40} className="footer-logo-img" />
           <p className="footer-brand-desc">
-            A global professional services firm that helps organizations
-            solve complex challenges through consulting services and
-            digital solutions &mdash; at the intersection of strategy,
+            A global professional services firm that pairs consulting
+            services with digital solutions to help organizations solve
+            complex challenges at the intersection of strategy,
             operations, and technology.
           </p>
         </div>

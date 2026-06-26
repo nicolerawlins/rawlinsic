@@ -28,11 +28,11 @@ export const metadata: Metadata = {
     template: "%s | Rawlins Infra Consult",
   },
   description:
-    "A global professional services firm that helps organizations solve complex challenges through consulting services and digital solutions — at the intersection of strategy, operations, and technology.",
+    "A global professional services firm that pairs consulting services with digital solutions to help organizations solve complex challenges at the intersection of strategy, operations, and technology.",
   openGraph: {
     title: "Rawlins Infra Consult",
     description:
-      "A global professional services firm that helps organizations solve complex challenges through consulting services and digital solutions — at the intersection of strategy, operations, and technology.",
+      "A global professional services firm that pairs consulting services with digital solutions to help organizations solve complex challenges at the intersection of strategy, operations, and technology.",
     url: SITE_URL,
     siteName: "Rawlins Infra Consult",
     type: "website",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Rawlins Infra Consult",
     description:
-      "A global professional services firm that helps organizations solve complex challenges through consulting services and digital solutions — at the intersection of strategy, operations, and technology.",
+      "A global professional services firm that pairs consulting services with digital solutions to help organizations solve complex challenges at the intersection of strategy, operations, and technology.",
     images: ["/images/pages/og-image.png"],
   },
   robots: {
@@ -66,7 +66,7 @@ const ORGANIZATION_SCHEMA = {
   url: SITE_URL,
   logo: `${SITE_URL}/images/pages/rawlins-logo.png`,
   description:
-    "A global professional services firm that helps organizations solve complex challenges through consulting services and digital solutions — at the intersection of strategy, operations, and technology.",
+    "A global professional services firm that pairs consulting services with digital solutions to help organizations solve complex challenges at the intersection of strategy, operations, and technology.",
   email: "info@rawlinsic.com",
   telephone: "+1-775-843-3822",
   address: {
@@ -112,7 +112,7 @@ const LOCAL_BUSINESS_SCHEMA = {
   image: `${SITE_URL}/images/pages/og-image.png`,
   logo: `${SITE_URL}/images/pages/rawlins-logo.png`,
   description:
-    "A global professional services firm that helps organizations solve complex challenges through consulting services and digital solutions — at the intersection of strategy, operations, and technology.",
+    "A global professional services firm that pairs consulting services with digital solutions to help organizations solve complex challenges at the intersection of strategy, operations, and technology.",
   email: "info@rawlinsic.com",
   telephone: "+1-775-843-3822",
   priceRange: "$$$$",
