@@ -830,7 +830,7 @@ She continues to expand her expertise in AI and automation, consistently adoptin
     photo: `/images/team/ian.webp`,
     role: `VP of Finance`,
     location: `New York`,
-    phone: `775-250-1965`,
+    phone: `+1 775-250-1965`,
     email: `ian@rawlinsic.com`,
     linkedin: `https://www.linkedin.com/in/ian-noller-cain/`,
     background: `Ian has 10 years of experience as a Franchisee and Financial Controller of multiple national brands. His responsibilities spanned multi–unit ownership, financial leadership, and operational scale. He specializes in building systems that support sustainable growth.`,
@@ -849,5 +849,41 @@ She continues to expand her expertise in AI and automation, consistently adoptin
     background: `Koussay Khelil is a Senior Front End Engineer with over 6 years of experience building scalable, high-performance web applications across enterprise and startup environments. He specializes in React, Next.js, TypeScript, and modern front-end architecture, with a strong focus on performance optimization, accessibility, and user experience.`,
     achievements: `Koussay has led initiatives that improved application load times, enhanced real-time analytics dashboards, and streamlined component systems for global engineering teams. Currently at Cisco, he continues to drive innovation through scalable UI development and modern web technologies.`,
     categories: ['technology'],
+  },
+  {
+    id: 56,
+    name: `Satheesh Vivekanandan`,
+    photo: `/images/team/satheesh.webp`,
+    role: `AI Solutions Architect`,
+    location: `Dubai, United Arab Emirates`,
+    phone: `+971 52 698 3930`,
+    email: `satheesh@rawlinsic.com`,
+    linkedin: `https://www.linkedin.com/in/satheesh-vivekanandan/`,
+    background: `Satheesh Vivekanandan is a Solutions Architect with over 11 years of experience helping organizations design, implement, and scale technology solutions that improve operational efficiency and business performance. His expertise spans artificial intelligence, Data, Analytics, business process automation, enterprise integrations, cloud technologies, and digital transformation initiatives.
+
+Throughout his career, Satheesh has worked with clients across government, banking, healthcare, and enterprise sectors, leading discovery workshops, solution design, stakeholder engagement, and implementation planning for complex technology programs. He specializes in bridging the gap between business objectives and technical execution, ensuring solutions are practical, scalable, and aligned with organizational goals.
+
+At Rawlins, Satheesh focuses on identifying opportunities to streamline operations, automate manual processes, and transform business requirements into build-ready solutions that deliver measurable results. His passion lies in leveraging emerging technologies and automation to solve real-world business challenges while creating sustainable long-term value for clients and internal teams.`,
+    achievements: ``,
+    categories: ['technology'],
+  },
+  {
+    id: 57,
+    name: `Rory Petersen`,
+    photo: `/images/team/rory.webp`,
+    role: `Administrative Assistant`,
+    location: `Nevada`,
+    phone: `+1 775-443-5912`,
+    email: `rory@rawlinsic.com`,
+    linkedin: `https://www.linkedin.com/in/rory-petersen-65a1a6149/`,
+    background: `Rory Petersen is an administrative and project support professional with more than five years of experience managing client relationships, coordinating complex projects, and supporting business operations across highly regulated industries. His background includes full-cycle recruitment, account management, stakeholder engagement, business development, and operational support within the biotechnology, pharmaceutical, and life sciences sectors.
+
+Prior to joining Rawlins Infra Consult, Rory served as a Senior Recruiting Consultant and Account Manager for Canopy Life Sciences, where he managed client engagements and recruitment projects throughout North America, Latin America, Europe, and the Asia-Pacific region. In this role, he partnered directly with executive leadership teams, hiring managers, and specialized professionals to facilitate successful project outcomes while coordinating activities across multiple countries, time zones, and business units.`,
+    achievements: `Throughout his career, Rory has developed expertise in client service, project coordination, scheduling, documentation management, process improvement, and stakeholder communication. He has experience preparing reports and presentations, maintaining complex databases and tracking systems, coordinating meetings and interviews, and supporting strategic business initiatives. His ability to build strong relationships and effectively manage competing priorities has enabled him to consistently deliver high-quality results in fast-paced environments.
+
+Prior to his work in the life sciences industry, Rory held leadership and operational roles in the golf and sports industries, where he supervised staff, coordinated events, managed customer relationships, and supported day-to-day business operations. These experiences helped establish the strong communication, organizational, and leadership skills that continue to serve him today.
+
+Rory earned a Bachelor of Science in Psychology from William Jessup University and an Associate of Arts in General Sciences from Yuba College. He brings a collaborative, service-oriented approach to every project and is committed to supporting clients and team members through effective communication, organization, and problem-solving.`,
+    categories: ['administration'],
   },
 ];
