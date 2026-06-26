@@ -11,9 +11,12 @@ const LOGO_URL =
 interface SiteNavProps {
   /** href for the "Get In Touch" CTA button. Defaults to /contact */
   ctaHref?: string;
+  /** Hide the top-left wordmark until the user scrolls. Used on
+   *  the home page where the big logo lives inside the hero. */
+  homeMode?: boolean;
 }
 
-export default function SiteNav({ ctaHref = "/contact" }: SiteNavProps) {
+export default function SiteNav({ ctaHref = "/contact", homeMode = false }: SiteNavProps) {
   const navRef = useRef<HTMLElement>(null);
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -180,7 +183,7 @@ export default function SiteNav({ ctaHref = "/contact" }: SiteNavProps) {
       </div>
 
       {/* Navigation */}
-      <nav className="nav" id="mainNav" ref={navRef}>
+      <nav className={`nav${homeMode ? " home-mode" : ""}`} id="mainNav" ref={navRef}>
         <a href="/" className="nav-logo" aria-label="Rawlins home">
           <Image src={LOGO_URL} alt="Rawlins" width={160} height={40} className="nav-logo-img" priority fetchPriority="high" />
         </a>

@@ -349,7 +349,7 @@ export default function HomePage() {
         </svg>
       </a>
 
-      <SiteNav ctaHref="/contact" />
+      <SiteNav ctaHref="/contact" homeMode />
 
       {/* ── Hero ── */}
       <section className="hero" id="top">
@@ -362,7 +362,15 @@ export default function HomePage() {
         <div className="hero-depth" />
         <div className="hero-grid" />
         <div className="hero-content">
-          <span className="hero-label"><span className="gold-text"><span className="hero-label-segment">Trusted Advisor &bull;</span> <span className="hero-label-segment">Global Consultancy</span></span></span>
+          <Image
+            src="/images/pages/hero-bg.webp"
+            alt="Rawlins Infra Consult"
+            width={520}
+            height={130}
+            className="hero-logo-mark"
+            priority
+            fetchPriority="high"
+          />
           <h1 className="hero-title">
             Solving complex challenges &amp; delivering digital solutions at the intersection of <em>strategy, operations</em> &amp; <em>technology</em>
           </h1>
