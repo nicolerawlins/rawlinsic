@@ -423,22 +423,26 @@ export default function AutomationPage() {
                   </div>
                 )}
 
-                {/* Title + expand — always visible */}
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "24px 28px", background: "rgba(19, 36, 58, 0.5)", cursor: "pointer" }} onClick={() => setOpenChallenge(isOpen ? null : i)}>
+                {/* Title + expand — always visible. Gold panel so it
+                    matches the AAM pillar / framework / Key Projects
+                    treatment elsewhere on the site. */}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "24px 28px", background: "linear-gradient(135deg, #c9a84c 0%, #e8d5a0 50%, #d4b878 100%)", cursor: "pointer" }} onClick={() => setOpenChallenge(isOpen ? null : i)}>
                   <div>
-                    <span style={{ fontSize: "12px", fontWeight: 600, letterSpacing: "2px", textTransform: "uppercase", background: "linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>Challenge</span>
-                    <h3 style={{ fontFamily: "var(--font-cormorant), 'Cormorant Garamond', Georgia, serif", fontSize: "28px", fontWeight: 400, color: "#fff", marginTop: "4px" }}>{c.title}</h3>
+                    <span style={{ fontSize: "12px", fontWeight: 800, letterSpacing: "2px", textTransform: "uppercase", color: "#000" }}>Challenge</span>
+                    <h3 style={{ fontFamily: "var(--font-cormorant), 'Cormorant Garamond', Georgia, serif", fontSize: "28px", fontWeight: 600, color: "#000", marginTop: "4px" }}>{c.title}</h3>
                   </div>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" style={{ flexShrink: 0, transition: "transform 0.3s", transform: isOpen ? "rotate(45deg)" : "none" }}>
-                    <line x1="12" y1="5" x2="12" y2="19" />
-                    <line x1="5" y1="12" x2="19" y2="12" />
-                  </svg>
+                  <span style={{ flexShrink: 0, display: "inline-flex", alignItems: "center", justifyContent: "center", width: "36px", height: "36px", borderRadius: "50%", background: "#1A3251", transition: "transform 0.3s", transform: isOpen ? "rotate(45deg)" : "none" }}>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <line x1="12" y1="5" x2="12" y2="19" />
+                      <line x1="5" y1="12" x2="19" y2="12" />
+                    </svg>
+                  </span>
                 </div>
 
-                {/* Expandable description only */}
+                {/* Expandable description — same gold panel continues */}
                 <div style={{ maxHeight: isOpen ? "300px" : "0", overflow: "hidden", transition: "max-height 0.5s ease" }}>
-                  <div style={{ padding: "0 28px 24px", background: "rgba(19, 36, 58, 0.5)" }}>
-                    <p style={{ fontSize: "16px", color: "#fff", lineHeight: 1.8 }}>{c.solution}</p>
+                  <div style={{ padding: "0 28px 24px", background: "linear-gradient(135deg, #c9a84c 0%, #e8d5a0 50%, #d4b878 100%)" }}>
+                    <p style={{ fontSize: "16px", color: "#000", fontWeight: 600, lineHeight: 1.8 }}>{c.solution}</p>
                   </div>
                 </div>
               </div>

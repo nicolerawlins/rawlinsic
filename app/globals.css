@@ -7176,21 +7176,28 @@ color: #fff;
   position: absolute; inset: 0;
   background: linear-gradient(180deg, transparent 40%, rgba(19, 36, 58,0.8) 100%);
 }
-.ins-channel-body { padding: 24px 28px; flex: 1; display: flex; flex-direction: column; transition: padding 0.3s; }
+/* Insights channel cards: gold panel under the hero image, black
+   text + dark-navy expand button — same treatment as the AAM pillar
+   / framework / Key Projects tiles for visual consistency. */
+.ins-channel-body {
+  padding: 24px 28px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  transition: padding 0.3s;
+  background: linear-gradient(135deg, #c9a84c 0%, #e8d5a0 50%, #d4b878 100%);
+}
 .ins-channel-card.active .ins-channel-body { padding: 32px 28px; }
 .ins-channel-subtitle {
   display: inline-block;
   font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
   font-size: 13px; letter-spacing: 3px; text-transform: uppercase; margin-bottom: 10px;
-  font-weight: 700;
-  background: linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878);
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  font-weight: 800;
+  color: #000;
 }
 .ins-channel-title {
   font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
-  font-size: 36px; font-weight: 400; color: #fff; margin-bottom: 16px; line-height: 1.15;
+  font-size: 36px; font-weight: 600; color: #000; margin-bottom: 16px; line-height: 1.15;
 }
 .ins-channel-expand-hint {
   display: inline-flex; align-items: center; justify-content: center;
@@ -7198,10 +7205,11 @@ color: #fff;
   border: none;
   border-radius: 50%;
   margin: 16px 0 0;
-  background: linear-gradient(90deg, #d4be78, #c9a84c);
-  transition: opacity 0.3s, transform 0.4s;
+  background: #1A3251;
+  transition: opacity 0.3s, transform 0.4s, background 0.25s;
 }
-.ins-channel-expand-hint svg { stroke: #060c16; width: 20px; height: 20px; }
+.ins-channel-expand-hint:hover { background: #0D0D0D; }
+.ins-channel-expand-hint svg { stroke: #fff; width: 20px; height: 20px; }
 .ins-channel-expand-hint svg .expand-vertical { transition: opacity 0.25s, transform 0.25s; transform-origin: center; }
 .ins-channel-card.active .ins-channel-expand-hint svg .expand-vertical { opacity: 0; transform: scaleY(0); }
 .ins-channel-card.active .ins-channel-expand-hint {
@@ -7209,7 +7217,7 @@ color: #fff;
 }
 .ins-channel-desc {
   font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
-  font-size: 16px; line-height: 1.75; color: #ffffff; flex: 1; margin-bottom: 24px;
+  font-size: 16px; line-height: 1.75; color: #000; font-weight: 600; flex: 1; margin-bottom: 24px;
   max-height: 0; opacity: 0; overflow: hidden;
   transition: max-height 0.45s ease, opacity 0.4s ease;
 }
@@ -7219,10 +7227,8 @@ color: #fff;
 .ins-channel-cta {
   display: inline-flex; align-items: center; gap: 8px;
   font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
-  font-size: 15px; letter-spacing: 2px; text-transform: uppercase; font-weight: 700;
-  background: linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  color: transparent;
+  font-size: 15px; letter-spacing: 2px; text-transform: uppercase; font-weight: 800;
+  color: #000;
   text-decoration: none;
   position: relative;
   width: fit-content;
