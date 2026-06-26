@@ -3033,7 +3033,30 @@ color: #fff;
   height: 3px;
   background: linear-gradient(90deg, #c9a84c, #e8d5a0, #c9a84c);
 }
-.aam-pillar-inner { padding: 32px 28px 28px; }
+.aam-pillar-inner {
+  padding: 32px 28px 28px;
+  /* PREVIEW: gold gradient on the bottom panel so it pops away from
+     the page background. Text colors below switched to dark navy
+     #1A3251 for legibility against gold. */
+  background: linear-gradient(135deg, #c9a84c 0%, #e8d5a0 50%, #d4b878 100%);
+}
+/* Text inside the gold-panel cards — switch from white to dark
+   navy so it reads against gold. */
+.aam-pillar-inner .aam-pillar-title,
+.aam-pillar-inner .aam-pillar-desc,
+.aam-pillar-inner .aam-pillar-desc * {
+  color: #1A3251 !important;
+}
+/* Expand chevron stays on-brand but darker against gold */
+.aam-pillar-inner .aam-expand-btn {
+  color: #1A3251;
+  border-color: rgba(26, 50, 81, 0.35);
+  background: rgba(26, 50, 81, 0.08);
+}
+.aam-pillar-inner .aam-expand-btn:hover {
+  background: rgba(26, 50, 81, 0.18);
+  border-color: #1A3251;
+}
 .aam-pillar-title-row {
   display: flex;
   align-items: flex-start;
