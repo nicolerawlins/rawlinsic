@@ -823,7 +823,7 @@ const AAMPage = () => {
                 <p className="aam-section-lead" style={{ marginTop: '20px' }}>
                   We reside at the center of the transportation ecosystem, connecting public and private partners across both surface and air transportation to turn strategy into efficient, operational, and coordinated action.
                 </p>
-                <p className="aam-section-lead" style={{ fontStyle: 'italic' }}>
+                <p className="aam-section-lead eco-click-hint-mobile" style={{ fontStyle: 'italic' }}>
                   Click any stakeholder to learn more.
                 </p>
               </div>
@@ -831,6 +831,9 @@ const AAMPage = () => {
 
             {/* Right: interactive visualization */}
             <div className="eco-layout-vis">
+              <p className="aam-section-lead eco-click-hint-desktop" style={{ fontStyle: 'italic', textAlign: 'center', marginBottom: '16px' }}>
+                Click any stakeholder to learn more.
+              </p>
               <div className="eco-vis-wrapper">
                 <svg className="eco-svg" viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg">
                   <defs>
@@ -983,12 +986,11 @@ const AAMPage = () => {
                   })}
                 </svg>
 
-                {/* Detail panel — shows on hover (desktop) OR click (any).
-                    On desktop, hovering any node reveals the popup; clicking
-                    pins it. On mobile/touch (no hover), only click opens. */}
-                {(activeNode || (!isMobile && hoveredNode)) && (() => {
-                  const showId = activeNode || hoveredNode;
-                  const node = ecosystemNodes.find(n => n.id === showId);
+                {/* Detail panel — click-only (hover proved unreliable
+                    across SVG quirks; tapping is the canonical
+                    interaction). */}
+                {activeNode && (() => {
+                  const node = ecosystemNodes.find(n => n.id === activeNode);
                   if (!node) return null;
                   const rad = (node.angle * Math.PI) / 180;
                   const cosA = Math.cos(rad);

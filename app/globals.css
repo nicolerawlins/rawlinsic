@@ -3884,6 +3884,15 @@ color: #fff;
 }
 .eco-layout-text {}
 .eco-layout-vis {}
+/* "Click any stakeholder to learn more." appears in two spots so we
+   can show one or the other based on viewport: above the graphic on
+   desktop, in the text column on mobile. */
+.eco-click-hint-desktop { display: block; }
+.eco-click-hint-mobile { display: none; }
+@media (max-width: 1024px) {
+  .eco-click-hint-desktop { display: none; }
+  .eco-click-hint-mobile { display: block; }
+}
 .eco-vis-wrapper {
   position: relative;
   max-width: 700px;
