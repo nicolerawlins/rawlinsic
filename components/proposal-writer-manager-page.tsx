@@ -777,12 +777,12 @@ export default function ProposalWriterManagerPage() {
         .pwm-section h2,
         .pwm-section h3 { color: #fff; }
         .pwm-form .form-label,
-        .pwm-form .form-label * { color: #1A3251 !important; }
-        .pwm-form .form-required { color: #1A3251 !important; }
+        .pwm-form .form-label * { color: #000 !important; }
+        .pwm-form .form-required { color: #000 !important; }
         .pwm-form .form-input { color: #000; }
-        .pwm-form .form-input::placeholder { color: rgba(26, 50, 81, 0.55); }
+        .pwm-form .form-input::placeholder { color: rgba(0, 0, 0, 0.55); }
         .pwm-form .form-recaptcha-notice,
-        .pwm-form .form-recaptcha-notice a { color: #1A3251 !important; }
+        .pwm-form .form-recaptcha-notice a { color: #000 !important; }
 
         /* Hero tagline */
         .pwm-hero-tagline {
