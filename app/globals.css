@@ -2074,6 +2074,12 @@ position: absolute;
 .explore-card:hover .explore-card-overlay {
 background: linear-gradient(to top, rgba(13, 13, 13, 0.92) 20%, rgba(13, 13, 13, 0.55) 60%, rgba(13, 13, 13, 0.2) 100%);
 }
+/* Active state (mobile-tap reveals the description) — push the
+   overlay noticeably darker so the expanded description text is
+   easy to read on top of the photo. */
+.explore-card.active .explore-card-overlay {
+  background: linear-gradient(to top, rgba(13, 13, 13, 0.96) 30%, rgba(13, 13, 13, 0.78) 65%, rgba(13, 13, 13, 0.45) 100%);
+}
 /* Text content */
 .explore-card-inner {
   position: absolute; bottom: 0; left: 0; right: 0;
