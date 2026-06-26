@@ -869,7 +869,7 @@ a.contact-detail-value:hover { color: #fff; }
   -webkit-appearance: none;
   appearance: none;
 }
-.form-input::placeholder { color: rgba(26, 50, 81, 0.55); }
+.form-input::placeholder { color: rgba(0, 0, 0, 0.55); }
 .form-input:focus {
   border-color: #1A3251;
   background: #fff;
@@ -925,7 +925,7 @@ a.contact-detail-value:hover { color: #fff; }
   position: relative; z-index: 1;
 }
 .form-submit svg { transition: transform 0.4s ease; }
-.form-submit:hover svg { transform: translateX(5px); stroke: #fff; }
+.form-submit:hover svg { transform: translateX(5px); stroke: #000; }
 .form-spinner {
   width: 16px; height: 16px;
   border: 1.5px solid rgba(19, 36, 58,0.25);
@@ -986,9 +986,9 @@ a.contact-detail-value:hover { color: #fff; }
   cursor: pointer; transition: opacity 0.3s;
   text-decoration: underline;
   text-underline-offset: 6px;
-  text-decoration-color: rgba(26, 50, 81, 0.55);
-  /* Dark navy on the new light-blue success panel for legibility. */
-  color: #1A3251;
+  text-decoration-color: rgba(0, 0, 0, 0.45);
+  /* Black on the light-blue success panel. */
+  color: #000;
 }
 @supports not ((-webkit-background-clip: text) or (background-clip: text)) {
   .form-success-reset {
@@ -2397,14 +2397,14 @@ body nextjs-portal { display: none; }
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #1A3251;
+  color: #000;
 }
 .scott-featured-quote-attribution .gold-text {
-  color: #1A3251;
+  color: #000;
   background: none;
   -webkit-background-clip: initial;
   background-clip: initial;
-  -webkit-text-fill-color: #1A3251;
+  -webkit-text-fill-color: #000;
 }
 .scott-featured-quote-dash {
   font-size: 1.1rem;
@@ -5896,7 +5896,7 @@ color: #fff;
   justify-content: center;
   width: 32px;
   height: 32px;
-  color: #1A3251;
+  color: #000;
   transition: transform 0.35s ease;
 }
 .tla-final-thought-chevron.open {
@@ -6207,11 +6207,11 @@ color: #fff;
   flex-shrink: 0;
   margin-top: 10px;
   transition: transform 0.35s ease;
-  color: #1A3251;
+  color: #000;
 }
 .tla-accordion-chevron.open {
   transform: rotate(180deg);
-  color: #1A3251;
+  color: #000;
 }
 
 .tla-accordion-body {

@@ -810,9 +810,9 @@ export default function ProposalWriterManagerPage() {
           border: 1px solid rgba(196, 216, 242, 0.6);
           border-radius: 999px;
           /* Light-blue palette pills (#C4D8F2) — punchy little chips
-             against the brand-navy hero. Dark navy text for legibility. */
+             against the brand-navy hero. Black text for legibility. */
           background: #C4D8F2;
-          color: #1A3251;
+          color: #000;
           font-size: 14px;
           font-weight: 700;
           letter-spacing: 0.3px;
