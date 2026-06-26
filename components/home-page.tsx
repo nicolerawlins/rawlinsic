@@ -136,6 +136,37 @@ export default function HomePage() {
   const [activeExplore, setActiveExplore] = useState<string | null>(null);
   const [storyProgress, setStoryProgress] = useState(0);
   const [pillarsProgress, setPillarsProgress] = useState(0);
+  /* Render the static poster first; only swap to the looping video
+     once the client has confirmed the user isn't on a slow connection
+     / data-saver / low-memory device. Slow visitors never download
+     the video bytes — they just see the poster forever. */
+  const [showHeroVideo, setShowHeroVideo] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    type ConnInfo = {
+      effectiveType?: string;
+      saveData?: boolean;
+    };
+    const nav = navigator as Navigator & {
+      connection?: ConnInfo;
+      deviceMemory?: number;
+    };
+    const conn = nav.connection;
+    const saveData = conn?.saveData === true;
+    const slowConn =
+      !!conn?.effectiveType &&
+      ["slow-2g", "2g", "3g"].includes(conn.effectiveType);
+    const weakDevice =
+      typeof nav.deviceMemory === "number" && nav.deviceMemory < 2;
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (!saveData && !slowConn && !weakDevice && !reducedMotion) {
+      setShowHeroVideo(true);
+    }
+  }, []);
+
 
   const toggleJourney = (idx: number) => {
     setOpenJourneys((prev) =>
@@ -354,12 +385,33 @@ export default function HomePage() {
       {/* ── Hero ── */}
       <section className="hero" id="top">
         <div className="hero-video-wrap">
-          <video className="hero-video" autoPlay muted loop playsInline preload="metadata" poster="/images/pages/hero-poster.webp">
-            <source src={VIDEO_URL} type="video/mp4" />
-          </video>
+          {showHeroVideo ? (
+            <video
+              className="hero-video"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              poster="/images/pages/home-hero-poster.webp"
+              aria-hidden="true"
+            >
+              <source src="/videos/home-hero-loop.webm" type="video/webm" />
+              <source src="/videos/home-hero-loop.mp4" type="video/mp4" />
+            </video>
+          ) : (
+            <Image
+              src="/images/pages/home-hero-poster.webp"
+              alt=""
+              fill
+              priority
+              className="hero-video"
+              sizes="100vw"
+              aria-hidden="true"
+            />
+          )}
         </div>
         <div className="hero-bg-overlay" />
-        <div className="hero-depth" />
         <div className="hero-grid" />
         <div className="hero-content">
           <Image

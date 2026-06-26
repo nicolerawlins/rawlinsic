@@ -1437,19 +1437,17 @@ text-align: center;
   padding-bottom: 40px;
 }
 .hero-video-wrap {
-  /* Video background removed per design pass — hero now sits on the
-     site ambient background with the radial light in the middle. */
-  display: none;
+  position: absolute; inset: 0; z-index: 0; overflow: hidden;
 }
 .hero-video {
-  width: 100%; height: 100%; object-fit: cover; opacity: 0.45;
+  width: 100%; height: 100%; object-fit: cover;
 }
 .hero-bg-overlay {
-  /* Removed — the hero now sits directly on the site's ambient bg
-     so the brand-navy reads the same in the hero as it does on the
-     content below. The light-blue radial spotlight (.hero-depth)
-     is still layered on top. */
-  display: none;
+  position: absolute; inset: 0;
+  z-index: 1;
+  /* Flat uniform brand-navy wash — consistent darkness across the
+     whole hero so the title/wordmark are equally readable. */
+  background: rgba(19, 36, 58, 0.85);
 }
 .hero-depth {
   position: absolute; inset: 0;
