@@ -361,15 +361,6 @@ export default function HomePage() {
         <div className="hero-bg-overlay" />
         <div className="hero-depth" />
         <div className="hero-grid" />
-        {/* Aurora — large soft blurred color blobs in the brand palette
-            (light blue, mid blue, gold accent) drifting slowly over the
-            navy base. Matches the BCG-style hero bg motion. */}
-        <div className="hero-aurora" aria-hidden="true">
-          <span className="hero-aurora-blob hero-aurora-1" />
-          <span className="hero-aurora-blob hero-aurora-2" />
-          <span className="hero-aurora-blob hero-aurora-3" />
-          <span className="hero-aurora-blob hero-aurora-4" />
-        </div>
         <div className="hero-content">
           <Image
             src="/images/pages/hero-bg.webp"
