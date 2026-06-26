@@ -1011,12 +1011,15 @@ a.contact-detail-value:hover { color: #fff; }
   padding: 100px 40px;
   position: relative; overflow: hidden;
   display: flex; align-items: center; justify-content: center;
+  /* Light-blue palette hint — subtle, not bright, just enough to
+     differentiate the callout from the page bg while keeping the
+     dominant brand-navy tone. White text inside stays readable. */
   background: linear-gradient(180deg,
-    rgba(229,203,135,0.03) 0%,
-    rgba(229,203,135,0.06) 50%,
-    rgba(229,203,135,0.03) 100%);
-  border-top: 1px solid rgba(229,203,135,0.08);
-  border-bottom: 1px solid rgba(229,203,135,0.08);
+    rgba(196, 216, 242, 0.04) 0%,
+    rgba(196, 216, 242, 0.08) 50%,
+    rgba(196, 216, 242, 0.04) 100%);
+  border-top: 1px solid rgba(196, 216, 242, 0.14);
+  border-bottom: 1px solid rgba(196, 216, 242, 0.14);
 }
 .parallax-panel.parallax-panel-img {
   background: none;
@@ -1046,7 +1049,9 @@ a.contact-detail-value:hover { color: #fff; }
 }
 .parallax-panel::before {
   content: ''; position: absolute; inset: 0;
-  background: radial-gradient(ellipse at 50% 50%, rgba(229,203,135,0.05) 0%, transparent 60%);
+  /* Soft light-blue radial behind the quote so the panel reads as a
+     subtle blue wash rather than a gold one. */
+  background: radial-gradient(ellipse at 50% 50%, rgba(196, 216, 242, 0.10) 0%, transparent 60%);
   pointer-events: none;
 }
 .parallax-panel::after {
@@ -1057,8 +1062,8 @@ a.contact-detail-value:hover { color: #fff; }
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
   font-size: 6rem;
   line-height: 1;
-  opacity: 0.06;
-  color: #c9a84c;
+  opacity: 0.18;
+  color: #C4D8F2;
   pointer-events: none;
 }
 .parallax-text {
@@ -1458,12 +1463,12 @@ text-align: center;
    narrow viewports so it doesn't dominate the screen on phones. */
 .hero-logo-mark {
   display: block;
-  width: clamp(260px, 38vw, 520px);
+  width: clamp(220px, 32vw, 440px);
   height: auto;
-  margin: 0 auto 20px;
+  margin: 0 auto 36px;
 }
 @media (max-width: 480px) {
-  .hero-logo-mark { margin-bottom: 16px; }
+  .hero-logo-mark { margin-bottom: 28px; }
 }
 .hero-grid {
   position: absolute; inset: 0;
