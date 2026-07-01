@@ -425,7 +425,7 @@ export default function HomePage() {
           />
           <span className="hero-label"><span className="gold-text"><span className="hero-label-segment">Trusted Advisor &bull;</span> <span className="hero-label-segment">Global Consultancy</span></span></span>
           <h1 className="hero-title">
-            Solving complex challenges &amp; delivering digital solutions at the intersection of <em>strategy, operations</em> &amp; <em>technology</em>
+            Pairing consulting services with digital solutions to solve complex challenges at the intersection of <em>strategy, operations</em> &amp; <em>technology</em>
           </h1>
           <a href="#pillars" className="auto-hero-btn"><span>Consider Our Approach</span></a>
         </div>

@@ -1498,8 +1498,13 @@ text-align: center;
   min-width: 0;
   padding: 0 40px;
 }
+/* Wider box on desktop so the longer hero title wraps evenly and the
+   last word ("technology") doesn't drop onto its own line. */
+@media (min-width: 769px) {
+  .hero-content { max-width: 1040px; }
+}
 @media (min-width: 1368px) {
-  .hero-content { max-width: 840px; }
+  .hero-content { max-width: 1140px; }
 }
 
 .hero-sub {
