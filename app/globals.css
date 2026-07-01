@@ -673,13 +673,19 @@ color: #fff;
 
 .hero-title {
   font-family: var(--font-cormorant), 'Cormorant Garamond', Georgia, serif;
-  font-size: clamp(1.8rem, 2.6vw, 3rem);
-  line-height: 1.2;
+  font-size: clamp(2.7rem, 4vw, 4.5rem);
+  line-height: 1.15;
   font-weight: 400;
   margin-bottom: 28px;
   opacity: 0; transform: translateY(40px);
   animation: heroFade 1.2s 0.5s forwards;
   margin-top:20px;
+}
+/* Home hero title stays smaller (the big wordmark carries the visual
+   weight there); every other page keeps the original larger size. */
+.hero .hero-title {
+  font-size: clamp(1.8rem, 2.6vw, 3rem);
+  line-height: 1.2;
 }
 
 .hero-title em {
