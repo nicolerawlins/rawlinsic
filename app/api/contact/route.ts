@@ -40,6 +40,7 @@ function isRateLimited(ip: string): boolean {
 async function storeInConvex(data: {
   name: string;
   email: string;
+  phone?: string;
   organization?: string;
   interest?: string;
   message: string;
@@ -95,16 +96,16 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { name, email, organization, interest, message, honeypot, recaptchaToken } = body;
+    const { name, email, phone, organization, interest, message, honeypot, recaptchaToken } = body;
 
     // Honeypot: real users never fill this. Silently accept and discard.
     if (honeypot && String(honeypot).trim().length > 0) {
       return NextResponse.json({ success: true });
     }
 
-    if (!name || !email || !message) {
+    if (!name || !email || !organization || !interest || !message) {
       return NextResponse.json(
-        { error: "Name, email, and message are required." },
+        { error: "Name, email, organization, area of interest, and message are required." },
         { status: 400 }
       );
     }
@@ -116,6 +117,7 @@ export async function POST(request: Request) {
       typeof message !== "string" ||
       name.length > 200 ||
       email.length > 200 ||
+      (phone && String(phone).length > 50) ||
       (organization && String(organization).length > 200) ||
       (interest && String(interest).length > 200) ||
       message.length > 5000
@@ -148,6 +150,7 @@ export async function POST(request: Request) {
     await storeInConvex({
       name,
       email,
+      phone,
       organization,
       interest,
       message,
@@ -190,7 +193,8 @@ export async function POST(request: Request) {
           <h2>New Contact Form Submission</h2>
           <p><strong>Name:</strong> ${escape(name)}</p>
           <p><strong>Email:</strong> ${escape(email)}</p>
-          <p><strong>Organization:</strong> ${organization ? escape(String(organization)) : "Not provided"}</p>
+          <p><strong>Phone:</strong> ${phone ? escape(String(phone)) : "Not provided"}</p>
+          <p><strong>Organization/Agency:</strong> ${organization ? escape(String(organization)) : "Not provided"}</p>
           <p><strong>Area of Interest:</strong> ${interest ? escape(String(interest)) : "Not specified"}</p>
           <hr />
           <p><strong>Message:</strong></p>

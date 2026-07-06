@@ -8,6 +8,7 @@ import SiteFooter from "@/components/site-footer";
 interface FormData {
   name: string;
   email: string;
+  phone: string;
   organization: string;
   interest: string;
   message: string;
@@ -30,6 +31,7 @@ export default function ContactPage() {
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
+    phone: "",
     organization: "",
     interest: "",
     message: "",
@@ -223,7 +225,7 @@ export default function ContactPage() {
 
   const resetForm = () => {
     setSubmitted(false);
-    setFormData({ name: "", email: "", organization: "", interest: "", message: "" });
+    setFormData({ name: "", email: "", phone: "", organization: "", interest: "", message: "" });
   };
 
   return (
@@ -440,25 +442,43 @@ export default function ContactPage() {
                     </div>
                   </div>
 
-                  <div className="form-group">
-                    <label className="form-label" htmlFor="organization">
-                      Organization
-                    </label>
-                    <input
-                      className="form-input"
-                      id="organization"
-                      name="organization"
-                      type="text"
-                      placeholder="Your organization or agency"
-                      value={formData.organization}
-                      onChange={handleChange}
-                      autoComplete="organization"
-                    />
+                  <div className="form-row">
+                    <div className="form-group">
+                      <label className="form-label" htmlFor="organization">
+                        Organization/Agency <span className="form-required">*</span>
+                      </label>
+                      <input
+                        className="form-input"
+                        id="organization"
+                        name="organization"
+                        type="text"
+                        placeholder="Your organization or agency"
+                        value={formData.organization}
+                        onChange={handleChange}
+                        required
+                        autoComplete="organization"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label" htmlFor="phone">
+                        Phone <span style={{ fontWeight: 400, textTransform: "none", letterSpacing: "normal" }}>(optional)</span>
+                      </label>
+                      <input
+                        className="form-input"
+                        id="phone"
+                        name="phone"
+                        type="tel"
+                        placeholder="(000) 000-0000"
+                        value={formData.phone}
+                        onChange={handleChange}
+                        autoComplete="tel"
+                      />
+                    </div>
                   </div>
 
                   <div className="form-group">
                     <label className="form-label" htmlFor="interest">
-                      Area of Interest
+                      Area of Interest <span className="form-required">*</span>
                     </label>
                     <input
                       className="form-input"
@@ -468,6 +488,7 @@ export default function ContactPage() {
                       placeholder="e.g., Strategy, Operations, Technology, General Inquiry"
                       value={formData.interest}
                       onChange={handleChange}
+                      required
                     />
                   </div>
 
