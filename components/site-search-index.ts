@@ -175,15 +175,6 @@ const STATIC_ENTRIES: SearchEntry[] = [
       "careers jobs hiring employment open positions work opportunities join us",
   },
   {
-    title: "Proposal Writer/Manager",
-    href: "/careers/proposal-writer-manager",
-    category: "Careers",
-    description:
-      "Open opportunity — full-time, remote. Candidates preferred in US or GCC markets (UAE, Saudi Arabia, Qatar).",
-    keywords:
-      "proposal writer manager careers job open opportunity full-time remote business development consulting raid gcc uae saudi arabia qatar us",
-  },
-  {
     title: "Contact",
     href: "/contact",
     category: "Main",

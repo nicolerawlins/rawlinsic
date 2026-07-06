@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import Link from "next/link";
 import SiteNav from "@/components/site-nav";
 import SiteFooter from "@/components/site-footer";
 
@@ -150,17 +149,19 @@ export default function CareersPage() {
               <p
                 style={{
                   marginTop: "48px",
-                  marginBottom: "16px",
+                  marginBottom: "72px",
                   color: "#fff",
-                  fontSize: "20px",
-                  fontWeight: 700,
+                  fontSize: "18px",
+                  fontWeight: 500,
+                  lineHeight: 1.7,
                   letterSpacing: "normal",
                   textTransform: "none",
                 }}
               >
-                Open Opportunities:
+                We don&rsquo;t have any open positions at the moment, but we&rsquo;re
+                always glad to connect with talented people. Reach out at the email
+                above and we&rsquo;ll keep you in mind for future opportunities.
               </p>
-              <Link href="/careers/proposal-writer-manager" className="auto-hero-btn" style={{ opacity: 1, transform: "none", animation: "none", marginBottom: "72px" }}><span>Proposal Writer/Manager</span></Link>
             </div>
           </section>
 

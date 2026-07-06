@@ -157,16 +157,9 @@ export default function SiteNav({ ctaHref = "/contact", homeMode = false }: Site
             </div>
           </div>
 
-          <div className="mobile-menu-group" style={{ marginTop: 12 }}>
-            <button className="mobile-menu-parent" onClick={() => toggleSub("careers")}>
-              Careers
-              <svg className={`mobile-menu-chevron${mobileSubOpen.has("careers") ? " open" : ""}`} width="12" height="8" viewBox="0 0 12 8" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M1 1.5l5 5 5-5"/></svg>
-            </button>
-            <div className={`mobile-menu-sub${mobileSubOpen.has("careers") ? " open" : ""}`}>
-              <a href="/careers" onClick={close}>View All</a>
-              <a href="/careers/proposal-writer-manager" onClick={close}>Proposal Writer/Manager</a>
-            </div>
-          </div>
+          {/* Careers — plain link (no open postings, so no submenu).
+              The /careers page stays live. */}
+          <a href="/careers" onClick={close} className="mobile-menu-link">Careers</a>
         </div>
 
         <Link href={ctaHref} onClick={close} className="mobile-menu-cta">Get In Touch</Link>
@@ -244,18 +237,10 @@ export default function SiteNav({ ctaHref = "/contact", homeMode = false }: Site
             </div>
           </div>
 
-          <div className="nav-item has-sub">
-            <span className="nav-item-label">
-              Careers
-              <svg className="nav-chevron" width="8" height="5" viewBox="0 0 8 5" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M1 1l3 3 3-3"/>
-              </svg>
-            </span>
-            <div className="nav-dropdown">
-              <a href="/careers">View All</a>
-              <a href="/careers/proposal-writer-manager">Proposal Writer/Manager</a>
-            </div>
-          </div>
+          {/* Careers has no open postings right now, so it's a plain
+              link to /careers rather than a dropdown. The /careers page
+              itself stays live. */}
+          <a href="/careers" className="nav-item nav-item-plain">Careers</a>
         </div>
 
         <div className="nav-right">

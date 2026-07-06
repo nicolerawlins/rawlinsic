@@ -435,6 +435,12 @@ body.has-custom-cursor .cursor-ring {
   display: flex; align-items: center; gap: 6px;
   text-decoration: none; color: inherit;
 }
+/* Careers is a plain link (no dropdown). Align it like the other
+   nav items and keep the gold underline-on-hover. */
+.nav-item-plain {
+  display: inline-flex; align-items: center;
+  text-decoration: none;
+}
 .nav-chevron {
   transition: transform 0.3s; flex-shrink: 0;
 }

@@ -17,6 +17,18 @@ const nextConfig = {
   },
   compress: true,
   poweredByHeader: false,
+  async redirects() {
+    return [
+      // Proposal Writer/Manager role filled — permanently (301) redirect
+      // the old posting URL to the careers index so inbound links and
+      // search-engine hits don't 404.
+      {
+        source: "/careers/proposal-writer-manager",
+        destination: "/careers",
+        permanent: true,
+      },
+    ];
+  },
   async headers() {
     return [
       // Static assets in /public get immutable caching
