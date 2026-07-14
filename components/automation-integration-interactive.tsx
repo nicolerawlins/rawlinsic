@@ -3,19 +3,22 @@
 import { useEffect, useRef, useState } from "react";
 
 /* ──────────────────────────────────────────────────────────────
-   Rawlins · Automation & Integration — interactive hub-and-spoke.
-   Dark, high-tech take on the connected-system map.
-   Click a node → modal with that capability's real case study.
+   Rawlins · Automation & Integration — interactive infographic.
+   The 3D hub illustration is the centerpiece; each of the six
+   nodes has a clickable hotspot that opens its real case study.
    Self-contained: all styles scoped under `.rai-root`.
    Content sourced from "Real-World A&I Examples" (anonymized).
    ────────────────────────────────────────────────────────────── */
 
+const HUB_IMG = "/images/dev/ai-hub.png"; // 846 x 600
+
 type Node = {
   id: string;
   title: string;
-  tagline: string;
   accent: string;
-  icon: JSX.Element;
+  /* hotspot box + pulse-badge position, as % of the image */
+  box: { left: number; top: number; width: number; height: number };
+  badge: { x: number; y: number };
   example: string;
   popupTitle: string;
   popupSubtitle: string;
@@ -28,45 +31,13 @@ type Node = {
   quote: string;
 };
 
-/* ── Icons (line marks) ── */
-const iChart = (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M4 20V4M4 20h16" /><rect x="7" y="12" width="3" height="5" /><rect x="12" y="8" width="3" height="9" /><rect x="17" y="10" width="3" height="7" />
-  </svg>
-);
-const iGauge = (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M4 15a8 8 0 0 1 16 0" /><path d="M12 15l4-3" /><circle cx="12" cy="15" r="1.3" fill="currentColor" stroke="none" />
-  </svg>
-);
-const iDatabase = (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-    <ellipse cx="12" cy="6" rx="7" ry="3" /><path d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6" /><path d="M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6" />
-  </svg>
-);
-const iFlow = (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-    <circle cx="6" cy="7" r="2.5" /><circle cx="6" cy="17" r="2.5" /><path d="M8.5 7H15l3.5 5-3.5 5H8.5" /><path d="M18.5 12H15" />
-  </svg>
-);
-const iPin = (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="6" y="3" width="12" height="18" rx="2.5" /><path d="M12 8.5a2 2 0 1 0 0 4 2 2 0 0 0 0-4z" /><path d="M12 12.5V17" />
-  </svg>
-);
-const iHandoff = (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M4 8h13l-3-3M20 16H7l3 3" />
-  </svg>
-);
-
-/* ── Node data + real case studies ── */
 const NODES: Node[] = [
   {
     id: "reporting",
     title: "Reporting",
-    tagline: "Real-time insights that drive action.",
-    accent: "#4d9fff", icon: iChart,
+    accent: "#2f6fb5",
+    box: { left: 13, top: 3, width: 37, height: 26 },
+    badge: { x: 68, y: 50 },
     example: "Example 01",
     popupTitle: "Project Accounting & Reporting",
     popupSubtitle: "Project-based technical services firm",
@@ -95,8 +66,9 @@ const NODES: Node[] = [
   {
     id: "capacity",
     title: "Capacity",
-    tagline: "See capacity before it becomes a bottleneck.",
-    accent: "#f0b83f", icon: iGauge,
+    accent: "#d99a2b",
+    box: { left: 57, top: 3, width: 39, height: 26 },
+    badge: { x: 23, y: 46 },
     example: "Example 04",
     popupTitle: "Capacity Planning",
     popupSubtitle: "Field services / drilling organization",
@@ -125,8 +97,9 @@ const NODES: Node[] = [
   {
     id: "single-source",
     title: "Single Source",
-    tagline: "One source of truth across your team.",
-    accent: "#35d08a", icon: iDatabase,
+    accent: "#2e9e6a",
+    box: { left: 70, top: 38, width: 29, height: 28 },
+    badge: { x: 34, y: 48 },
     example: "Example 05",
     popupTitle: "Single Source of Truth",
     popupSubtitle: "100+ employee manufacturing firm",
@@ -155,8 +128,9 @@ const NODES: Node[] = [
   {
     id: "sales-project",
     title: "Sales → Project",
-    tagline: "From opportunity to execution — connected.",
-    accent: "#a78bfa", icon: iFlow,
+    accent: "#3a4d7a",
+    box: { left: 62, top: 71, width: 37, height: 27 },
+    badge: { x: 24, y: 50 },
     example: "Example 06",
     popupTitle: "BD → Project Handover",
     popupSubtitle: "130-person professional services firm",
@@ -185,8 +159,9 @@ const NODES: Node[] = [
   {
     id: "field-reporting",
     title: "Field Reporting",
-    tagline: "Capture field data that fuels better decisions.",
-    accent: "#ff8a5c", icon: iPin,
+    accent: "#d9702f",
+    box: { left: 8, top: 68, width: 38, height: 29 },
+    badge: { x: 72, y: 47 },
     example: "Example 03",
     popupTitle: "Field Reporting",
     popupSubtitle: "Field-service / project delivery firm",
@@ -214,8 +189,9 @@ const NODES: Node[] = [
   {
     id: "service-handoff",
     title: "Service Handoff",
-    tagline: "Seamless transitions. No dropped information.",
-    accent: "#2fd4d4", icon: iHandoff,
+    accent: "#2a9d9d",
+    box: { left: 2, top: 32, width: 33, height: 30 },
+    badge: { x: 64, y: 47 },
     example: "Example 02",
     popupTitle: "Project → Service Handoff",
     popupSubtitle: "Install & service / maintenance firm",
@@ -250,11 +226,6 @@ const FOOTER_STATS = [
   { big: "Stronger", sub: "Outcomes" },
 ];
 
-/* connector endpoints (%) — match .rai-pos-* below, in NODES order */
-const SPOKES = [
-  [26, 16], [74, 16], [90, 50], [74, 84], [26, 84], [10, 50],
-];
-
 const XMark = ({ color }: { color: string }) => (
   <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke={color} strokeWidth="2.4" strokeLinecap="round"><path d="M7 7l10 10M17 7L7 17" /></svg>
 );
@@ -269,11 +240,11 @@ function toolDot(name: string): string {
   if (n.includes("salesforce")) return "#1798c1";
   if (n.includes("quickbook")) return "#2ca01c";
   if (n.includes("docusign")) return "#ffb300";
-  if (n.includes("tracket")) return "#2fd4d4";
+  if (n.includes("tracket")) return "#2fbfbf";
   if (n.includes("looker")) return "#4d9fff";
-  if (n.includes("google")) return "#4d9fff";
-  if (n.includes("sharepoint") || n.includes("teams") || n.includes("outlook")) return "#4d9fff";
-  return "#f0b83f";
+  if (n.includes("google")) return "#4285f4";
+  if (n.includes("sharepoint") || n.includes("teams") || n.includes("outlook")) return "#2f6fb5";
+  return "#d99a2b";
 }
 
 export default function AutomationIntegrationInteractive() {
@@ -310,61 +281,42 @@ export default function AutomationIntegrationInteractive() {
   return (
     <div className="rai-root">
       <style>{CSS}</style>
-      <div className="rai-bg" aria-hidden="true">
-        <span className="rai-grid" />
-        <span className="rai-glow rai-glow-a" />
-        <span className="rai-glow rai-glow-b" />
-        <span className="rai-orb rai-orb-1" />
-        <span className="rai-orb rai-orb-2" />
-        <span className="rai-orb rai-orb-3" />
-      </div>
 
       <main className="rai-canvas">
         {/* ── Header ── */}
         <header className="rai-header">
           <span className="rai-brand">R A W L I N S</span>
-          <h1 className="rai-title">
-            Automation <span className="rai-amp">&amp;</span> Integration
-          </h1>
+          <h1 className="rai-title">Automation <span className="rai-amp">&amp;</span> Integration</h1>
           <p className="rai-sub">One connected system. Full visibility. Smarter decisions.</p>
+          <p className="rai-hint"><span className="rai-hint-dot" />Click a capability to see a real example</p>
         </header>
 
-        {/* ── Hub + nodes ── */}
-        <div className="rai-stage" role="group" aria-label="Connected capabilities">
-          <svg className="rai-connectors" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-            {SPOKES.map(([x, y], i) => (
-              <g key={i}>
-                <line x1="50" y1="50" x2={x} y2={y} className="rai-line-base" />
-                <line x1="50" y1="50" x2={x} y2={y} className="rai-line-pulse" pathLength={100} style={{ animationDelay: `${i * 0.5}s`, stroke: NODES[i].accent }} />
-              </g>
+        {/* ── Interactive image ── */}
+        <div className="rai-stage">
+          <div className="rai-imgwrap">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={HUB_IMG} alt="Rawlins Automation & Integration — one connected system" className="rai-img" width={846} height={600} />
+            {NODES.map((n, i) => (
+              <button
+                key={n.id}
+                className="rai-hotspot"
+                style={{
+                  left: `${n.box.left}%`, top: `${n.box.top}%`,
+                  width: `${n.box.width}%`, height: `${n.box.height}%`,
+                  ["--acc" as string]: n.accent,
+                }}
+                onClick={() => open(i)}
+                aria-label={`${n.title} — view example`}
+                aria-haspopup="dialog"
+              >
+                <span className="rai-badge" style={{ left: `${n.badge.x}%`, top: `${n.badge.y}%` }}>
+                  <span className="rai-badge-ring" />
+                  <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="#fff" strokeWidth="2.6" strokeLinecap="round"><path d="M12 5v14M5 12h14" /></svg>
+                </span>
+                <span className="rai-hotspot-chip">View example →</span>
+              </button>
             ))}
-          </svg>
-
-          <div className="rai-hub">
-            <span className="rai-hub-ring r1" aria-hidden="true" />
-            <span className="rai-hub-ring r2" aria-hidden="true" />
-            <div className="rai-hub-tile">
-              <span className="rai-hub-r">R</span>
-              <span className="rai-hub-stripe" aria-hidden="true" />
-            </div>
           </div>
-
-          {NODES.map((n, i) => (
-            <button
-              key={n.id}
-              className={`rai-node rai-pos-${i}`}
-              style={{ ["--acc" as string]: n.accent }}
-              onClick={() => open(i)}
-              aria-haspopup="dialog"
-            >
-              <span className="rai-node-icon">{n.icon}</span>
-              <span className="rai-node-text">
-                <span className="rai-node-title">{n.title}</span>
-                <span className="rai-node-tag">{n.tagline}</span>
-              </span>
-              <span className="rai-node-cue" aria-hidden="true">View example →</span>
-            </button>
-          ))}
         </div>
 
         {/* ── Footer stat bar ── */}
@@ -387,17 +339,15 @@ export default function AutomationIntegrationInteractive() {
             </button>
 
             <div className="rai-modal-scroll">
-              {/* header */}
               <div className="rai-modal-head">
                 <span className="rai-example">{active.example}</span>
                 <h2 id="rai-modal-title" className="rai-modal-title">{active.popupTitle}</h2>
                 <p className="rai-modal-subtitle">{active.popupSubtitle}</p>
               </div>
 
-              {/* before / after */}
               <div className="rai-ba">
                 <div className="rai-ba-card rai-ba-before">
-                  <div className="rai-ba-label"><span className="rai-badge rai-badge-x"><XMark color="#fff" /></span>Before</div>
+                  <div className="rai-ba-label"><span className="rai-badge2 rai-badge-x"><XMark color="#fff" /></span>Before</div>
                   <p className="rai-ba-cap">{active.before}</p>
                   <div className="rai-ba-art rai-art-messy" aria-hidden="true">
                     <span className="rai-note n1" /><span className="rai-note n2" /><span className="rai-note n3" />
@@ -406,7 +356,7 @@ export default function AutomationIntegrationInteractive() {
                 </div>
                 <div className="rai-ba-arrow" aria-hidden="true">→</div>
                 <div className="rai-ba-card rai-ba-after">
-                  <div className="rai-ba-label"><span className="rai-badge rai-badge-check"><CheckMark color="#fff" /></span>After</div>
+                  <div className="rai-ba-label"><span className="rai-badge2 rai-badge-check"><CheckMark color="#fff" /></span>After</div>
                   <p className="rai-ba-cap">{active.after}</p>
                   <div className="rai-ba-art rai-art-clean" aria-hidden="true">
                     <span className="rai-gantt g1" /><span className="rai-gantt g2" /><span className="rai-gantt g3" /><span className="rai-gantt g4" />
@@ -414,7 +364,6 @@ export default function AutomationIntegrationInteractive() {
                 </div>
               </div>
 
-              {/* three columns */}
               <div className="rai-cols">
                 <section className="rai-col rai-col-problem">
                   <h3 className="rai-col-head">
@@ -422,11 +371,7 @@ export default function AutomationIntegrationInteractive() {
                       <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3L2 20h20L12 3z" /><path d="M12 10v4M12 17.5v.01" /></svg>
                     </span>The Problem
                   </h3>
-                  <ul>
-                    {active.problem.map((t, i) => (
-                      <li key={i}><XMark color="#ff6b6b" /><span>{t}</span></li>
-                    ))}
-                  </ul>
+                  <ul>{active.problem.map((t, i) => (<li key={i}><XMark color="#e05656" /><span>{t}</span></li>))}</ul>
                 </section>
                 <section className="rai-col rai-col-built">
                   <h3 className="rai-col-head">
@@ -434,11 +379,7 @@ export default function AutomationIntegrationInteractive() {
                       <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21l3-1 9.5-9.5-2-2L4 18l-1 3z" /><path d="M14.5 6.5l3 3 2.2-2.2a1.6 1.6 0 0 0 0-2.3l-.7-.7a1.6 1.6 0 0 0-2.3 0z" /></svg>
                     </span>What We Built
                   </h3>
-                  <ul>
-                    {active.built.map((t, i) => (
-                      <li key={i}><CheckMark color="#4d9fff" /><span>{t}</span></li>
-                    ))}
-                  </ul>
+                  <ul>{active.built.map((t, i) => (<li key={i}><CheckMark color="#2f6fb5" /><span>{t}</span></li>))}</ul>
                 </section>
                 <section className="rai-col rai-col-result">
                   <h3 className="rai-col-head">
@@ -446,18 +387,12 @@ export default function AutomationIntegrationInteractive() {
                       <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19V5M4 19h16" /><path d="M8 15l3.5-4 3 2.5L20 7" /><path d="M16 7h4v4" /></svg>
                     </span>The Result
                   </h3>
-                  <ul>
-                    {active.result.map((t, i) => (
-                      <li key={i}><CheckMark color="#35d08a" /><span>{t}</span></li>
-                    ))}
-                  </ul>
+                  <ul>{active.result.map((t, i) => (<li key={i}><CheckMark color="#2e9e6a" /><span>{t}</span></li>))}</ul>
                 </section>
               </div>
 
-              {/* takeaway quote */}
               <blockquote className="rai-quote">{active.quote}</blockquote>
 
-              {/* stack */}
               <div className="rai-stack">
                 <div className="rai-stack-head"><span className="rai-stack-line" />The Stack We Connect<span className="rai-stack-line" /></div>
                 <div className="rai-stack-items">
@@ -480,229 +415,138 @@ export default function AutomationIntegrationInteractive() {
 /* ────────────────────────────  Styles  ──────────────────────────── */
 const CSS = `
 .rai-root{
-  --gold:#f0b83f; --text:#eaf0fb; --muted:#8f9cb5;
-  --panel:rgba(255,255,255,.045); --panel-brd:rgba(255,255,255,.09);
-  position:relative; min-height:100vh; overflow:hidden;
+  --navy:#1e2d4d; --gold:#d99a2b; --ink:#3a4661; --muted:#7b869b; --line:#e6eaf1;
+  position:relative; min-height:100vh;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
-  color:var(--text);
-  background:radial-gradient(1200px 800px at 15% -10%, #12203f 0%, #0a1226 45%, #070c18 100%);
+  color:var(--ink);
+  background:radial-gradient(1200px 700px at 50% -8%, #ffffff 0%, #f2f5fa 55%, #eef2f8 100%);
 }
 .rai-root *{box-sizing:border-box}
-
-/* background layers */
-.rai-bg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.rai-grid{position:absolute;inset:-2px;
-  background-image:linear-gradient(rgba(255,255,255,.045) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.045) 1px,transparent 1px);
-  background-size:46px 46px;
-  -webkit-mask-image:radial-gradient(900px 620px at 50% 34%,#000 0%,transparent 78%);
-  mask-image:radial-gradient(900px 620px at 50% 34%,#000 0%,transparent 78%)}
-.rai-glow{position:absolute;border-radius:50%;filter:blur(70px);opacity:.5}
-.rai-glow-a{width:520px;height:520px;left:-140px;top:-120px;background:radial-gradient(circle,rgba(240,184,63,.42),transparent 65%)}
-.rai-glow-b{width:560px;height:560px;right:-160px;bottom:-160px;background:radial-gradient(circle,rgba(77,159,255,.34),transparent 65%)}
-.rai-orb{position:absolute;border-radius:50%;filter:blur(46px);opacity:.35;animation:rai-drift 18s ease-in-out infinite}
-.rai-orb-1{width:230px;height:230px;left:10%;top:52%;background:radial-gradient(circle,rgba(53,208,138,.5),transparent 70%)}
-.rai-orb-2{width:200px;height:200px;right:14%;top:20%;background:radial-gradient(circle,rgba(167,139,250,.5),transparent 70%);animation-delay:-6s}
-.rai-orb-3{width:180px;height:180px;left:46%;bottom:6%;background:radial-gradient(circle,rgba(47,212,212,.42),transparent 70%);animation-delay:-11s}
-@keyframes rai-drift{0%,100%{transform:translate(0,0)}50%{transform:translate(24px,-26px)}}
-
-.rai-canvas{position:relative;z-index:1;max-width:940px;margin:0 auto;padding:52px 28px 44px}
+.rai-canvas{position:relative;z-index:1;max-width:980px;margin:0 auto;padding:44px 24px 44px}
 
 /* header */
-.rai-header{margin-bottom:22px}
-.rai-brand{font-size:12px;letter-spacing:6px;font-weight:700;color:var(--gold);text-shadow:0 0 22px rgba(240,184,63,.5)}
-.rai-title{font-size:clamp(30px,6vw,56px);line-height:1.02;font-weight:800;letter-spacing:-.5px;margin:10px 0 0;
-  text-transform:uppercase;color:#fff}
-.rai-amp{background:linear-gradient(120deg,#f0b83f,#ffd98a);-webkit-background-clip:text;background-clip:text;color:transparent}
-.rai-title:after{content:"";display:block;width:56px;height:4px;border-radius:3px;margin-top:16px;
-  background:linear-gradient(90deg,#f0b83f,#ffd98a);box-shadow:0 0 20px rgba(240,184,63,.6)}
-.rai-sub{margin:16px 0 0;font-size:clamp(15px,2.2vw,19px);color:var(--muted);font-weight:500}
+.rai-header{text-align:center;margin-bottom:14px}
+.rai-brand{font-size:12px;letter-spacing:6px;font-weight:700;color:var(--gold)}
+.rai-title{font-size:clamp(28px,5.4vw,46px);line-height:1.05;font-weight:800;letter-spacing:-.5px;margin:10px 0 0;text-transform:uppercase;color:var(--navy)}
+.rai-amp{color:var(--gold)}
+.rai-sub{margin:12px 0 0;font-size:clamp(14px,2vw,18px);color:var(--muted);font-weight:500}
+.rai-hint{display:inline-flex;align-items:center;gap:8px;margin:16px 0 0;font-size:12.5px;font-weight:700;
+  letter-spacing:.4px;text-transform:uppercase;color:var(--navy);
+  background:#fff;border:1px solid var(--line);border-radius:999px;padding:7px 15px;
+  box-shadow:0 6px 16px -10px rgba(30,45,77,.4)}
+.rai-hint-dot{width:8px;height:8px;border-radius:50%;background:var(--gold);box-shadow:0 0 0 0 rgba(217,154,43,.55);animation:rai-ping 2s ease-out infinite}
+@keyframes rai-ping{0%{box-shadow:0 0 0 0 rgba(217,154,43,.5)}70%,100%{box-shadow:0 0 0 8px rgba(217,154,43,0)}}
 
-/* stage */
-.rai-stage{position:relative;height:680px;margin:20px 0 34px}
-.rai-connectors{position:absolute;inset:0;width:100%;height:100%;overflow:visible;z-index:0}
-.rai-line-base{stroke:rgba(255,255,255,.1);stroke-width:1;vector-effect:non-scaling-stroke}
-.rai-line-pulse{stroke-width:2;fill:none;vector-effect:non-scaling-stroke;stroke-linecap:round;
-  stroke-dasharray:14 86;stroke-dashoffset:100;opacity:.9;
-  filter:drop-shadow(0 0 4px currentColor);
-  animation:rai-flow 3.2s linear infinite}
-@keyframes rai-flow{to{stroke-dashoffset:0}}
+/* interactive image */
+.rai-stage{margin:20px 0 30px}
+.rai-imgwrap{position:relative;width:100%;max-width:846px;margin:0 auto;aspect-ratio:846/600}
+.rai-img{display:block;width:100%;height:auto;user-select:none;-webkit-user-drag:none}
 
-/* hub */
-.rai-hub{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:2;
-  width:160px;height:160px;display:flex;align-items:center;justify-content:center}
-.rai-hub-ring{position:absolute;border-radius:50%;border:1px solid rgba(240,184,63,.4)}
-.rai-hub-ring.r1{width:100%;height:100%;animation:rai-pulse 3.4s ease-out infinite}
-.rai-hub-ring.r2{width:100%;height:100%;animation:rai-pulse 3.4s ease-out infinite;animation-delay:1.7s}
-@keyframes rai-pulse{0%{transform:scale(.78);opacity:.7}100%{transform:scale(1.5);opacity:0}}
-.rai-hub-tile{position:relative;width:132px;height:132px;border-radius:26px;
-  background:linear-gradient(155deg,rgba(35,52,90,.9),rgba(12,20,40,.92));
-  border:1px solid rgba(255,255,255,.12);overflow:hidden;
-  box-shadow:0 0 0 1px rgba(240,184,63,.18),0 24px 60px -18px rgba(0,0,0,.8),
-    inset 0 1px 0 rgba(255,255,255,.14),0 0 60px rgba(240,184,63,.22);
-  display:flex;align-items:center;justify-content:center}
-.rai-hub-r{font-family:Georgia,"Times New Roman",serif;font-weight:700;font-size:72px;line-height:1;
-  color:#fff;transform:translateY(-3px);position:relative;text-shadow:0 2px 18px rgba(0,0,0,.5)}
-.rai-hub-r:after{content:"";position:absolute;left:-6px;bottom:14px;width:13px;height:40px;background:var(--gold);
-  border-radius:3px;z-index:-1;box-shadow:0 0 16px rgba(240,184,63,.8)}
-.rai-hub-stripe{position:absolute;left:0;right:0;bottom:0;height:5px;
-  background:linear-gradient(90deg,#4d9fff,#f0b83f 55%,#35d08a);opacity:.9}
-
-/* nodes */
-.rai-node{position:absolute;transform:translate(-50%,-50%);z-index:3;
-  width:238px;display:flex;align-items:center;gap:13px;text-align:left;cursor:pointer;
-  background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.028));
-  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
-  border:1px solid var(--panel-brd);border-radius:16px;padding:14px 15px 30px;
-  box-shadow:0 20px 40px -22px rgba(0,0,0,.85),inset 0 1px 0 rgba(255,255,255,.06);
-  transition:transform .24s cubic-bezier(.2,.8,.25,1),box-shadow .24s,border-color .24s,background .24s}
-.rai-node:hover,.rai-node:focus-visible{transform:translate(-50%,-50%) translateY(-5px);
-  border-color:color-mix(in srgb,var(--acc) 70%,transparent);
-  box-shadow:0 26px 46px -20px rgba(0,0,0,.9),0 0 30px -6px var(--acc),inset 0 1px 0 rgba(255,255,255,.09);
-  outline:none}
-.rai-node-icon{flex:0 0 auto;width:44px;height:44px;border-radius:12px;
-  background:color-mix(in srgb,var(--acc) 16%,transparent);
-  border:1px solid color-mix(in srgb,var(--acc) 34%,transparent);
-  color:var(--acc);display:flex;align-items:center;justify-content:center;
-  box-shadow:0 0 18px -4px var(--acc)}
-.rai-node-icon svg{width:24px;height:24px;filter:drop-shadow(0 0 5px color-mix(in srgb,var(--acc) 60%,transparent))}
-.rai-node-text{display:flex;flex-direction:column;gap:3px;min-width:0}
-.rai-node-title{font-size:13px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#fff}
-.rai-node-tag{font-size:12px;line-height:1.35;color:var(--muted)}
-.rai-node-cue{position:absolute;left:15px;bottom:9px;font-size:10.5px;font-weight:700;letter-spacing:.4px;
-  text-transform:uppercase;color:var(--acc);opacity:0;transform:translateY(3px);transition:opacity .2s,transform .2s}
-.rai-node:hover .rai-node-cue,.rai-node:focus-visible .rai-node-cue{opacity:1;transform:none}
-
-/* desktop positions */
-.rai-pos-0{left:26%;top:16%}
-.rai-pos-1{left:74%;top:16%}
-.rai-pos-2{left:90%;top:50%}
-.rai-pos-3{left:74%;top:84%}
-.rai-pos-4{left:26%;top:84%}
-.rai-pos-5{left:10%;top:50%}
+.rai-hotspot{position:absolute;margin:0;padding:0;border:0;background:transparent;cursor:pointer;
+  border-radius:18px;transition:background .2s, box-shadow .2s;outline:none}
+.rai-hotspot:hover,.rai-hotspot:focus-visible{
+  background:color-mix(in srgb, var(--acc) 9%, transparent);
+  box-shadow:0 0 0 1.5px color-mix(in srgb,var(--acc) 45%,transparent), 0 14px 30px -16px color-mix(in srgb,var(--acc) 70%,transparent)}
+.rai-badge{position:absolute;transform:translate(-50%,-50%);width:26px;height:26px;border-radius:50%;
+  background:var(--acc);display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 12px -2px color-mix(in srgb,var(--acc) 75%,transparent);transition:transform .2s}
+.rai-badge-ring{position:absolute;inset:0;border-radius:50%;border:2px solid var(--acc);
+  animation:rai-badgepulse 2.2s ease-out infinite}
+@keyframes rai-badgepulse{0%{transform:scale(1);opacity:.7}100%{transform:scale(2.1);opacity:0}}
+.rai-hotspot:hover .rai-badge,.rai-hotspot:focus-visible .rai-badge{transform:translate(-50%,-50%) scale(1.15)}
+.rai-hotspot-chip{position:absolute;left:50%;top:-14px;transform:translate(-50%,-6px);
+  background:var(--navy);color:#fff;font-size:11px;font-weight:700;letter-spacing:.3px;white-space:nowrap;
+  padding:5px 10px;border-radius:8px;opacity:0;pointer-events:none;transition:opacity .18s,transform .18s;z-index:4}
+.rai-hotspot-chip:after{content:"";position:absolute;left:50%;bottom:-4px;transform:translateX(-50%);
+  border-left:5px solid transparent;border-right:5px solid transparent;border-top:5px solid var(--navy)}
+.rai-hotspot:hover .rai-hotspot-chip,.rai-hotspot:focus-visible .rai-hotspot-chip{opacity:1;transform:translate(-50%,0)}
 
 /* stat bar */
-.rai-statbar{display:grid;grid-template-columns:repeat(4,1fr);
-  background:linear-gradient(120deg,rgba(255,255,255,.06),rgba(255,255,255,.02));
-  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
-  border:1px solid var(--panel-brd);border-radius:20px;padding:26px 10px;
-  box-shadow:0 24px 50px -26px rgba(0,0,0,.85),inset 0 1px 0 rgba(255,255,255,.06)}
+.rai-statbar{display:grid;grid-template-columns:repeat(4,1fr);background:var(--navy);
+  border-radius:18px;padding:24px 10px;box-shadow:0 22px 44px -26px rgba(30,45,77,.6)}
 .rai-stat{display:flex;flex-direction:column;align-items:center;text-align:center;padding:4px 14px;
-  border-left:1px solid rgba(255,255,255,.1)}
+  border-left:1px solid rgba(255,255,255,.14)}
 .rai-stat:first-child{border-left:none}
 .rai-stat-big{font-size:clamp(18px,2.6vw,26px);font-weight:800;color:#fff}
-.rai-stat-sub{font-size:12px;color:var(--muted);margin-top:3px;letter-spacing:.5px}
+.rai-stat-sub{font-size:12px;color:#a9b6d2;margin-top:3px;letter-spacing:.5px}
 
-/* ── modal ── */
-.rai-overlay{position:fixed;inset:0;z-index:1000;background:rgba(4,8,18,.84);
+/* ── modal (light) ── */
+.rai-overlay{position:fixed;inset:0;z-index:1000;background:rgba(20,28,45,.55);
   display:flex;align-items:flex-start;justify-content:center;padding:32px 18px;overflow-y:auto;
   animation:rai-fade .18s ease}
 @keyframes rai-fade{from{opacity:0}to{opacity:1}}
-.rai-modal{position:relative;width:100%;max-width:960px;
-  background:linear-gradient(180deg,#101a33,#0b1428);
-  border:1px solid rgba(255,255,255,.1);border-radius:22px;
-  box-shadow:0 50px 110px -30px rgba(0,0,0,.9),0 0 0 1px rgba(255,255,255,.04),0 0 60px -10px var(--acc);
-  animation:rai-pop .26s cubic-bezier(.2,.8,.25,1);overflow:hidden}
-.rai-modal:before{content:"";position:absolute;left:0;right:0;top:0;height:3px;
-  background:linear-gradient(90deg,transparent,var(--acc),transparent);box-shadow:0 0 18px var(--acc)}
-@keyframes rai-pop{from{opacity:0;transform:translateY(16px) scale(.985)}to{opacity:1;transform:none}}
+.rai-modal{position:relative;width:100%;max-width:960px;background:#fff;border-radius:22px;
+  box-shadow:0 50px 100px -30px rgba(20,28,45,.55);
+  overflow:hidden;border-top:4px solid var(--acc)}
 .rai-modal-scroll{padding:32px clamp(20px,4vw,44px) 36px}
 .rai-close{position:absolute;top:14px;right:14px;z-index:5;width:38px;height:38px;border-radius:50%;
-  border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.06);color:#fff;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;transition:background .15s,transform .15s}
-.rai-close:hover{background:rgba(255,255,255,.14);transform:rotate(90deg)}
-
+  border:1px solid var(--line);background:#fff;color:var(--navy);cursor:pointer;display:flex;
+  align-items:center;justify-content:center;transition:background .15s,transform .15s}
+.rai-close:hover{background:#f1f4f9;transform:rotate(90deg)}
 .rai-modal-head{margin-bottom:22px;padding-right:40px}
-.rai-example{display:inline-block;color:var(--acc);font-size:11px;font-weight:800;letter-spacing:2.5px;
-  text-transform:uppercase;padding:6px 13px;border-radius:20px;
-  background:color-mix(in srgb,var(--acc) 14%,transparent);
-  border:1px solid color-mix(in srgb,var(--acc) 40%,transparent)}
-.rai-modal-title{font-size:clamp(25px,4.4vw,38px);font-weight:800;color:#fff;margin:14px 0 4px;letter-spacing:-.3px}
+.rai-example{display:inline-block;background:var(--navy);color:#fff;font-size:11px;font-weight:700;
+  letter-spacing:2.5px;text-transform:uppercase;padding:6px 13px;border-radius:20px}
+.rai-modal-title{font-size:clamp(24px,4.2vw,36px);font-weight:800;color:var(--navy);margin:14px 0 4px;letter-spacing:-.3px}
 .rai-modal-subtitle{font-size:15px;color:var(--muted);font-style:italic;margin:0}
 
-/* before / after */
 .rai-ba{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:stretch;margin-bottom:24px}
-.rai-ba-card{border-radius:16px;padding:16px 16px 18px;border:1px solid rgba(255,255,255,.08);
-  background:rgba(255,255,255,.03)}
-.rai-ba-before{background:rgba(255,90,90,.07);border-color:rgba(255,90,90,.22)}
-.rai-ba-after{background:rgba(53,208,138,.08);border-color:rgba(53,208,138,.24)}
-.rai-ba-label{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:800;letter-spacing:1.5px;
-  text-transform:uppercase;color:#fff}
-.rai-badge{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
-.rai-badge-x{background:#e05656;box-shadow:0 0 14px rgba(224,86,86,.6)}
-.rai-badge-check{background:#2e9e6a;box-shadow:0 0 14px rgba(46,158,106,.6)}
-.rai-ba-cap{margin:8px 0 12px;font-size:14px;color:#eef2fb;font-weight:600}
-.rai-ba-art{position:relative;height:98px;border-radius:10px;overflow:hidden}
-.rai-art-messy{background:repeating-linear-gradient(0deg,rgba(255,255,255,.03),rgba(255,255,255,.03) 14px,rgba(255,90,90,.06) 14px,rgba(255,90,90,.06) 15px)}
-.rai-note{position:absolute;width:32px;height:28px;border-radius:3px;box-shadow:0 5px 10px rgba(0,0,0,.4)}
-.rai-note.n1{left:10px;top:12px;background:#f0a0a0;transform:rotate(-8deg)}
-.rai-note.n2{left:50px;top:22px;background:#f3d488;transform:rotate(5deg)}
-.rai-note.n3{left:94px;top:10px;background:#9ec5ef;transform:rotate(-4deg)}
-.rai-note.n4{left:136px;top:24px;background:#a4e0b7;transform:rotate(7deg)}
-.rai-note.n5{left:74px;top:54px;background:#f0a0a0;transform:rotate(3deg)}
-.rai-art-clean{background:rgba(255,255,255,.03);border:1px solid rgba(53,208,138,.2);
-  display:flex;flex-direction:column;justify-content:center;gap:9px;padding:0 14px}
+.rai-ba-card{border-radius:16px;padding:16px 16px 18px;border:1px solid var(--line)}
+.rai-ba-before{background:#fbf1f1;border-color:#f2dede}
+.rai-ba-after{background:#eef7f1;border-color:#d9ecdf}
+.rai-ba-label{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;color:var(--navy)}
+.rai-badge2{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.rai-badge-x{background:#e05656}
+.rai-badge-check{background:#2e9e6a}
+.rai-ba-cap{margin:8px 0 12px;font-size:14px;color:var(--ink);font-weight:600}
+.rai-ba-art{position:relative;height:96px;border-radius:10px;overflow:hidden}
+.rai-art-messy{background:repeating-linear-gradient(0deg,#fff,#fff 15px,#f4e9e9 15px,#f4e9e9 16px)}
+.rai-note{position:absolute;width:32px;height:28px;border-radius:3px;box-shadow:0 4px 8px rgba(0,0,0,.12)}
+.rai-note.n1{left:10px;top:12px;background:#f6c9c9;transform:rotate(-8deg)}
+.rai-note.n2{left:50px;top:22px;background:#fbe4a6;transform:rotate(5deg)}
+.rai-note.n3{left:94px;top:10px;background:#bcd8f2;transform:rotate(-4deg)}
+.rai-note.n4{left:136px;top:24px;background:#c9e9d3;transform:rotate(7deg)}
+.rai-note.n5{left:74px;top:54px;background:#f6c9c9;transform:rotate(3deg)}
+.rai-art-clean{background:#fff;border:1px solid #dcecdf;display:flex;flex-direction:column;justify-content:center;gap:9px;padding:0 14px}
 .rai-gantt{height:10px;border-radius:6px}
-.rai-gantt.g1{width:60%;background:#4d9fff;margin-left:6%;box-shadow:0 0 10px -2px #4d9fff}
-.rai-gantt.g2{width:44%;background:#f0b83f;margin-left:26%;box-shadow:0 0 10px -2px #f0b83f}
-.rai-gantt.g3{width:52%;background:#35d08a;margin-left:14%;box-shadow:0 0 10px -2px #35d08a}
-.rai-gantt.g4{width:38%;background:#a78bfa;margin-left:40%;box-shadow:0 0 10px -2px #a78bfa}
-.rai-ba-arrow{align-self:center;color:var(--acc);font-size:26px;font-weight:700;filter:drop-shadow(0 0 8px var(--acc))}
+.rai-gantt.g1{width:60%;background:#2f6fb5;margin-left:6%}
+.rai-gantt.g2{width:44%;background:#d99a2b;margin-left:26%}
+.rai-gantt.g3{width:52%;background:#2e9e6a;margin-left:14%}
+.rai-gantt.g4{width:38%;background:#3a4d7a;margin-left:40%}
+.rai-ba-arrow{align-self:center;color:var(--acc);font-size:26px;font-weight:700}
 
-/* three columns */
 .rai-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
-.rai-col{border-radius:16px;padding:18px 17px;border:1px solid rgba(255,255,255,.07)}
-.rai-col-problem{background:rgba(255,90,90,.06)}
-.rai-col-built{background:rgba(77,159,255,.06)}
-.rai-col-result{background:rgba(53,208,138,.06)}
-.rai-col-head{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:800;letter-spacing:.6px;
-  text-transform:uppercase;color:#fff;margin:0 0 14px}
-.rai-col-ic{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.08);display:flex;
-  align-items:center;justify-content:center}
-.rai-col-problem .rai-col-ic{color:#ff6b6b}
-.rai-col-built .rai-col-ic{color:#4d9fff}
-.rai-col-result .rai-col-ic{color:#35d08a}
+.rai-col{border-radius:16px;padding:18px 17px}
+.rai-col-problem{background:#fbf1f1}.rai-col-built{background:#eef4fb}.rai-col-result{background:#edf7f1}
+.rai-col-head{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--navy);margin:0 0 14px}
+.rai-col-ic{width:26px;height:26px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.rai-col-problem .rai-col-ic{color:#e05656}.rai-col-built .rai-col-ic{color:#2f6fb5}.rai-col-result .rai-col-ic{color:#2e9e6a}
 .rai-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
-.rai-col li{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;line-height:1.5;color:#d8dfec}
+.rai-col li{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;line-height:1.5;color:var(--ink)}
 .rai-col li svg{flex:0 0 auto;margin-top:2px}
 
-/* quote */
-.rai-quote{margin:0 0 24px;padding:14px 20px;border-left:3px solid var(--acc);
-  background:rgba(255,255,255,.03);border-radius:0 12px 12px 0;
-  font-family:Georgia,serif;font-style:italic;font-size:15.5px;line-height:1.6;color:#e7ecf6}
+.rai-quote{margin:0 0 24px;padding:14px 20px;border-left:3px solid var(--acc);background:#f7f9fc;
+  border-radius:0 12px 12px 0;font-family:Georgia,serif;font-style:italic;font-size:15.5px;line-height:1.6;color:var(--navy)}
 
-/* stack */
-.rai-stack{border-top:1px solid rgba(255,255,255,.08);padding-top:22px}
-.rai-stack-head{display:flex;align-items:center;justify-content:center;gap:14px;font-size:12px;font-weight:800;
-  letter-spacing:2px;text-transform:uppercase;color:#fff}
-.rai-stack-line{height:1px;width:56px;background:rgba(255,255,255,.16)}
+.rai-stack{border-top:1px solid var(--line);padding-top:22px}
+.rai-stack-head{display:flex;align-items:center;justify-content:center;gap:14px;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--navy)}
+.rai-stack-line{height:1px;width:56px;background:var(--line)}
 .rai-stack-items{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;margin-top:18px}
-.rai-chip{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:#e7ecf6;
-  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:11px;padding:8px 14px}
-.rai-chip-dot{width:9px;height:9px;border-radius:50%;box-shadow:0 0 8px currentColor}
+.rai-chip{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--navy);background:#fff;border:1px solid var(--line);border-radius:11px;padding:8px 14px;box-shadow:0 6px 16px -12px rgba(30,45,77,.35)}
+.rai-chip-dot{width:9px;height:9px;border-radius:50%}
 
-/* ── responsive ── */
-@media (max-width:880px){
-  .rai-connectors{display:none}
-  .rai-stage{height:auto;display:flex;flex-direction:column;align-items:center;gap:16px;margin:22px 0}
-  .rai-hub{position:static;transform:none;order:-1;width:auto;height:auto;margin-bottom:4px}
-  .rai-hub-ring{display:none}
-  .rai-hub-tile{width:104px;height:104px;border-radius:22px}
-  .rai-hub-r{font-size:54px}
-  .rai-node{position:static;transform:none;width:100%;max-width:440px;padding:14px 15px}
-  .rai-node:hover,.rai-node:focus-visible{transform:translateY(-3px)}
-  .rai-node-cue{position:static;opacity:.85;transform:none;margin-left:auto;align-self:center}
+@media (max-width:760px){
   .rai-ba{grid-template-columns:1fr}
   .rai-ba-arrow{transform:rotate(90deg)}
   .rai-cols{grid-template-columns:1fr}
+  .rai-hotspot-chip{display:none}
 }
 @media (max-width:520px){
-  .rai-canvas{padding:36px 16px 30px}
+  .rai-canvas{padding:32px 14px 30px}
   .rai-statbar{grid-template-columns:repeat(2,1fr);gap:18px 0}
   .rai-stat:nth-child(odd){border-left:none}
+  .rai-badge{width:22px;height:22px}
 }
 @media (prefers-reduced-motion:reduce){
-  .rai-line-pulse,.rai-hub-ring,.rai-orb{animation:none}
-  .rai-line-pulse{opacity:.5}
+  .rai-hint-dot,.rai-badge-ring{animation:none}
 }
 `;
