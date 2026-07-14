@@ -101,12 +101,17 @@ function bObj(kind: string, accent: string): THREE.Group {
     P(new THREE.BoxGeometry(0.82, 0.46, 0.012), navy, sg).position.set(0, 0.31, 0.035);
     ([[-0.2, 0.14], [0, 0.24], [0.2, 0.18]] as [number, number][]).forEach((b) => { P(new THREE.BoxGeometry(0.1, b[1], 0.02), acc, sg).position.set(b[0], 0.17 + b[1] / 2, 0.05); });
   } else if (kind === "gauge") {
-    const disc = M(new THREE.CylinderGeometry(0.54, 0.54, 0.16, 44), white); disc.rotation.x = Math.PI / 2; disc.position.y = 0.56;
-    const arc = M(new THREE.TorusGeometry(0.36, 0.07, 14, 44, Math.PI * 1.35), acc); arc.position.set(0, 0.56, 0.09); arc.rotation.z = Math.PI * 0.83;
-    const nl = M(new THREE.BoxGeometry(0.055, 0.34, 0.03), navy); nl.position.set(0, 0.6, 0.12); nl.rotation.z = 0.7;
-    const hub = M(new THREE.CylinderGeometry(0.08, 0.08, 0.16, 20), navy); hub.rotation.x = Math.PI / 2; hub.position.set(0, 0.56, 0.12);
+    /* speedometer: navy track across the TOP (arc = PI, opening at the bottom) */
+    const disc = M(new THREE.CylinderGeometry(0.54, 0.54, 0.16, 44), white); disc.rotation.x = Math.PI / 2; disc.position.y = 0.54;
+    const track = M(new THREE.TorusGeometry(0.36, 0.062, 14, 48, Math.PI), navy); track.position.set(0, 0.54, 0.09);
+    /* gold fill across the LEFT portion (90..180deg) */
+    const fill = M(new THREE.TorusGeometry(0.36, 0.072, 14, 28, Math.PI * 0.5), acc); fill.position.set(0, 0.54, 0.1); fill.rotation.z = Math.PI * 0.5;
+    /* needle from the hub pointing up/right into the arc */
+    const nl = M(new THREE.BoxGeometry(0.042, 0.32, 0.03), navy); nl.rotation.z = -Math.PI / 4; nl.position.set(0.113, 0.653, 0.12);
+    const hub = M(new THREE.CylinderGeometry(0.075, 0.075, 0.17, 20), navy); hub.rotation.x = Math.PI / 2; hub.position.set(0, 0.54, 0.12);
   } else if (kind === "db") {
-    ([0.14, 0.42, 0.7]).forEach((y) => { M(new THREE.CylinderGeometry(0.44, 0.44, 0.2, 40), white).position.y = y; M(new THREE.TorusGeometry(0.44, 0.035, 12, 40), acc).position.y = y + 0.11; });
+    /* stacked layers merging into one source (rims lie FLAT around each layer) */
+    ([0.14, 0.42, 0.7]).forEach((y) => { M(new THREE.CylinderGeometry(0.44, 0.44, 0.2, 40), white).position.y = y; const r = M(new THREE.TorusGeometry(0.44, 0.032, 12, 40), acc); r.rotation.x = Math.PI / 2; r.position.y = y + 0.1; });
   } else if (kind === "handoff") {
     const p1 = M(new RoundedBoxGeometry(0.6, 0.8, 0.04, 3, 0.03), white); p1.position.set(-0.16, 0.5, -0.02); p1.rotation.z = 0.1;
     const p2 = M(new RoundedBoxGeometry(0.6, 0.8, 0.04, 3, 0.03), white); p2.position.set(0.02, 0.52, 0.06); p2.rotation.z = -0.05;
@@ -119,8 +124,15 @@ function bObj(kind: string, accent: string): THREE.Group {
     M(new THREE.BoxGeometry(0.24, 0.1, 0.09), navy).position.set(0, 0.98, 0.02);
     ([0.72, 0.5, 0.28]).forEach((y) => { M(new THREE.BoxGeometry(0.13, 0.13, 0.03), acc).position.set(-0.16, y, 0.05); M(new THREE.BoxGeometry(0.26, 0.05, 0.02), navy).position.set(0.12, y, 0.05); });
   } else if (kind === "flow") {
-    const mk = (x: number, z: number, mat: THREE.Material, h: number) => { const grp = new THREE.Group(); grp.position.set(x, 0, z); g.add(grp); P(new THREE.SphereGeometry(0.17, 20, 20), mat, grp).position.y = h + 0.17; P(new THREE.CapsuleGeometry(0.17, 0.34, 6, 16), mat, grp).position.y = h - 0.06; };
-    mk(-0.24, 0.02, acc, 0.42); mk(0.22, -0.08, white, 0.5);
+    /* funnel (opportunity) -> arrow -> check (delivered) */
+    const fn = M(new THREE.ConeGeometry(0.25, 0.34, 26), acc); fn.rotation.x = Math.PI; fn.position.set(-0.44, 0.39, 0);
+    M(new THREE.CylinderGeometry(0.045, 0.045, 0.22, 16), acc).position.set(-0.44, 0.11, 0);
+    const ar = new THREE.Group(); ar.position.set(0, 0.38, 0); g.add(ar);
+    P(new THREE.BoxGeometry(0.2, 0.05, 0.05), white, ar).position.x = -0.04;
+    const hd2 = P(new THREE.ConeGeometry(0.07, 0.14, 18), white, ar); hd2.rotation.z = -Math.PI / 2; hd2.position.x = 0.13;
+    const ck = new THREE.Group(); ck.position.set(0.45, 0.42, 0); g.add(ck);
+    const c1 = P(new THREE.BoxGeometry(0.085, 0.23, 0.06), acc, ck); c1.rotation.z = Math.PI / 4; c1.position.set(-0.077, -0.005, 0);
+    const c2 = P(new THREE.BoxGeometry(0.085, 0.42, 0.06), acc, ck); c2.rotation.z = -0.58; c2.position.set(0.105, 0.12, 0);
   }
   return g;
 }
@@ -177,10 +189,6 @@ export default function AutomationIntegrationInteractive() {
     const disposables: { dispose: () => void }[] = [];
 
     const center = new THREE.Group(); rig.add(center);
-    const haloGeo = new THREE.TorusGeometry(1.75, 0.045, 18, 80); const haloMat = new THREE.MeshBasicMaterial({ color: 0xe8b552 });
-    const halo = new THREE.Mesh(haloGeo, haloMat); halo.rotation.x = Math.PI / 2.3; center.add(halo); disposables.push(haloGeo, haloMat);
-    const halo2Geo = new THREE.TorusGeometry(2.05, 0.02, 16, 80); const halo2Mat = new THREE.MeshBasicMaterial({ color: 0x5b8bd6, transparent: true, opacity: 0.5 });
-    const halo2 = new THREE.Mesh(halo2Geo, halo2Mat); halo2.rotation.x = Math.PI / 1.7; center.add(halo2); disposables.push(halo2Geo, halo2Mat);
     const rTex = new THREE.TextureLoader().load("/images/dev/r-icon.png"); rTex.colorSpace = THREE.SRGBColorSpace; rTex.anisotropy = 8;
     const rGeo = new THREE.PlaneGeometry(2.15, 2.08); const rMat = new THREE.MeshBasicMaterial({ map: rTex, transparent: true, depthWrite: false, depthTest: false });
     const rPlane = new THREE.Mesh(rGeo, rMat); rPlane.renderOrder = 20; scene.add(rPlane); disposables.push(rTex, rGeo, rMat);
@@ -198,6 +206,30 @@ export default function AutomationIntegrationInteractive() {
       nodeGroups.push({ g, phase: i * 1.1 });
     });
 
+    /* connectors: each node -> the R core (navy->gold, gently curved) */
+    const cNavy = new THREE.Color(0x24406e), cGold = new THREE.Color(0xe0a63c);
+    const flows: { curve: THREE.QuadraticBezierCurve3; dot: THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>; off: number }[] = [];
+    const junctions: THREE.Mesh[] = [];
+    NODES.forEach((n, i) => {
+      const a = (n.ang * Math.PI) / 180, dx = Math.sin(a), dz = Math.cos(a);
+      const start = new THREE.Vector3(dx * R * 0.82, 0.14, dz * R * 0.82);
+      const end = new THREE.Vector3(dx * 1.35, 0.3, dz * 1.35);
+      const mid = start.clone().lerp(end, 0.5);
+      mid.add(new THREE.Vector3(-dz, 0, dx).multiplyScalar(0.42)); mid.y += 0.26;
+      const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
+      const tg = new THREE.TubeGeometry(curve, 44, 0.015, 8, false);
+      const uvA = tg.attributes.uv, col = new Float32Array(uvA.count * 3), tmp = new THREE.Color();
+      for (let k = 0; k < uvA.count; k++) { const u = uvA.getX(k); tmp.copy(cNavy).lerp(cGold, Math.pow(u, 1.7)); col[k * 3] = tmp.r; col[k * 3 + 1] = tmp.g; col[k * 3 + 2] = tmp.b; }
+      tg.setAttribute("color", new THREE.BufferAttribute(col, 3));
+      const tm = new THREE.MeshBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.62 });
+      rig.add(new THREE.Mesh(tg, tm)); disposables.push(tg, tm);
+      const jG = new THREE.SphereGeometry(0.055, 14, 14), jM = new THREE.MeshBasicMaterial({ color: 0xf3cf80 });
+      const j = new THREE.Mesh(jG, jM); j.position.copy(end); rig.add(j); junctions.push(j); disposables.push(jG, jM);
+      const dG = new THREE.SphereGeometry(0.042, 10, 10), dM = new THREE.MeshBasicMaterial({ color: 0xf0c46a, transparent: true, opacity: 0.9 });
+      const dot = new THREE.Mesh(dG, dM); rig.add(dot); disposables.push(dG, dM);
+      flows.push({ curve, dot, off: i / NODES.length });
+    });
+
     /* interaction */
     const ray = new THREE.Raycaster(), pointer = new THREE.Vector2(); let hover = -1;
     let drag = false, px0 = 0, rotY = 0, rotVel = 0, lastX = 0;
@@ -207,15 +239,18 @@ export default function AutomationIntegrationInteractive() {
     const clickAt = (e: PointerEvent) => { if (openIdxRef.current !== null) return; const r = canvas.getBoundingClientRect(); pointer.x = ((e.clientX - r.left) / r.width) * 2 - 1; pointer.y = -((e.clientY - r.top) / r.height) * 2 + 1; ray.setFromCamera(pointer, camera); const hit = ray.intersectObjects(hitMeshes, false); if (hit.length) openRef.current(hit[0].object.userData.i as number); };
     canvas.addEventListener("pointerdown", onDown); canvas.addEventListener("pointerup", onUp); canvas.addEventListener("pointermove", onMove);
 
-    const resize = () => { const w = stage.clientWidth, h = stage.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); };
-    window.addEventListener("resize", resize); resize();
+    const resize = () => { const w = stage.clientWidth || window.innerWidth, h = stage.clientHeight || window.innerHeight; if (!w || !h) return; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); };
+    window.addEventListener("resize", resize);
+    const ro = new ResizeObserver(resize); ro.observe(stage);
+    resize();
 
     let raf = 0;
     const animate = (now: number) => {
       const t = now * 0.001;
       if (!drag) { rotVel *= 0.92; rotY += rotVel; }
       rig.rotation.y = rotY + Math.sin(t * 0.18) * 0.14;
-      halo.rotation.z = t * 0.5; halo2.rotation.z = -t * 0.35;
+      flows.forEach((f) => { const u = (t * 0.19 + f.off) % 1; f.curve.getPointAt(u, f.dot.position); f.dot.material.opacity = 0.25 + 0.75 * Math.sin(u * Math.PI); });
+      junctions.forEach((j, k) => { j.scale.setScalar(1 + Math.sin(t * 2.1 + k) * 0.16); });
       center.position.y = 0.35 + Math.sin(t * 0.9) * 0.12;
       nodeGroups.forEach((nd, i) => {
         nd.g.position.y = Math.sin(t * 0.9 + nd.phase) * 0.14;
@@ -230,10 +265,17 @@ export default function AutomationIntegrationInteractive() {
       const w = stage.clientWidth, h = stage.clientHeight;
       const cs = new THREE.Vector3(0, 0.4, 0).project(camera); const csx = (cs.x * 0.5 + 0.5) * w, csy = (-cs.y * 0.5 + 0.5) * h;
       nodeGroups.forEach((nd, i) => {
-        const world = new THREE.Vector3(); nd.g.getWorldPosition(world); world.y += 1.35;
-        const p = world.clone().project(camera); let sx = (p.x * 0.5 + 0.5) * w, sy = (-p.y * 0.5 + 0.5) * h;
-        let dx = sx - csx, dy = sy - csy; const len = Math.hypot(dx, dy) || 1; sx += (dx / len) * 54; sy += (dy / len) * 54;
-        const lab = labelEls.current[i]; if (lab) { lab.style.left = sx + "px"; lab.style.top = sy + "px"; lab.classList.toggle("on", p.z < 1 && p.z > -1); }
+        const world = new THREE.Vector3(); nd.g.getWorldPosition(world); world.y += 0.8;
+        const p = world.clone().project(camera); const sx = (p.x * 0.5 + 0.5) * w, sy = (-p.y * 0.5 + 0.5) * h;
+        const lab = labelEls.current[i]; if (!lab) return;
+        const left = sx < csx, gap = 70, cardW = 240, pad = 12;
+        let x = left ? sx - gap : sx + gap;
+        if (left) { if (x - cardW < pad) x = pad + cardW; } else { if (x + cardW > w - pad) x = w - pad - cardW; }
+        const y = Math.min(Math.max(sy, 58), h - 58);
+        lab.style.left = x + "px"; lab.style.top = y + "px";
+        lab.style.transform = left ? "translate(-100%,-50%)" : "translate(0,-50%)";
+        lab.classList.toggle("lft", left); lab.classList.toggle("rgt", !left);
+        lab.classList.toggle("on", p.z < 1 && p.z > -1);
       });
       renderer.render(scene, camera); raf = requestAnimationFrame(animate);
     };
@@ -242,6 +284,7 @@ export default function AutomationIntegrationInteractive() {
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
+      ro.disconnect();
       canvas.removeEventListener("pointerdown", onDown); canvas.removeEventListener("pointerup", onUp); canvas.removeEventListener("pointermove", onMove);
       disposables.forEach((d) => d.dispose());
       renderer.dispose();
@@ -319,10 +362,15 @@ const CSS = `
 .rai-root *{box-sizing:border-box}
 .rai-stage{position:absolute;inset:0}
 .rai-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
-.rai-label{position:absolute;transform:translate(-50%,-50%);pointer-events:none;text-align:center;width:186px;background:rgba(9,15,29,.62);border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:8px 12px 9px;box-shadow:0 10px 26px -14px rgba(0,0,0,.8);opacity:0;transition:opacity .3s}
+.rai-label{position:absolute;pointer-events:none;text-align:left;width:238px;
+  background:#fff;border:1px solid rgba(30,45,77,.12);border-radius:14px;padding:13px 16px 14px;
+  box-shadow:0 20px 44px -14px rgba(0,0,0,.6);opacity:0;transition:opacity .3s}
 .rai-label.on{opacity:1}
-.rai-label .t{font-size:14px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#fff;line-height:1.15;text-shadow:0 2px 10px rgba(0,0,0,.7)}
-.rai-label .d{font-size:12px;line-height:1.35;color:#c3cde0;margin-top:4px;text-shadow:0 1px 10px rgba(0,0,0,.85)}
+.rai-label .t{font-size:21px;font-weight:800;letter-spacing:.2px;text-transform:uppercase;color:#1e2d4d;line-height:1.1}
+.rai-label .d{font-size:14.5px;line-height:1.4;color:#5a6a86;margin-top:6px}
+.rai-label:after{content:"";position:absolute;top:50%;margin-top:-1px;width:22px;height:2px;background:rgba(224,166,60,.8)}
+.rai-label.lft:after{right:-22px}
+.rai-label.rgt:after{left:-22px}
 .rai-hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#c4cee0;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:8px 16px;pointer-events:none;opacity:.9}
 .rai-hint .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);animation:rai-ping 2s ease-out infinite}
 @keyframes rai-ping{0%{box-shadow:0 0 0 0 rgba(217,154,43,.5)}70%,100%{box-shadow:0 0 0 8px rgba(217,154,43,0)}}
