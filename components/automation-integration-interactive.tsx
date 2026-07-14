@@ -45,13 +45,13 @@ const NODES: Node[] = [
     stack: ["Monday.com", "Make.com", "Tracket", "DocuSign"],
     quote: "Transformed from multiple software solutions into a streamlined, easy-to-use single source of truth — full visibility over what's happening across the entire company." },
   { id: "sales-project", title: "Sales → Project", desc: "From opportunity to execution — connected.", accent: "#6d7ff0", icon: "flow", ang: 30,
-    example: "Example 06", popupTitle: "BD → Project Handover", popupSubtitle: "130-person professional services firm",
+    example: "Example 06", popupTitle: "Business Development → Project Handover", popupSubtitle: "130-person professional services firm",
     before: "Closed-won ran on memory", after: "Billing-ready in days, not weeks",
-    problem: ["Handoff from BD to delivery & finance ran on email and memory", "Scope, fee, billing terms & owner moved late or incomplete", "Finance and PMs chased BD for info that should be settled at close", "Project setup dragged on for one to two weeks"],
+    problem: ["Handoff from Business Development to delivery & finance ran on email and memory", "Scope, fee, billing terms & owner moved late or incomplete", "Finance and PMs chased Business Development for info that should be settled at close", "Project setup dragged on for one to two weeks"],
     built: ["Locked the few fields required before an opportunity can close-won", "Required scope, fee, terms, owner & kickoff date in Salesforce", "Automation pushes the project record into Monday.com at close", "Notified finance & delivery instantly with a standardized kickoff checklist"],
-    result: ["Setup went from 1–2 weeks of back-and-forth to billing-ready in days", "Finance stopped chasing BD for basic setup information", "PMs walked into kickoffs with everything they needed"],
+    result: ["Setup went from 1–2 weeks of back-and-forth to billing-ready in days", "Finance stopped chasing Business Development for basic setup information", "PMs walked into kickoffs with everything they needed"],
     stack: ["Salesforce", "Monday.com", "Make.com", "QuickBooks", "SharePoint", "Teams"],
-    quote: "Project setup went from one to two weeks of back-and-forth to billing-ready in a few business days. Finance stopped chasing BD, and PMs walked into kickoffs with what they needed." },
+    quote: "Project setup went from one to two weeks of back-and-forth to billing-ready in a few business days. Finance stopped chasing Business Development, and PMs walked into kickoffs with what they needed." },
   { id: "field-reporting", title: "Field Reporting", desc: "Capture field data that fuels better decisions.", accent: "#e07a3c", icon: "pin", ang: 330,
     example: "Example 03", popupTitle: "Field Reporting", popupSubtitle: "Field-service / project delivery firm",
     before: "Records that vanished after the visit", after: "Captured on site, filed automatically",
@@ -137,8 +137,47 @@ function bObj(kind: string, accent: string): THREE.Group {
   return g;
 }
 
+/* animated visual for each story step */
+function StepVisual({ tone }: { tone: "problem" | "built" | "result" }) {
+  if (tone === "problem") {
+    const pos: [number, number][] = [[6, 12], [34, 50], [62, 8], [16, 64], [56, 70], [78, 38]];
+    return (
+      <div className="rai-vis vs-problem">
+        {pos.map((p, k) => (<span key={k} className="n" style={{ left: `${p[0]}%`, top: `${p[1]}%`, animationDelay: `${k * 0.07}s, ${k * 0.07 + 0.4}s` }} />))}
+        <span className="x" style={{ left: "30%", top: "32%", animationDelay: ".5s" }}>✕</span>
+        <span className="x" style={{ left: "70%", top: "58%", animationDelay: ".65s" }}>✕</span>
+      </div>
+    );
+  }
+  if (tone === "built") {
+    const ang = [0, 60, 120, 180, 240, 300], len = 84;
+    return (
+      <div className="rai-vis vs-built">
+        <span className="hub" />
+        {ang.map((a, k) => {
+          const rad = (a * Math.PI) / 180;
+          return (
+            <span key={k}>
+              <span className="sp" style={{ ["--len" as string]: `${len}px`, transform: `rotate(${a}deg)`, animationDelay: `${0.25 + k * 0.06}s` }} />
+              <span className="n" style={{ left: `calc(50% + ${(Math.cos(rad) * len).toFixed(1)}px - 22px)`, top: `calc(50% + ${(Math.sin(rad) * len).toFixed(1)}px - 15px)`, animationDelay: `${0.5 + k * 0.06}s` }} />
+            </span>
+          );
+        })}
+      </div>
+    );
+  }
+  const f = [0.95, 0.82, 0.7, 0.58];
+  return (
+    <div className="rai-vis vs-result">
+      {f.map((v, k) => (<span key={k} className="row" style={{ top: `${20 + k * 20}%`, animationDelay: `${k * 0.1}s` }}><i style={{ ["--f" as string]: v, animationDelay: `${0.2 + k * 0.1}s` }} /></span>))}
+      <span className="tick" style={{ top: "74%", animationDelay: ".95s" }}><CheckMark color="#2e9e6a" /></span>
+    </div>
+  );
+}
+
 export default function AutomationIntegrationInteractive() {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
+  const [step, setStep] = useState(0);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
   const labelEls = useRef<(HTMLDivElement | null)[]>([]);
@@ -149,7 +188,15 @@ export default function AutomationIntegrationInteractive() {
   const active = openIdx === null ? null : NODES[openIdx];
   openIdxRef.current = openIdx;
 
-  openRef.current = (i: number) => { lastFocused.current = document.activeElement as HTMLElement; setOpenIdx(i); };
+  const STEPS = active
+    ? ([
+        { k: "The Problem", cap: active.before, items: active.problem, tone: "problem" as const },
+        { k: "What We Built", cap: "", items: active.built, tone: "built" as const },
+        { k: "The Result", cap: active.after, items: active.result, tone: "result" as const },
+      ])
+    : [];
+
+  openRef.current = (i: number) => { lastFocused.current = document.activeElement as HTMLElement; setStep(0); setOpenIdx(i); };
   const close = () => { setOpenIdx(null); lastFocused.current?.focus?.(); };
 
   /* modal a11y */
@@ -208,8 +255,6 @@ export default function AutomationIntegrationInteractive() {
 
     /* connectors: each node -> the R core (navy->gold, gently curved) */
     const cNavy = new THREE.Color(0x24406e), cGold = new THREE.Color(0xe0a63c);
-    const flows: { curve: THREE.QuadraticBezierCurve3; dot: THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>; off: number }[] = [];
-    const junctions: THREE.Mesh[] = [];
     NODES.forEach((n, i) => {
       const a = (n.ang * Math.PI) / 180, dx = Math.sin(a), dz = Math.cos(a);
       const start = new THREE.Vector3(dx * R * 0.82, 0.14, dz * R * 0.82);
@@ -217,17 +262,12 @@ export default function AutomationIntegrationInteractive() {
       const mid = start.clone().lerp(end, 0.5);
       mid.add(new THREE.Vector3(-dz, 0, dx).multiplyScalar(0.42)); mid.y += 0.26;
       const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
-      const tg = new THREE.TubeGeometry(curve, 44, 0.015, 8, false);
+      const tg = new THREE.TubeGeometry(curve, 44, 0.012, 8, false);
       const uvA = tg.attributes.uv, col = new Float32Array(uvA.count * 3), tmp = new THREE.Color();
-      for (let k = 0; k < uvA.count; k++) { const u = uvA.getX(k); tmp.copy(cNavy).lerp(cGold, Math.pow(u, 1.7)); col[k * 3] = tmp.r; col[k * 3 + 1] = tmp.g; col[k * 3 + 2] = tmp.b; }
+      for (let k = 0; k < uvA.count; k++) { const u = uvA.getX(k); tmp.copy(cNavy).lerp(cGold, Math.pow(u, 1.8)); col[k * 3] = tmp.r; col[k * 3 + 1] = tmp.g; col[k * 3 + 2] = tmp.b; }
       tg.setAttribute("color", new THREE.BufferAttribute(col, 3));
-      const tm = new THREE.MeshBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.62 });
+      const tm = new THREE.MeshBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.5 });
       rig.add(new THREE.Mesh(tg, tm)); disposables.push(tg, tm);
-      const jG = new THREE.SphereGeometry(0.055, 14, 14), jM = new THREE.MeshBasicMaterial({ color: 0xf3cf80 });
-      const j = new THREE.Mesh(jG, jM); j.position.copy(end); rig.add(j); junctions.push(j); disposables.push(jG, jM);
-      const dG = new THREE.SphereGeometry(0.042, 10, 10), dM = new THREE.MeshBasicMaterial({ color: 0xf0c46a, transparent: true, opacity: 0.9 });
-      const dot = new THREE.Mesh(dG, dM); rig.add(dot); disposables.push(dG, dM);
-      flows.push({ curve, dot, off: i / NODES.length });
     });
 
     /* interaction */
@@ -249,8 +289,6 @@ export default function AutomationIntegrationInteractive() {
       const t = now * 0.001;
       if (!drag) { rotVel *= 0.92; rotY += rotVel; }
       rig.rotation.y = rotY + Math.sin(t * 0.18) * 0.14;
-      flows.forEach((f) => { const u = (t * 0.19 + f.off) % 1; f.curve.getPointAt(u, f.dot.position); f.dot.material.opacity = 0.25 + 0.75 * Math.sin(u * Math.PI); });
-      junctions.forEach((j, k) => { j.scale.setScalar(1 + Math.sin(t * 2.1 + k) * 0.16); });
       center.position.y = 0.35 + Math.sin(t * 0.9) * 0.12;
       nodeGroups.forEach((nd, i) => {
         nd.g.position.y = Math.sin(t * 0.9 + nd.phase) * 0.14;
@@ -264,18 +302,26 @@ export default function AutomationIntegrationInteractive() {
       else { ray.setFromCamera(pointer, camera); const hit = ray.intersectObjects(hitMeshes, false); const idx = hit.length ? (hit[0].object.userData.i as number) : -1; if (idx !== hover) { hover = idx; canvas.style.cursor = idx >= 0 ? "pointer" : "grab"; } }
       const w = stage.clientWidth, h = stage.clientHeight;
       const cs = new THREE.Vector3(0, 0.4, 0).project(camera); const csx = (cs.x * 0.5 + 0.5) * w, csy = (-cs.y * 0.5 + 0.5) * h;
-      nodeGroups.forEach((nd, i) => {
+      const items = nodeGroups.map((nd, i) => {
         const world = new THREE.Vector3(); nd.g.getWorldPosition(world); world.y += 0.8;
-        const p = world.clone().project(camera); const sx = (p.x * 0.5 + 0.5) * w, sy = (-p.y * 0.5 + 0.5) * h;
-        const lab = labelEls.current[i]; if (!lab) return;
-        const left = sx < csx, gap = 70, cardW = 240, pad = 12;
-        let x = left ? sx - gap : sx + gap;
-        if (left) { if (x - cardW < pad) x = pad + cardW; } else { if (x + cardW > w - pad) x = w - pad - cardW; }
-        const y = Math.min(Math.max(sy, 58), h - 58);
-        lab.style.left = x + "px"; lab.style.top = y + "px";
-        lab.style.transform = left ? "translate(-100%,-50%)" : "translate(0,-50%)";
-        lab.classList.toggle("lft", left); lab.classList.toggle("rgt", !left);
-        lab.classList.toggle("on", p.z < 1 && p.z > -1);
+        const p = world.clone().project(camera); const sx = (p.x * 0.5 + 0.5) * w;
+        return { i, sx, sy: (-p.y * 0.5 + 0.5) * h, vis: p.z < 1 && p.z > -1, left: sx < csx };
+      });
+      const MINGAP = 124, cardW = 264, gap = 62, pad = 12;
+      ([true, false]).forEach((side) => {
+        const arr = items.filter((it) => it.left === side).sort((a, b) => a.sy - b.sy);
+        for (let k = 1; k < arr.length; k++) { if (arr[k].sy - arr[k - 1].sy < MINGAP) arr[k].sy = arr[k - 1].sy + MINGAP; }
+        if (arr.length) { const over = arr[arr.length - 1].sy - (h - 72); if (over > 0) arr.forEach((a) => { a.sy -= over; }); }
+        arr.forEach((a) => { a.sy = Math.min(Math.max(a.sy, 72), h - 72); });
+      });
+      items.forEach((it) => {
+        const lab = labelEls.current[it.i]; if (!lab) return;
+        let x = it.left ? it.sx - gap : it.sx + gap;
+        if (it.left) { if (x - cardW < pad) x = pad + cardW; } else { if (x + cardW > w - pad) x = w - pad - cardW; }
+        lab.style.left = x + "px"; lab.style.top = it.sy + "px";
+        lab.style.transform = it.left ? "translate(-100%,-50%)" : "translate(0,-50%)";
+        lab.classList.toggle("lft", it.left); lab.classList.toggle("rgt", !it.left);
+        lab.classList.toggle("on", it.vis);
       });
       renderer.render(scene, camera); raf = requestAnimationFrame(animate);
     };
@@ -297,9 +343,9 @@ export default function AutomationIntegrationInteractive() {
       <div className="rai-stage" ref={sceneRef}>
         <canvas className="rai-canvas" ref={canvasRef} />
         {NODES.map((n, i) => (
-          <div className="rai-label" key={n.id} ref={(el) => { labelEls.current[i] = el; }}>
-            <div className="t">{n.title}</div>
-            <div className="d">{n.desc}</div>
+          <div className="rai-label" key={n.id} style={{ ["--acc" as string]: n.accent }} ref={(el) => { labelEls.current[i] = el; }}>
+            <div className="tab">{n.title}</div>
+            <div className="body">{n.desc}</div>
           </div>
         ))}
         <div className="rai-hint"><span className="dot" />Click a capability to see a real example · drag to rotate</div>
@@ -315,38 +361,41 @@ export default function AutomationIntegrationInteractive() {
                 <h2 id="rai-modal-title" className="rai-modal-title">{active.popupTitle}</h2>
                 <p className="rai-modal-subtitle">{active.popupSubtitle}</p>
               </div>
-              <div className="rai-ba">
-                <div className="rai-ba-card rai-ba-before">
-                  <div className="rai-ba-label"><span className="rai-badge2 rai-badge-x"><CheckMark color="#fff" /></span>Before</div>
-                  <p className="rai-ba-cap">{active.before}</p>
-                  <div className="rai-ba-art rai-art-messy" aria-hidden="true"><span className="rai-note n1" /><span className="rai-note n2" /><span className="rai-note n3" /><span className="rai-note n4" /><span className="rai-note n5" /></div>
+
+              <div className="rai-story" key={step}>
+                <StepVisual tone={STEPS[step].tone} />
+                <div className="rai-stage-text">
+                  <div className="rai-kicker">Step {step + 1} of 3</div>
+                  <h3 className="rai-step-title">{STEPS[step].k}</h3>
+                  {STEPS[step].cap ? <p className="rai-step-cap">{STEPS[step].cap}</p> : null}
+                  <ul className="rai-step-list">
+                    {STEPS[step].items.map((tx, k) => (
+                      <li key={k} style={{ animationDelay: `${0.12 + k * 0.09}s` }}>
+                        {STEPS[step].tone === "problem"
+                          ? <XMark color="#e05656" />
+                          : <CheckMark color={STEPS[step].tone === "built" ? "#2f6fb5" : "#2e9e6a"} />}
+                        <span>{tx}</span>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <div className="rai-ba-arrow" aria-hidden="true">→</div>
-                <div className="rai-ba-card rai-ba-after">
-                  <div className="rai-ba-label"><span className="rai-badge2 rai-badge-check"><CheckMark color="#fff" /></span>After</div>
-                  <p className="rai-ba-cap">{active.after}</p>
-                  <div className="rai-ba-art rai-art-clean" aria-hidden="true"><span className="rai-gantt g1" /><span className="rai-gantt g2" /><span className="rai-gantt g3" /><span className="rai-gantt g4" /></div>
+              </div>
+
+              <div className="rai-nav">
+                <button className="rai-btn" onClick={() => setStep((s) => Math.max(0, s - 1))} disabled={step === 0}>&larr; Back</button>
+                <div className="rai-dots">{[0, 1, 2].map((k) => (<span key={k} className={"rai-dot" + (k === step ? " on" : "")} />))}</div>
+                <button className="rai-btn rai-btn-primary" onClick={() => setStep((s) => (s === 2 ? 0 : s + 1))}>{step === 2 ? "Start over" : "Next →"}</button>
+              </div>
+
+              {step === 2 && (
+                <div className="rai-final">
+                  <blockquote className="rai-quote">{active.quote}</blockquote>
+                  <div className="rai-stack">
+                    <div className="rai-stack-head"><span className="rai-stack-line" />The Stack We Connect<span className="rai-stack-line" /></div>
+                    <div className="rai-stack-items">{active.stack.map((tool) => (<span className="rai-chip" key={tool}><span className="rai-chip-dot" style={{ background: toolDot(tool) }} />{tool}</span>))}</div>
+                  </div>
                 </div>
-              </div>
-              <div className="rai-cols">
-                <section className="rai-col rai-col-problem">
-                  <h3 className="rai-col-head"><span className="rai-col-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 3L2 20h20L12 3z" /><path d="M12 10v4M12 17.5v.01" /></svg></span>The Problem</h3>
-                  <ul>{active.problem.map((t, i) => (<li key={i}><XMark color="#e05656" /><span>{t}</span></li>))}</ul>
-                </section>
-                <section className="rai-col rai-col-built">
-                  <h3 className="rai-col-head"><span className="rai-col-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 21l3-1 9.5-9.5-2-2L4 18l-1 3z" /><path d="M14.5 6.5l3 3 2.2-2.2a1.6 1.6 0 0 0 0-2.3l-.7-.7a1.6 1.6 0 0 0-2.3 0z" /></svg></span>What We Built</h3>
-                  <ul>{active.built.map((t, i) => (<li key={i}><CheckMark color="#2f6fb5" /><span>{t}</span></li>))}</ul>
-                </section>
-                <section className="rai-col rai-col-result">
-                  <h3 className="rai-col-head"><span className="rai-col-ic"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 19V5M4 19h16" /><path d="M8 15l3.5-4 3 2.5L20 7" /><path d="M16 7h4v4" /></svg></span>The Result</h3>
-                  <ul>{active.result.map((t, i) => (<li key={i}><CheckMark color="#2e9e6a" /><span>{t}</span></li>))}</ul>
-                </section>
-              </div>
-              <blockquote className="rai-quote">{active.quote}</blockquote>
-              <div className="rai-stack">
-                <div className="rai-stack-head"><span className="rai-stack-line" />The Stack We Connect<span className="rai-stack-line" /></div>
-                <div className="rai-stack-items">{active.stack.map((tool) => (<span className="rai-chip" key={tool}><span className="rai-chip-dot" style={{ background: toolDot(tool) }} />{tool}</span>))}</div>
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -362,29 +411,63 @@ const CSS = `
 .rai-root *{box-sizing:border-box}
 .rai-stage{position:absolute;inset:0}
 .rai-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
-.rai-label{position:absolute;pointer-events:none;text-align:left;width:238px;
-  background:#fff;border:1px solid rgba(30,45,77,.12);border-radius:14px;padding:13px 16px 14px;
-  box-shadow:0 20px 44px -14px rgba(0,0,0,.6);opacity:0;transition:opacity .3s}
+.rai-label{position:absolute;pointer-events:none;width:262px;opacity:0;transition:opacity .3s}
 .rai-label.on{opacity:1}
-.rai-label .t{font-size:21px;font-weight:800;letter-spacing:.2px;text-transform:uppercase;color:#1e2d4d;line-height:1.1}
-.rai-label .d{font-size:14.5px;line-height:1.4;color:#5a6a86;margin-top:6px}
-.rai-label:after{content:"";position:absolute;top:50%;margin-top:-1px;width:22px;height:2px;background:rgba(224,166,60,.8)}
-.rai-label.lft:after{right:-22px}
-.rai-label.rgt:after{left:-22px}
+.rai-label.lft{text-align:right}
+.rai-label.rgt{text-align:left}
+.rai-label .tab{display:inline-block;background:var(--acc);color:#fff;font-size:23px;font-weight:800;letter-spacing:.2px;
+  padding:10px 20px;border-radius:11px;box-shadow:0 12px 24px -8px rgba(0,0,0,.65);position:relative;z-index:2}
+.rai-label .body{background:#fff;border:1px solid rgba(30,45,77,.14);border-radius:12px;margin-top:-7px;
+  padding:16px 16px 13px;font-size:16px;line-height:1.42;color:#54647f;text-align:left;
+  box-shadow:0 18px 40px -14px rgba(0,0,0,.55)}
 .rai-hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#c4cee0;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:8px 16px;pointer-events:none;opacity:.9}
 .rai-hint .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);animation:rai-ping 2s ease-out infinite}
 @keyframes rai-ping{0%{box-shadow:0 0 0 0 rgba(217,154,43,.5)}70%,100%{box-shadow:0 0 0 8px rgba(217,154,43,0)}}
 .rai-overlay{position:fixed;inset:0;z-index:1000;background:rgba(6,12,26,.68);display:flex;align-items:flex-start;justify-content:center;padding:32px 18px;overflow-y:auto;cursor:default}
 .rai-overlay *{cursor:default}
-.rai-overlay .rai-close{cursor:pointer}
+.rai-overlay .rai-close,.rai-overlay .rai-btn{cursor:pointer}
+.rai-overlay .rai-btn[disabled]{cursor:default}
 .rai-modal{position:relative;width:100%;max-width:960px;background:#fff;border-radius:22px;box-shadow:0 50px 100px -30px rgba(0,0,0,.7);overflow:hidden;border-top:4px solid var(--acc)}
 .rai-modal-scroll{padding:32px clamp(20px,4vw,44px) 36px}
 .rai-close{position:absolute;top:14px;right:14px;z-index:5;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--navy);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,transform .15s}
 .rai-close:hover{background:#f1f4f9;transform:rotate(90deg)}
 .rai-modal-head{margin-bottom:22px;padding-right:40px}
-.rai-example{display:inline-block;background:var(--navy);color:#fff;font-size:11px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:6px 13px;border-radius:20px}
-.rai-modal-title{font-size:clamp(24px,4.2vw,36px);font-weight:800;color:var(--navy);margin:14px 0 4px;letter-spacing:-.3px}
-.rai-modal-subtitle{font-size:15px;color:var(--muted);font-style:italic;margin:0}
+.rai-example{display:inline-block;background:var(--navy);color:#fff;font-size:12.5px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:7px 15px;border-radius:20px}
+.rai-modal-title{font-size:clamp(28px,4.6vw,42px);font-weight:800;color:var(--navy);margin:14px 0 5px;letter-spacing:-.3px}
+.rai-modal-subtitle{font-size:17px;color:var(--muted);font-style:italic;margin:0}
+/* ---- story player ---- */
+.rai-story{display:grid;grid-template-columns:1.05fr 1fr;gap:26px;align-items:center;margin:26px 0 20px;min-height:250px}
+.rai-kicker{font-size:13px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--acc)}
+.rai-step-title{font-size:30px;font-weight:800;color:var(--navy);margin:8px 0 16px;letter-spacing:-.2px}
+.rai-step-cap{font-size:17px;font-weight:700;color:var(--navy);margin:0 0 14px}
+.rai-step-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.rai-step-list li{display:flex;gap:11px;align-items:flex-start;font-size:16.5px;line-height:1.5;color:#46566f;opacity:0;transform:translateY(8px);animation:rai-li .45s ease forwards}
+@keyframes rai-li{to{opacity:1;transform:none}}
+.rai-step-list li svg{flex:0 0 auto;margin-top:3px}
+.rai-vis{position:relative;height:250px;border-radius:16px;overflow:hidden;border:1px solid #e6eaf1;background:linear-gradient(180deg,#fbfcfe,#eef2f8)}
+.rai-vis .n{position:absolute;border-radius:8px;box-shadow:0 8px 16px -5px rgba(30,45,77,.3);opacity:0;animation:rai-pop .45s ease forwards}
+@keyframes rai-pop{from{opacity:0;transform:scale(.55)}to{opacity:1;transform:scale(1)}}
+.vs-problem .n{width:52px;height:36px;background:#efbfbf;animation:rai-pop .4s ease forwards,rai-jit 3s ease-in-out infinite .4s}
+@keyframes rai-jit{0%,100%{translate:0 0}50%{translate:5px -6px}}
+.vs-problem .x{position:absolute;font-size:26px;color:#e05656;font-weight:800;opacity:0;animation:rai-pop .4s ease forwards}
+.vs-built .hub{position:absolute;left:50%;top:50%;width:62px;height:62px;margin:-31px 0 0 -31px;border-radius:50%;background:#2f6fb5;box-shadow:0 10px 24px -6px rgba(47,111,181,.75);opacity:0;animation:rai-pop .4s ease forwards}
+.vs-built .sp{position:absolute;left:50%;top:50%;height:3px;background:#a9c8ea;transform-origin:0 50%;width:0;animation:rai-grow .55s ease forwards}
+@keyframes rai-grow{to{width:var(--len)}}
+.vs-built .n{width:44px;height:30px;background:#cfe0f4}
+.vs-result .row{position:absolute;left:9%;height:16px;border-radius:9px;background:#dbeee5;width:78%;opacity:0;animation:rai-pop .35s ease forwards}
+.vs-result .row i{position:absolute;left:0;top:0;bottom:0;border-radius:9px;background:#2e9e6a;transform-origin:left;transform:scaleX(0);animation:rai-fill .8s cubic-bezier(.3,.8,.3,1) forwards}
+@keyframes rai-fill{to{transform:scaleX(var(--f))}}
+.vs-result .tick{position:absolute;right:6%;opacity:0;animation:rai-pop .4s ease forwards}
+.rai-nav{display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:1px solid var(--line);padding-top:18px}
+.rai-dots{display:flex;gap:8px}
+.rai-dot{width:9px;height:9px;border-radius:50%;background:#d7dee9;transition:all .25s}
+.rai-dot.on{background:var(--acc);width:26px;border-radius:6px}
+.rai-btn{font:inherit;font-size:15px;font-weight:700;padding:11px 20px;border-radius:10px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--navy);transition:background .15s,opacity .15s}
+.rai-btn:hover{background:#f2f5fa}
+.rai-btn[disabled]{opacity:.35;cursor:default}
+.rai-btn-primary{background:var(--navy);color:#fff;border-color:var(--navy)}
+.rai-btn-primary:hover{background:#2b3f68}
+.rai-final{margin-top:22px}
 .rai-ba{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:stretch;margin-bottom:24px}
 .rai-ba-card{border-radius:16px;padding:16px 16px 18px;border:1px solid var(--line)}
 .rai-ba-before{background:#fbf1f1;border-color:#f2dede}.rai-ba-after{background:#eef7f1;border-color:#d9ecdf}
@@ -409,12 +492,12 @@ const CSS = `
 .rai-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
 .rai-col li{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;line-height:1.5;color:var(--ink)}
 .rai-col li svg{flex:0 0 auto;margin-top:2px}
-.rai-quote{margin:0 0 24px;padding:14px 20px;border-left:3px solid var(--acc);background:#f7f9fc;border-radius:0 12px 12px 0;font-family:Georgia,serif;font-style:italic;font-size:15.5px;line-height:1.6;color:var(--navy)}
+.rai-quote{margin:0 0 24px;padding:16px 22px;border-left:3px solid var(--acc);background:#f7f9fc;border-radius:0 12px 12px 0;font-family:Georgia,serif;font-style:italic;font-size:17.5px;line-height:1.6;color:var(--navy)}
 .rai-stack{border-top:1px solid var(--line);padding-top:22px}
-.rai-stack-head{display:flex;align-items:center;justify-content:center;gap:14px;font-size:12px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--navy)}
+.rai-stack-head{display:flex;align-items:center;justify-content:center;gap:14px;font-size:13px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--navy)}
 .rai-stack-line{height:1px;width:56px;background:var(--line)}
 .rai-stack-items{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;margin-top:18px}
-.rai-chip{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--navy);background:#fff;border:1px solid var(--line);border-radius:11px;padding:8px 14px;box-shadow:0 6px 16px -12px rgba(30,45,77,.35)}
+.rai-chip{display:inline-flex;align-items:center;gap:8px;font-size:14.5px;font-weight:600;color:var(--navy);background:#fff;border:1px solid var(--line);border-radius:11px;padding:8px 14px;box-shadow:0 6px 16px -12px rgba(30,45,77,.35)}
 .rai-chip-dot{width:9px;height:9px;border-radius:50%}
-@media (max-width:760px){.rai-ba{grid-template-columns:1fr}.rai-ba-arrow{transform:rotate(90deg)}.rai-cols{grid-template-columns:1fr}.rai-label{width:130px}.rai-label .t{font-size:12px}.rai-label .d{font-size:10.5px}}
+@media (max-width:760px){.rai-story{grid-template-columns:1fr}.rai-ba{grid-template-columns:1fr}.rai-ba-arrow{transform:rotate(90deg)}.rai-cols{grid-template-columns:1fr}.rai-label{width:130px}.rai-label .t{font-size:12px}.rai-label .d{font-size:10.5px}}
 `;
