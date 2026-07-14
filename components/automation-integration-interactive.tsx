@@ -137,43 +137,134 @@ function bObj(kind: string, accent: string): THREE.Group {
   return g;
 }
 
-/* animated visual for each story step */
-function StepVisual({ tone }: { tone: "problem" | "built" | "result" }) {
-  if (tone === "problem") {
-    const pos: [number, number][] = [[6, 12], [34, 50], [62, 8], [16, 64], [56, 70], [78, 38]];
-    return (
-      <div className="rai-vis vs-problem">
-        {pos.map((p, k) => (<span key={k} className="n" style={{ left: `${p[0]}%`, top: `${p[1]}%`, animationDelay: `${k * 0.07}s, ${k * 0.07 + 0.4}s` }} />))}
-        <span className="x" style={{ left: "30%", top: "32%", animationDelay: ".5s" }}>✕</span>
-        <span className="x" style={{ left: "70%", top: "58%", animationDelay: ".65s" }}>✕</span>
-      </div>
-    );
+const CV={navy:'#1D3759',slate:'#4D688C',lblue:'#C4D8F2',pblue:'#DCE6F2',gold:'#d99a2b',green:'#2e9e6a',red:'#d4696b'};
+function visualHTML(id: string, tone: string): string {
+ const E=(c: string, st: string, inner?: string)=>'<span class="'+c+'" style="'+st+'">'+(inner||'')+'</span>';
+ const D=(d: number)=>'animation-delay:'+d+'s;';
+ let h='';
+ if(id==='reporting'){
+  if(tone==='problem'){ // mismatched sheets, disconnected
+   [[8,14,-6],[38,44,5],[66,10,-3]].forEach((p,k)=>{h+=E('v-card v-jit','left:'+p[0]+'%;top:'+p[1]+'%;width:64px;height:78px;rotate:'+p[2]+'deg;'+D(k*.08)+'animation-delay:'+(k*.08)+'s,'+(k*.08+.4)+'s');});
+   ([[CV.slate,20,26],[CV.gold,50,56],[CV.green,78,22]] as [string,number,number][]).forEach((b,k)=>{h+=E('v-bar','left:'+b[1]+'%;top:'+(b[2]+14)+'%;width:34px;height:6px;background:'+b[0]+';'+D(.5+k*.08));});
+   h+=E('v-x','left:30%;top:42%;'+D(.7),'✕')+E('v-x','left:60%;top:26%;'+D(.85),'✕');
+  } else if(tone==='built'){ // sheets feed one dashboard
+   [12,42,72].forEach((y,k)=>{h+=E('v-card','left:5%;top:'+y+'%;width:46px;height:44px;'+D(k*.08));
+    h+=E('v-ln','left:20%;top:'+(y+9)+'%;--len:78px;background:'+CV.gold+';'+D(.3+k*.08));});
+   h+=E('v-panel','left:56%;top:20%;width:110px;height:130px;'+D(.6));
+   [0,1,2].forEach(k=>{h+=E('v-bar','left:'+(60+k*10)+'%;top:'+(60-k*6)+'%;width:14px;height:'+(30+k*14)+'px;background:'+CV.lblue+';'+D(.85+k*.1));});
+  } else { // live chart + drill-down
+   h+=E('v-panel','left:8%;top:14%;width:190px;height:150px;'+D(0));
+   [[.55,CV.lblue],[.8,CV.lblue],[1,CV.gold],[.65,CV.lblue]].forEach((b,k)=>{
+    h+=E('v-bar v-rise','left:'+(14+k*11)+'%;top:24%;width:18px;height:88px;background:'+b[1]+';--f:'+b[0]+';transform-origin:bottom;'+D(.25+k*.1));});
+   h+=E('v-card','left:52%;top:56%;width:104px;height:56px;'+D(.9));
+   h+=E('v-bar','left:56%;top:64%;width:44px;height:5px;background:'+CV.slate+';'+D(1.05));
+   h+=E('v-bar','left:56%;top:72%;width:30px;height:5px;background:'+CV.lblue+';'+D(1.15));
+   h+=E('v-tk','left:82%;top:60%;'+D(1.25),'✓');
   }
-  if (tone === "built") {
-    const ang = [0, 60, 120, 180, 240, 300], len = 84;
-    return (
-      <div className="rai-vis vs-built">
-        <span className="hub" />
-        {ang.map((a, k) => {
-          const rad = (a * Math.PI) / 180;
-          return (
-            <span key={k}>
-              <span className="sp" style={{ ["--len" as string]: `${len}px`, transform: `rotate(${a}deg)`, animationDelay: `${0.25 + k * 0.06}s` }} />
-              <span className="n" style={{ left: `calc(50% + ${(Math.cos(rad) * len).toFixed(1)}px - 22px)`, top: `calc(50% + ${(Math.sin(rad) * len).toFixed(1)}px - 15px)`, animationDelay: `${0.5 + k * 0.06}s` }} />
-            </span>
-          );
-        })}
-      </div>
-    );
+ } else if(id==='capacity'){
+  if(tone==='problem'){ // colliding time blocks
+   [18,45,72].forEach((y,k)=>{h+=E('v-lane','left:8%;top:'+y+'%;width:84%;height:34px;'+D(k*.07));});
+   h+=E('v-bar v-jit','left:12%;top:20%;width:110px;height:26px;background:'+CV.slate+';'+D(.3)+'animation-delay:.3s,.7s');
+   h+=E('v-bar v-jit','left:40%;top:20%;width:90px;height:26px;background:'+CV.red+';'+D(.38)+'animation-delay:.38s,.78s');
+   h+=E('v-bar v-jit','left:22%;top:47%;width:120px;height:26px;background:'+CV.slate+';'+D(.46)+'animation-delay:.46s,.86s');
+   h+=E('v-bar v-jit','left:55%;top:47%;width:70px;height:26px;background:'+CV.red+';'+D(.54)+'animation-delay:.54s,.94s');
+   h+=E('v-x','left:44%;top:18%;'+D(.9),'✕')+E('v-x','left:57%;top:45%;'+D(1),'✕');
+  } else if(tone==='built'){ // snap into clean lanes
+   [18,45,72].forEach((y,k)=>{h+=E('v-lane','left:8%;top:'+y+'%;width:84%;height:34px;'+D(k*.07));});
+   [[12,18,96],[44,18,74],[12,45,120],[60,45,58],[12,72,70],[42,72,96]].forEach((b,k)=>{
+    h+=E('v-bar','left:'+b[0]+'%;top:'+(b[1]+1.5)+'%;width:'+b[2]+'px;height:26px;background:'+(k%2?CV.lblue:CV.slate)+';'+D(.3+k*.08));});
+  } else { // gauge into safe zone
+   h+=E('v-gauge','left:50%;top:34%;width:150px;height:75px;margin-left:-75px;'+D(0));
+   h+=E('v-gauge','left:50%;top:34%;width:150px;height:75px;margin-left:-75px;border-color:'+CV.gold+';border-right-color:transparent;border-top-color:transparent;rotate:-30deg;'+D(.2));
+   h+=E('v-needle','left:50%;top:34%;width:5px;height:66px;margin-left:-2.5px;--a0:-70deg;--a1:22deg;'+D(.3));
+   h+=E('v-dot','left:50%;top:57%;width:16px;height:16px;margin-left:-8px;background:'+CV.navy+';'+D(.4));
+   h+=E('v-lbl','left:50%;top:80%;translate:-50% 0;color:'+CV.green+';'+D(1.4),'Safe capacity');
+   h+=E('v-tk','left:64%;top:78%;'+D(1.5),'✓');
   }
-  const f = [0.95, 0.82, 0.7, 0.58];
-  return (
-    <div className="rai-vis vs-result">
-      {f.map((v, k) => (<span key={k} className="row" style={{ top: `${20 + k * 20}%`, animationDelay: `${k * 0.1}s` }}><i style={{ ["--f" as string]: v, animationDelay: `${0.2 + k * 0.1}s` }} /></span>))}
-      <span className="tick" style={{ top: "74%", animationDelay: ".95s" }}><CheckMark color="#2e9e6a" /></span>
-    </div>
-  );
+ } else if(id==='single-source'){
+  if(tone==='problem'){ // duplicate conflicting records
+   [[10,18,-5],[34,34,4],[58,16,-3]].forEach((p,k)=>{h+=E('v-card v-jit','left:'+p[0]+'%;top:'+p[1]+'%;width:78px;height:88px;rotate:'+p[2]+'deg;animation-delay:'+(k*.08)+'s,'+(k*.08+.4)+'s');
+    h+=E('v-bar','left:'+(p[0]+2.5)+'%;top:'+(p[1]+12)+'%;width:44px;height:5px;background:'+CV.slate+';'+D(.4+k*.08));
+    h+=E('v-bar','left:'+(p[0]+2.5)+'%;top:'+(p[1]+22)+'%;width:32px;height:5px;background:'+CV.lblue+';'+D(.48+k*.08));});
+   h+=E('v-x','left:29%;top:34%;'+D(.8),'≠')+E('v-x','left:54%;top:30%;'+D(.92),'≠');
+  } else if(tone==='built'){ // merge into one
+   [[8,20],[8,54]].forEach((p,k)=>{h+=E('v-card','left:'+p[0]+'%;top:'+p[1]+'%;width:56px;height:52px;'+D(k*.1));
+    h+=E('v-ln','left:24%;top:'+(p[1]+9)+'%;--len:96px;background:'+CV.gold+';'+D(.35+k*.1));});
+   h+=E('v-card','left:58%;top:26%;width:96px;height:104px;'+D(.75));
+   [0,1,2].forEach(k=>{h+=E('v-bar','left:62%;top:'+(36+k*12)+'%;width:'+(60-k*10)+'px;height:6px;background:'+(k===0?CV.navy:CV.lblue)+';'+D(.95+k*.08));});
+  } else { // one record, synced ticks
+   h+=E('v-card','left:26%;top:18%;width:130px;height:132px;'+D(0));
+   [0,1,2].forEach(k=>{h+=E('v-bar','left:31%;top:'+(28+k*16)+'%;width:64px;height:7px;background:'+(k===0?CV.navy:CV.lblue)+';'+D(.2+k*.1));
+    h+=E('v-tk','left:64%;top:'+(25+k*16)+'%;'+D(.55+k*.12),'✓');});
+   h+=E('v-lbl','left:50%;top:74%;translate:-50% 0;color:'+CV.green+';'+D(1),'One source of truth');
+  }
+ } else if(id==='sales-project'){
+  if(tone==='problem'){ // deal stuck at a gap
+   h+=E('v-card v-jit','left:8%;top:32%;width:76px;height:70px;animation-delay:0s,.4s');
+   h+=E('v-lbl','left:9%;top:22%;'+D(.2),'Closed-won');
+   h+=E('v-ln','left:46%;top:20%;--len:0px;width:2px;height:120px;background:repeating-linear-gradient(180deg,'+CV.red+' 0 6px,transparent 6px 12px);animation:none;opacity:1');
+   h+=E('v-card','left:64%;top:32%;width:76px;height:70px;opacity:.45;'+D(.3));
+   h+=E('v-lbl','left:65%;top:22%;'+D(.4),'Delivery');
+   h+=E('v-x','left:44%;top:44%;'+D(.6),'✕');
+  } else if(tone==='built'){ // pipeline connects, card crosses
+   h+=E('v-card','left:64%;top:32%;width:76px;height:70px;'+D(.1));
+   h+=E('v-ln','left:24%;top:46%;--len:150px;background:'+CV.gold+';'+D(.25));
+   h+=E('v-card v-slide','left:8%;top:32%;width:76px;height:70px;--tx:150px;'+D(0));
+   h+=E('v-lbl','left:9%;top:22%;'+D(.2),'Closed-won');
+   h+=E('v-lbl','left:65%;top:22%;'+D(.2),'Project');
+  } else { // project card + kickoff ticks
+   h+=E('v-card','left:24%;top:14%;width:136px;height:150px;'+D(0));
+   h+=E('v-lbl','left:29%;top:20%;'+D(.15),'Kickoff ready');
+   [0,1,2,3].forEach(k=>{h+=E('v-bar','left:36%;top:'+(32+k*13)+'%;width:'+(58-k*6)+'px;height:6px;background:'+CV.lblue+';'+D(.25+k*.09));
+    h+=E('v-tk','left:29%;top:'+(29+k*13)+'%;'+D(.4+k*.1),'✓');});
+   h+=E('v-lbl','left:50%;top:78%;translate:-50% 0;color:'+CV.green+';'+D(.95),'Billing-ready');
+  }
+ } else if(id==='field-reporting'){
+  if(tone==='problem'){ // notes lost
+   [[10,12,-8],[36,30,6],[62,14,-4],[24,58,9]].forEach((p,k)=>{h+=E('v-card v-jit','left:'+p[0]+'%;top:'+p[1]+'%;width:56px;height:64px;rotate:'+p[2]+'deg;opacity:'+(1-k*.15)+';animation-delay:'+(k*.08)+'s,'+(k*.08+.4)+'s');});
+   h+=E('v-x','left:52%;top:56%;'+D(.7),'✕')+E('v-x','left:70%;top:44%;'+D(.85),'✕');
+   h+=E('v-lbl','left:50%;top:84%;translate:-50% 0;color:'+CV.red+';'+D(1),'Re-keyed days later');
+  } else if(tone==='built'){ // form -> auto-filed
+   h+=E('v-card','left:32%;top:8%;width:92px;height:74px;'+D(0));
+   [0,1].forEach(k=>{h+=E('v-bar','left:36%;top:'+(16+k*10)+'%;width:52px;height:5px;background:'+CV.lblue+';'+D(.2+k*.08));});
+   h+=E('v-ln','left:50%;top:38%;width:2px;--len:0;height:44px;background:'+CV.gold+';animation:none;opacity:1');
+   h+=E('v-dot','left:49%;top:44%;width:9px;height:9px;background:'+CV.gold+';'+D(.5));
+   [12,42,72].forEach((x,k)=>{h+=E('v-card','left:'+x+'%;top:66%;width:52px;height:46px;'+D(.7+k*.1));});
+   h+=E('v-lbl','left:50%;top:88%;translate:-50% 0;'+D(1),'Auto-filed');
+  } else { // tidy record list + attachments
+   h+=E('v-card','left:16%;top:14%;width:180px;height:150px;'+D(0));
+   [0,1,2].forEach(k=>{h+=E('v-bar','left:26%;top:'+(26+k*16)+'%;width:70px;height:6px;background:'+CV.lblue+';'+D(.2+k*.1));
+    h+=E('v-dot','left:21%;top:'+(25+k*16)+'%;width:9px;height:9px;background:'+CV.gold+';'+D(.3+k*.1));
+    h+=E('v-tk','left:64%;top:'+(23+k*16)+'%;'+D(.45+k*.1),'✓');});
+   h+=E('v-lbl','left:50%;top:76%;translate:-50% 0;color:'+CV.green+';'+D(.9),'Findable + reusable');
+  }
+ } else { // service-handoff
+  if(tone==='problem'){ // two teams, knowledge gap
+   h+=E('v-dot','left:12%;top:36%;width:56px;height:56px;background:'+CV.slate+';'+D(0));
+   h+=E('v-dot','left:70%;top:36%;width:56px;height:56px;background:'+CV.lblue+';'+D(.12));
+   h+=E('v-lbl','left:12%;top:60%;'+D(.3),'Install');
+   h+=E('v-lbl','left:70%;top:60%;'+D(.3),'Service');
+   h+=E('v-ln','left:32%;top:46%;--len:0;width:2px;height:70px;background:repeating-linear-gradient(180deg,'+CV.red+' 0 6px,transparent 6px 12px);animation:none;opacity:1;left:49%;top:26%');
+   h+=E('v-x','left:46%;top:44%;'+D(.5),'✕');
+   h+=E('v-lbl','left:50%;top:80%;translate:-50% 0;color:'+CV.red+';'+D(.7),'History lost');
+  } else if(tone==='built'){ // history trail links them
+   h+=E('v-dot','left:8%;top:36%;width:52px;height:52px;background:'+CV.slate+';'+D(0));
+   h+=E('v-dot','left:74%;top:36%;width:52px;height:52px;background:'+CV.lblue+';'+D(.1));
+   h+=E('v-ln','left:22%;top:45%;--len:140px;background:'+CV.gold+';'+D(.3));
+   [30,44,58].forEach((x,k)=>{h+=E('v-dot','left:'+x+'%;top:43%;width:12px;height:12px;background:'+CV.gold+';'+D(.55+k*.12));});
+   h+=E('v-lbl','left:50%;top:66%;translate:-50% 0;'+D(1),'Every visit tracked');
+  } else { // 2nd team sees full timeline
+   h+=E('v-card','left:12%;top:14%;width:230px;height:152px;'+D(0));
+   h+=E('v-ln','left:18%;top:32%;--len:150px;background:'+CV.gold+';'+D(.2));
+   [0,1,2,3].forEach(k=>{h+=E('v-dot','left:'+(17+k*10)+'%;top:30%;width:12px;height:12px;background:'+(k===3?CV.green:CV.navy)+';'+D(.4+k*.1));});
+   [0,1].forEach(k=>{h+=E('v-bar','left:18%;top:'+(46+k*12)+'%;width:'+(96-k*26)+'px;height:6px;background:'+CV.lblue+';'+D(.7+k*.1));});
+   h+=E('v-tk','left:47%;top:44%;'+D(.95),'✓');
+   h+=E('v-lbl','left:35%;top:72%;translate:-50% 0;color:'+CV.green+';'+D(1),'Full history, from day one');
+  }
+ }
+ return h;
 }
+
 
 export default function AutomationIntegrationInteractive() {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
@@ -367,7 +458,7 @@ export default function AutomationIntegrationInteractive() {
               </div>
 
               <div className="rai-story" key={step}>
-                <StepVisual tone={STEPS[step].tone} />
+                <div className="rai-vis" dangerouslySetInnerHTML={{ __html: visualHTML(active.id, STEPS[step].tone) }} />
                 <div className="rai-stage-text">
                   <div className="rai-kicker">Step {step + 1} of 3</div>
                   <h3 className="rai-step-title">{STEPS[step].k}</h3>
@@ -449,20 +540,31 @@ const CSS = `
 .rai-step-list li{display:flex;gap:11px;align-items:flex-start;font-size:16.5px;line-height:1.5;color:#46566f;opacity:0;transform:translateY(8px);animation:rai-li .45s ease forwards}
 @keyframes rai-li{to{opacity:1;transform:none}}
 .rai-step-list li svg{flex:0 0 auto;margin-top:3px}
+/* visuals: shared primitives, tailored per project */
 .rai-vis{position:relative;height:250px;border-radius:16px;overflow:hidden;border:1px solid #e6eaf1;background:linear-gradient(180deg,#fbfcfe,#eef2f8)}
-.rai-vis .n{position:absolute;border-radius:8px;box-shadow:0 8px 16px -5px rgba(30,45,77,.3);opacity:0;animation:rai-pop .45s ease forwards}
+.v-card,.v-bar,.v-lane,.v-dot,.v-ln,.v-x,.v-tk,.v-lbl,.v-panel,.v-gauge,.v-needle{position:absolute}
+.v-card{border-radius:6px;background:#fff;border:1px solid #d9e2ee;box-shadow:0 7px 16px -6px rgba(29,55,89,.35);opacity:0;animation:rai-pop .45s ease forwards}
+.v-panel{border-radius:8px;background:#1D3759;box-shadow:0 10px 22px -8px rgba(29,55,89,.6);opacity:0;animation:rai-pop .45s ease forwards}
+.v-bar{border-radius:3px;opacity:0;animation:rai-pop .4s ease forwards}
+.v-lane{border-radius:7px;background:#eef2f8;border:1px dashed #cbd7e8;opacity:0;animation:rai-pop .35s ease forwards}
+.v-dot{border-radius:50%;opacity:0;animation:rai-pop .35s ease forwards}
+.v-ln{height:2px;transform-origin:0 50%;width:0;animation:rai-grow .55s ease forwards}
+.v-x{color:#d4696b;font-weight:800;font-size:22px;opacity:0;animation:rai-pop .4s ease forwards}
+.v-tk{color:#2e9e6a;font-weight:800;font-size:17px;opacity:0;animation:rai-pop .4s ease forwards}
+.v-lbl{font-size:10.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#8296b2;opacity:0;animation:rai-pop .4s ease forwards}
+.v-jit{animation:rai-pop .4s ease forwards, rai-jit 3.2s ease-in-out infinite .4s}
+.v-fill{transform-origin:left;transform:scaleX(0);animation:rai-fill .85s cubic-bezier(.3,.8,.3,1) forwards}
+.v-rise{transform-origin:bottom;transform:scaleY(0);animation:rai-rise .7s cubic-bezier(.3,.8,.3,1) forwards}
+.v-gauge{border-radius:999px 999px 0 0;border:12px solid #DCE6F2;border-bottom:none;opacity:0;animation:rai-pop .45s ease forwards}
+.v-needle{background:#1D3759;border-radius:2px;transform-origin:50% 100%;opacity:0;animation:rai-pop .3s ease forwards, rai-sweep 1.1s cubic-bezier(.3,.9,.3,1) forwards .3s}
 @keyframes rai-pop{from{opacity:0;transform:scale(.55)}to{opacity:1;transform:scale(1)}}
-.vs-problem .n{width:52px;height:36px;background:#efbfbf;animation:rai-pop .4s ease forwards,rai-jit 3s ease-in-out infinite .4s}
 @keyframes rai-jit{0%,100%{translate:0 0}50%{translate:5px -6px}}
-.vs-problem .x{position:absolute;font-size:26px;color:#e05656;font-weight:800;opacity:0;animation:rai-pop .4s ease forwards}
-.vs-built .hub{position:absolute;left:50%;top:50%;width:62px;height:62px;margin:-31px 0 0 -31px;border-radius:50%;background:#1D3759;box-shadow:0 10px 24px -6px rgba(29,55,89,.75);opacity:0;animation:rai-pop .4s ease forwards}
-.vs-built .sp{position:absolute;left:50%;top:50%;height:3px;background:#93a9c6;transform-origin:0 50%;width:0;animation:rai-grow .55s ease forwards}
 @keyframes rai-grow{to{width:var(--len)}}
-.vs-built .n{width:44px;height:30px;background:#C4D8F2}
-.vs-result .row{position:absolute;left:9%;height:16px;border-radius:9px;background:#d8ecdf;width:78%;opacity:0;animation:rai-pop .35s ease forwards}
-.vs-result .row i{position:absolute;left:0;right:0;top:0;bottom:0;border-radius:9px;background:#2e9e6a;transform-origin:left;transform:scaleX(0);animation:rai-fill .8s cubic-bezier(.3,.8,.3,1) forwards}
-@keyframes rai-fill{to{transform:scaleX(var(--f))}}
-.vs-result .tick{position:absolute;right:6%;opacity:0;animation:rai-pop .4s ease forwards}
+@keyframes rai-fill{to{transform:scaleX(var(--f,1))}}
+@keyframes rai-rise{to{transform:scaleY(var(--f,1))}}
+@keyframes rai-sweep{from{rotate:var(--a0)}to{rotate:var(--a1)}}
+@keyframes rai-slide{to{translate:var(--tx) 0}}
+.v-slide{animation:rai-pop .4s ease forwards, rai-slide .9s cubic-bezier(.3,.8,.3,1) forwards .45s}
 .rai-nav{display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:1px solid var(--line);padding-top:18px}
 .rai-dots{display:flex;gap:8px}
 .rai-dot{width:9px;height:9px;border-radius:50%;background:#d7dee9;transition:all .25s}
