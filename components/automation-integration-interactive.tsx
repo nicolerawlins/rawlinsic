@@ -6,9 +6,9 @@ import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeom
 
 /* ──────────────────────────────────────────────────────────────
    Rawlins · Automation & Integration — interactive WebGL hub.
-   Real-3D scene (Three.js): floating capability tiles, glowing
-   R-core with orbiting halos, flowing connectors, drag to rotate.
-   Click a node → its real case study opens in an overlay.
+   Real-3D scene (Three.js): floating capability tiles each with a
+   3D object, the Rawlins logo + orbiting halos at the center,
+   drag to rotate. Click a node → its case study opens in an overlay.
    ────────────────────────────────────────────────────────────── */
 
 type Node = {
@@ -86,28 +86,43 @@ function toolDot(name: string): string {
 const XMark = ({ color }: { color: string }) => (<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke={color} strokeWidth="2.4" strokeLinecap="round"><path d="M7 7l10 10M17 7L7 17" /></svg>);
 const CheckMark = ({ color }: { color: string }) => (<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke={color} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12.5l4.5 4.5L19 7" /></svg>);
 
-/* canvas textures (called only inside the effect / browser) */
-function iconCanvas(kind: string, color: string): THREE.CanvasTexture {
-  const s = 256, cv = document.createElement("canvas"); cv.width = cv.height = s;
-  const x = cv.getContext("2d")!; x.clearRect(0, 0, s, s);
-  x.fillStyle = color; x.beginPath(); x.arc(s / 2, s / 2, 104, 0, 7); x.fill();
-  x.strokeStyle = "rgba(255,255,255,.92)"; x.lineWidth = 13; x.lineCap = "round"; x.lineJoin = "round"; x.fillStyle = "#fff";
-  const cx = s / 2, cy = s / 2;
-  if (kind === "chart") { x.beginPath(); x.moveTo(cx - 42, cy - 40); x.lineTo(cx - 42, cy + 40); x.lineTo(cx + 46, cy + 40); x.stroke(); x.fillRect(cx - 30, cy + 6, 16, 28); x.fillRect(cx - 6, cy - 14, 16, 48); x.fillRect(cx + 18, cy - 2, 16, 36); }
-  else if (kind === "gauge") { x.beginPath(); x.arc(cx, cy + 14, 44, Math.PI * 1.05, Math.PI * 1.95); x.stroke(); x.beginPath(); x.moveTo(cx, cy + 14); x.lineTo(cx + 26, cy - 14); x.stroke(); x.beginPath(); x.arc(cx, cy + 14, 7, 0, 7); x.fill(); }
-  else if (kind === "db") { x.beginPath(); x.ellipse(cx, cy - 30, 42, 16, 0, 0, 7); x.stroke(); x.beginPath(); x.moveTo(cx - 42, cy - 30); x.lineTo(cx - 42, cy + 30); x.moveTo(cx + 42, cy - 30); x.lineTo(cx + 42, cy + 30); x.stroke(); x.beginPath(); x.ellipse(cx, cy, 42, 16, 0, 0, Math.PI); x.stroke(); x.beginPath(); x.ellipse(cx, cy + 30, 42, 16, 0, 0, Math.PI); x.stroke(); }
-  else if (kind === "flow") { x.beginPath(); x.arc(cx - 34, cy - 26, 12, 0, 7); x.arc(cx - 34, cy + 26, 12, 0, 7); x.stroke(); x.beginPath(); x.moveTo(cx - 22, cy - 26); x.lineTo(cx + 16, cy - 26); x.lineTo(cx + 40, cy); x.lineTo(cx + 16, cy + 26); x.lineTo(cx - 22, cy + 26); x.stroke(); x.beginPath(); x.moveTo(cx + 40, cy); x.lineTo(cx + 16, cy); x.stroke(); }
-  else if (kind === "pin") { x.strokeRect(cx - 30, cy - 46, 60, 92); x.beginPath(); x.arc(cx, cy - 8, 11, 0, 7); x.stroke(); x.beginPath(); x.moveTo(cx, cy + 3); x.lineTo(cx, cy + 30); x.stroke(); }
-  else if (kind === "handoff") { x.beginPath(); x.moveTo(cx - 40, cy - 14); x.lineTo(cx + 34, cy - 14); x.moveTo(cx + 18, cy - 30); x.lineTo(cx + 34, cy - 14); x.lineTo(cx + 18, cy + 2); x.stroke(); x.beginPath(); x.moveTo(cx + 40, cy + 14); x.lineTo(cx - 34, cy + 14); x.moveTo(cx - 18, cy - 2); x.lineTo(cx - 34, cy + 14); x.lineTo(cx - 18, cy + 30); x.stroke(); }
-  const t = new THREE.CanvasTexture(cv); t.anisotropy = 8; t.colorSpace = THREE.SRGBColorSpace; return t;
-}
-function rCanvas(): THREE.CanvasTexture {
-  const s = 512, cv = document.createElement("canvas"); cv.width = cv.height = s;
-  const x = cv.getContext("2d")!; x.clearRect(0, 0, s, s);
-  x.font = '700 360px Georgia, "Times New Roman", serif'; x.textAlign = "center"; x.textBaseline = "middle";
-  x.save(); x.beginPath(); x.rect(0, 0, s * 0.52, s); x.clip(); x.fillStyle = "#e0a63c"; x.fillText("R", s / 2, s / 2 + 18); x.restore();
-  x.save(); x.beginPath(); x.rect(s * 0.52, 0, s, s); x.clip(); x.fillStyle = "#1e2d4d"; x.fillText("R", s / 2, s / 2 + 18); x.restore();
-  const t = new THREE.CanvasTexture(cv); t.anisotropy = 8; t.colorSpace = THREE.SRGBColorSpace; return t;
+/* build a small 3D object per capability (base at y=0) */
+function bObj(kind: string, accent: string): THREE.Group {
+  const g = new THREE.Group();
+  const white = new THREE.MeshStandardMaterial({ color: 0xf4f7fc, metalness: 0.1, roughness: 0.5 });
+  const acc = new THREE.MeshStandardMaterial({ color: new THREE.Color(accent), metalness: 0.22, roughness: 0.34 });
+  const navy = new THREE.MeshStandardMaterial({ color: 0x27395c, metalness: 0.2, roughness: 0.45 });
+  const M = (geo: THREE.BufferGeometry, mat: THREE.Material) => { const m = new THREE.Mesh(geo, mat); m.castShadow = true; g.add(m); return m; };
+  const P = (geo: THREE.BufferGeometry, mat: THREE.Material, par: THREE.Object3D) => { const m = new THREE.Mesh(geo, mat); m.castShadow = true; par.add(m); return m; };
+  if (kind === "chart") {
+    M(new RoundedBoxGeometry(1.0, 0.08, 0.66, 3, 0.03), white).position.y = 0.05;
+    const sg = new THREE.Group(); sg.position.set(0, 0.07, -0.29); sg.rotation.x = -0.33; g.add(sg);
+    P(new RoundedBoxGeometry(1.0, 0.62, 0.05, 3, 0.03), white, sg).position.y = 0.31;
+    P(new THREE.BoxGeometry(0.82, 0.46, 0.012), navy, sg).position.set(0, 0.31, 0.035);
+    ([[-0.2, 0.14], [0, 0.24], [0.2, 0.18]] as [number, number][]).forEach((b) => { P(new THREE.BoxGeometry(0.1, b[1], 0.02), acc, sg).position.set(b[0], 0.17 + b[1] / 2, 0.05); });
+  } else if (kind === "gauge") {
+    const disc = M(new THREE.CylinderGeometry(0.54, 0.54, 0.16, 44), white); disc.rotation.x = Math.PI / 2; disc.position.y = 0.56;
+    const arc = M(new THREE.TorusGeometry(0.36, 0.07, 14, 44, Math.PI * 1.35), acc); arc.position.set(0, 0.56, 0.09); arc.rotation.z = Math.PI * 0.83;
+    const nl = M(new THREE.BoxGeometry(0.055, 0.34, 0.03), navy); nl.position.set(0, 0.6, 0.12); nl.rotation.z = 0.7;
+    const hub = M(new THREE.CylinderGeometry(0.08, 0.08, 0.16, 20), navy); hub.rotation.x = Math.PI / 2; hub.position.set(0, 0.56, 0.12);
+  } else if (kind === "db") {
+    ([0.14, 0.42, 0.7]).forEach((y) => { M(new THREE.CylinderGeometry(0.44, 0.44, 0.2, 40), white).position.y = y; M(new THREE.TorusGeometry(0.44, 0.035, 12, 40), acc).position.y = y + 0.11; });
+  } else if (kind === "handoff") {
+    const p1 = M(new RoundedBoxGeometry(0.6, 0.8, 0.04, 3, 0.03), white); p1.position.set(-0.16, 0.5, -0.02); p1.rotation.z = 0.1;
+    const p2 = M(new RoundedBoxGeometry(0.6, 0.8, 0.04, 3, 0.03), white); p2.position.set(0.02, 0.52, 0.06); p2.rotation.z = -0.05;
+    ([0.18, 0.02, -0.14]).forEach((y) => { P(new THREE.BoxGeometry(0.36, 0.04, 0.006), acc, p2).position.set(0, y, 0.025); });
+    const ar = new THREE.Group(); ar.position.set(0.34, 0.34, 0.24); g.add(ar);
+    P(new THREE.BoxGeometry(0.26, 0.09, 0.09), acc, ar).position.x = -0.02;
+    const hd = P(new THREE.ConeGeometry(0.11, 0.2, 20), acc, ar); hd.rotation.z = -Math.PI / 2; hd.position.x = 0.2;
+  } else if (kind === "pin") {
+    M(new RoundedBoxGeometry(0.66, 0.92, 0.06, 3, 0.04), white).position.y = 0.52;
+    M(new THREE.BoxGeometry(0.24, 0.1, 0.09), navy).position.set(0, 0.98, 0.02);
+    ([0.72, 0.5, 0.28]).forEach((y) => { M(new THREE.BoxGeometry(0.13, 0.13, 0.03), acc).position.set(-0.16, y, 0.05); M(new THREE.BoxGeometry(0.26, 0.05, 0.02), navy).position.set(0.12, y, 0.05); });
+  } else if (kind === "flow") {
+    const mk = (x: number, z: number, mat: THREE.Material, h: number) => { const grp = new THREE.Group(); grp.position.set(x, 0, z); g.add(grp); P(new THREE.SphereGeometry(0.17, 20, 20), mat, grp).position.y = h + 0.17; P(new THREE.CapsuleGeometry(0.17, 0.34, 6, 16), mat, grp).position.y = h - 0.06; };
+    mk(-0.24, 0.02, acc, 0.42); mk(0.22, -0.08, white, 0.5);
+  }
+  return g;
 }
 
 export default function AutomationIntegrationInteractive() {
@@ -118,7 +133,9 @@ export default function AutomationIntegrationInteractive() {
   const openRef = useRef<(i: number) => void>(() => {});
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const lastFocused = useRef<HTMLElement | null>(null);
+  const openIdxRef = useRef<number | null>(null);
   const active = openIdx === null ? null : NODES[openIdx];
+  openIdxRef.current = openIdx;
 
   openRef.current = (i: number) => { lastFocused.current = document.activeElement as HTMLElement; setOpenIdx(i); };
   const close = () => { setOpenIdx(null); lastFocused.current?.focus?.(); };
@@ -160,38 +177,25 @@ export default function AutomationIntegrationInteractive() {
     const disposables: { dispose: () => void }[] = [];
 
     const center = new THREE.Group(); rig.add(center);
-    const coreGeo = new THREE.IcosahedronGeometry(1.0, 0);
-    const coreMat = new THREE.MeshStandardMaterial({ color: 0x3f60a8, emissive: 0xffd27a, emissiveIntensity: 0.13, metalness: 0.28, roughness: 0.26, flatShading: true });
-    const core = new THREE.Mesh(coreGeo, coreMat); core.castShadow = true; center.add(core); disposables.push(coreGeo, coreMat);
     const haloGeo = new THREE.TorusGeometry(1.75, 0.045, 18, 80); const haloMat = new THREE.MeshBasicMaterial({ color: 0xe8b552 });
     const halo = new THREE.Mesh(haloGeo, haloMat); halo.rotation.x = Math.PI / 2.3; center.add(halo); disposables.push(haloGeo, haloMat);
     const halo2Geo = new THREE.TorusGeometry(2.05, 0.02, 16, 80); const halo2Mat = new THREE.MeshBasicMaterial({ color: 0x5b8bd6, transparent: true, opacity: 0.5 });
     const halo2 = new THREE.Mesh(halo2Geo, halo2Mat); halo2.rotation.x = Math.PI / 1.7; center.add(halo2); disposables.push(halo2Geo, halo2Mat);
-    const rTex = rCanvas(); const rGeo = new THREE.PlaneGeometry(1.9, 1.9); const rMat = new THREE.MeshBasicMaterial({ map: rTex, transparent: true, depthWrite: false, depthTest: false });
+    const rTex = new THREE.TextureLoader().load("/images/dev/r-icon.png"); rTex.colorSpace = THREE.SRGBColorSpace; rTex.anisotropy = 8;
+    const rGeo = new THREE.PlaneGeometry(2.15, 2.08); const rMat = new THREE.MeshBasicMaterial({ map: rTex, transparent: true, depthWrite: false, depthTest: false });
     const rPlane = new THREE.Mesh(rGeo, rMat); rPlane.renderOrder = 20; scene.add(rPlane); disposables.push(rTex, rGeo, rMat);
 
     const pedGeo = new RoundedBoxGeometry(1.5, 0.4, 1.5, 4, 0.13); disposables.push(pedGeo);
-    const nodeGroups: { g: THREE.Group; ped: THREE.Mesh; badge: THREE.Mesh; base: number; phase: number }[] = [];
+    const nodeGroups: { g: THREE.Group; phase: number }[] = [];
     NODES.forEach((n, i) => {
       const a = (n.ang * Math.PI) / 180, px = Math.sin(a) * R, pz = Math.cos(a) * R;
       const g = new THREE.Group(); g.position.set(px, 0, pz); rig.add(g);
       const pedMat = new THREE.MeshStandardMaterial({ color: 0xeef2f8, metalness: 0.05, roughness: 0.55 }); disposables.push(pedMat);
       const ped = new THREE.Mesh(pedGeo, pedMat); ped.castShadow = true; ped.receiveShadow = true; ped.userData.i = i; g.add(ped); hitMeshes.push(ped);
-      const tex = iconCanvas(n.icon, n.accent); const bGeo = new THREE.PlaneGeometry(1.15, 1.15); const bMat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthWrite: false });
-      const badge = new THREE.Mesh(bGeo, bMat); badge.position.y = 0.95; badge.userData.i = i; g.add(badge); hitMeshes.push(badge); disposables.push(tex, bGeo, bMat);
-      const gl = new THREE.PointLight(new THREE.Color(n.accent).getHex(), 4, 4, 2); gl.position.set(0, 0.9, 0); g.add(gl);
-      nodeGroups.push({ g, ped, badge, base: 0.95, phase: i * 1.1 });
-    });
-
-    const flows: { curve: THREE.QuadraticBezierCurve3; dot: THREE.Mesh; off: number }[] = [];
-    NODES.forEach((n, i) => {
-      const a = (n.ang * Math.PI) / 180, px = Math.sin(a) * R, pz = Math.cos(a) * R;
-      const curve = new THREE.QuadraticBezierCurve3(new THREE.Vector3(0, 0.35, 0), new THREE.Vector3(px / 2, 1.15, pz / 2), new THREE.Vector3(px, 0.35, pz));
-      const tGeo = new THREE.TubeGeometry(curve, 26, 0.022, 8, false); const tMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(n.accent), transparent: true, opacity: 0.32 });
-      rig.add(new THREE.Mesh(tGeo, tMat)); disposables.push(tGeo, tMat);
-      const dGeo = new THREE.SphereGeometry(0.075, 12, 12); const dMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(n.accent) });
-      const dot = new THREE.Mesh(dGeo, dMat); rig.add(dot); disposables.push(dGeo, dMat);
-      flows.push({ curve, dot, off: i / NODES.length });
+      const obj = bObj(n.icon, n.accent); obj.position.y = 0.2; g.add(obj);
+      obj.traverse((o) => { const m = o as THREE.Mesh; if (m.isMesh) { m.userData.i = i; hitMeshes.push(m); disposables.push(m.geometry as THREE.BufferGeometry, m.material as THREE.Material); } });
+      const gl = new THREE.PointLight(new THREE.Color(n.accent).getHex(), 3.2, 4.5, 2); gl.position.set(0, 1.0, 0.3); g.add(gl);
+      nodeGroups.push({ g, phase: i * 1.1 });
     });
 
     /* interaction */
@@ -200,7 +204,7 @@ export default function AutomationIntegrationInteractive() {
     const onDown = (e: PointerEvent) => { drag = true; lastX = e.clientX; px0 = e.clientX; canvas.setPointerCapture(e.pointerId); };
     const onUp = (e: PointerEvent) => { drag = false; if (Math.abs(e.clientX - px0) < 5) clickAt(e); };
     const onMove = (e: PointerEvent) => { const r = canvas.getBoundingClientRect(); pointer.x = ((e.clientX - r.left) / r.width) * 2 - 1; pointer.y = -((e.clientY - r.top) / r.height) * 2 + 1; if (drag) { rotVel = (e.clientX - lastX) * 0.005; rotY += rotVel; lastX = e.clientX; } };
-    const clickAt = (e: PointerEvent) => { const r = canvas.getBoundingClientRect(); pointer.x = ((e.clientX - r.left) / r.width) * 2 - 1; pointer.y = -((e.clientY - r.top) / r.height) * 2 + 1; ray.setFromCamera(pointer, camera); const hit = ray.intersectObjects(hitMeshes, false); if (hit.length) openRef.current(hit[0].object.userData.i as number); };
+    const clickAt = (e: PointerEvent) => { if (openIdxRef.current !== null) return; const r = canvas.getBoundingClientRect(); pointer.x = ((e.clientX - r.left) / r.width) * 2 - 1; pointer.y = -((e.clientY - r.top) / r.height) * 2 + 1; ray.setFromCamera(pointer, camera); const hit = ray.intersectObjects(hitMeshes, false); if (hit.length) openRef.current(hit[0].object.userData.i as number); };
     canvas.addEventListener("pointerdown", onDown); canvas.addEventListener("pointerup", onUp); canvas.addEventListener("pointermove", onMove);
 
     const resize = () => { const w = stage.clientWidth, h = stage.clientHeight; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); };
@@ -211,29 +215,24 @@ export default function AutomationIntegrationInteractive() {
       const t = now * 0.001;
       if (!drag) { rotVel *= 0.92; rotY += rotVel; }
       rig.rotation.y = rotY + Math.sin(t * 0.18) * 0.14;
-      core.rotation.y = t * 0.35; core.rotation.x = Math.sin(t * 0.4) * 0.15;
       halo.rotation.z = t * 0.5; halo2.rotation.z = -t * 0.35;
       center.position.y = 0.35 + Math.sin(t * 0.9) * 0.12;
       nodeGroups.forEach((nd, i) => {
         nd.g.position.y = Math.sin(t * 0.9 + nd.phase) * 0.14;
-        nd.badge.position.y = nd.base + Math.sin(t * 1.3 + nd.phase) * 0.05;
-        nd.badge.quaternion.copy(camera.quaternion);
-        const sc = hover === i ? 1.12 : 1; nd.ped.scale.setScalar(THREE.MathUtils.lerp(nd.ped.scale.x, sc, 0.15));
+        const sc = hover === i ? 1.07 : 1; nd.g.scale.setScalar(THREE.MathUtils.lerp(nd.g.scale.x, sc, 0.15));
       });
-      { const cw = new THREE.Vector3(); center.getWorldPosition(cw); const tc = camera.position.clone().sub(cw).normalize(); rPlane.position.copy(cw).addScaledVector(tc, 1.55); rPlane.quaternion.copy(camera.quaternion); }
-      flows.forEach((f) => { const p = (t * 0.14 + f.off) % 1; f.curve.getPointAt(p, f.dot.position); });
+      { const cw = new THREE.Vector3(); center.getWorldPosition(cw); const tc = camera.position.clone().sub(cw).normalize(); rPlane.position.copy(cw).addScaledVector(tc, 0.3); rPlane.quaternion.copy(camera.quaternion); }
       camera.position.x = THREE.MathUtils.lerp(camera.position.x, pointer.x * 0.8, 0.04);
       camera.position.y = THREE.MathUtils.lerp(camera.position.y, 7.8 - pointer.y * 0.6, 0.04);
       camera.lookAt(camTarget);
-      ray.setFromCamera(pointer, camera); const hit = ray.intersectObjects(hitMeshes, false);
-      const idx = hit.length ? (hit[0].object.userData.i as number) : -1;
-      if (idx !== hover) { hover = idx; canvas.style.cursor = idx >= 0 ? "pointer" : "grab"; }
+      if (openIdxRef.current !== null) { hover = -1; canvas.style.cursor = "default"; }
+      else { ray.setFromCamera(pointer, camera); const hit = ray.intersectObjects(hitMeshes, false); const idx = hit.length ? (hit[0].object.userData.i as number) : -1; if (idx !== hover) { hover = idx; canvas.style.cursor = idx >= 0 ? "pointer" : "grab"; } }
       const w = stage.clientWidth, h = stage.clientHeight;
       const cs = new THREE.Vector3(0, 0.4, 0).project(camera); const csx = (cs.x * 0.5 + 0.5) * w, csy = (-cs.y * 0.5 + 0.5) * h;
       nodeGroups.forEach((nd, i) => {
-        const world = new THREE.Vector3(); nd.badge.getWorldPosition(world);
+        const world = new THREE.Vector3(); nd.g.getWorldPosition(world); world.y += 1.35;
         const p = world.clone().project(camera); let sx = (p.x * 0.5 + 0.5) * w, sy = (-p.y * 0.5 + 0.5) * h;
-        let dx = sx - csx, dy = sy - csy; const len = Math.hypot(dx, dy) || 1; sx += (dx / len) * 78; sy += (dy / len) * 78;
+        let dx = sx - csx, dy = sy - csy; const len = Math.hypot(dx, dy) || 1; sx += (dx / len) * 54; sy += (dy / len) * 54;
         const lab = labelEls.current[i]; if (lab) { lab.style.left = sx + "px"; lab.style.top = sy + "px"; lab.classList.toggle("on", p.z < 1 && p.z > -1); }
       });
       renderer.render(scene, camera); raf = requestAnimationFrame(animate);
@@ -320,14 +319,16 @@ const CSS = `
 .rai-root *{box-sizing:border-box}
 .rai-stage{position:absolute;inset:0}
 .rai-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
-.rai-label{position:absolute;transform:translate(-50%,-50%);pointer-events:none;text-align:center;width:180px;opacity:0;transition:opacity .3s}
+.rai-label{position:absolute;transform:translate(-50%,-50%);pointer-events:none;text-align:center;width:186px;background:rgba(9,15,29,.62);border:1px solid rgba(255,255,255,.09);border-radius:12px;padding:8px 12px 9px;box-shadow:0 10px 26px -14px rgba(0,0,0,.8);opacity:0;transition:opacity .3s}
 .rai-label.on{opacity:1}
 .rai-label .t{font-size:14px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#fff;line-height:1.15;text-shadow:0 2px 10px rgba(0,0,0,.7)}
 .rai-label .d{font-size:12px;line-height:1.35;color:#c3cde0;margin-top:4px;text-shadow:0 1px 10px rgba(0,0,0,.85)}
 .rai-hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#c4cee0;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:8px 16px;pointer-events:none;opacity:.9}
 .rai-hint .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);animation:rai-ping 2s ease-out infinite}
 @keyframes rai-ping{0%{box-shadow:0 0 0 0 rgba(217,154,43,.5)}70%,100%{box-shadow:0 0 0 8px rgba(217,154,43,0)}}
-.rai-overlay{position:fixed;inset:0;z-index:1000;background:rgba(6,12,26,.68);display:flex;align-items:flex-start;justify-content:center;padding:32px 18px;overflow-y:auto}
+.rai-overlay{position:fixed;inset:0;z-index:1000;background:rgba(6,12,26,.68);display:flex;align-items:flex-start;justify-content:center;padding:32px 18px;overflow-y:auto;cursor:default}
+.rai-overlay *{cursor:default}
+.rai-overlay .rai-close{cursor:pointer}
 .rai-modal{position:relative;width:100%;max-width:960px;background:#fff;border-radius:22px;box-shadow:0 50px 100px -30px rgba(0,0,0,.7);overflow:hidden;border-top:4px solid var(--acc)}
 .rai-modal-scroll{padding:32px clamp(20px,4vw,44px) 36px}
 .rai-close{position:absolute;top:14px;right:14px;z-index:5;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--navy);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,transform .15s}
