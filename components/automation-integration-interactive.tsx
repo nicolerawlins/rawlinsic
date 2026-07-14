@@ -532,34 +532,37 @@ const CSS = `
 .rai-step-title{font-size:30px;font-weight:800;color:var(--navy);margin:8px 0 16px;letter-spacing:-.2px}
 .rai-step-cap{font-size:17px;font-weight:700;color:var(--navy);margin:0 0 14px}
 .rai-step-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
-.rai-step-list li{display:flex;gap:11px;align-items:flex-start;font-size:16.5px;line-height:1.5;color:#46566f;opacity:0;transform:translateY(8px);animation:rai-li .45s ease forwards}
-@keyframes rai-li{to{opacity:1;transform:none}}
+.rai-step-list li{display:flex;gap:11px;align-items:flex-start;font-size:16.5px;line-height:1.5;color:#46566f;animation:rai-li .45s ease backwards}
+@keyframes rai-li{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .rai-step-list li svg{flex:0 0 auto;margin-top:3px}
-/* visuals: shared primitives, tailored per project */
+/* visuals: shared primitives, tailored per project.
+   NOTE: base state is VISIBLE; animations use fill-mode 'backwards' so the
+   art still renders if animations never run (hidden tab, throttling,
+   reduced-motion). Never gate content behind an animation. */
 .rai-vis{position:relative;height:250px;border-radius:16px;overflow:hidden;border:1px solid #e6eaf1;background:linear-gradient(180deg,#fbfcfe,#eef2f8)}
 .v-card,.v-bar,.v-lane,.v-dot,.v-ln,.v-x,.v-tk,.v-lbl,.v-panel,.v-gauge,.v-needle{position:absolute}
-.v-card{border-radius:6px;background:#fff;border:1px solid #d9e2ee;box-shadow:0 7px 16px -6px rgba(29,55,89,.35);opacity:0;animation:rai-pop .45s ease forwards}
-.v-panel{border-radius:8px;background:#1D3759;box-shadow:0 10px 22px -8px rgba(29,55,89,.6);opacity:0;animation:rai-pop .45s ease forwards}
-.v-bar{border-radius:3px;opacity:0;animation:rai-pop .4s ease forwards}
-.v-lane{border-radius:7px;background:#eef2f8;border:1px dashed #cbd7e8;opacity:0;animation:rai-pop .35s ease forwards}
-.v-dot{border-radius:50%;opacity:0;animation:rai-pop .35s ease forwards}
-.v-ln{height:2px;transform-origin:0 50%;width:0;animation:rai-grow .55s ease forwards}
-.v-x{color:#d4696b;font-weight:800;font-size:22px;opacity:0;animation:rai-pop .4s ease forwards}
-.v-tk{color:#2e9e6a;font-weight:800;font-size:17px;opacity:0;animation:rai-pop .4s ease forwards}
-.v-lbl{font-size:10.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#8296b2;opacity:0;animation:rai-pop .4s ease forwards}
-.v-jit{animation:rai-pop .4s ease forwards, rai-jit 3.2s ease-in-out infinite .4s}
-.v-fill{transform-origin:left;transform:scaleX(0);animation:rai-fill .85s cubic-bezier(.3,.8,.3,1) forwards}
-.v-rise{transform-origin:bottom;transform:scaleY(0);animation:rai-rise .7s cubic-bezier(.3,.8,.3,1) forwards}
-.v-gauge{border-radius:999px 999px 0 0;border:12px solid #DCE6F2;border-bottom:none;opacity:0;animation:rai-pop .45s ease forwards}
-.v-needle{background:#1D3759;border-radius:2px;transform-origin:50% 100%;opacity:0;animation:rai-pop .3s ease forwards, rai-sweep 1.1s cubic-bezier(.3,.9,.3,1) forwards .3s}
+.v-card{border-radius:6px;background:#fff;border:1px solid #d9e2ee;box-shadow:0 7px 16px -6px rgba(29,55,89,.35);animation:rai-pop .45s ease backwards}
+.v-panel{border-radius:8px;background:#1D3759;box-shadow:0 10px 22px -8px rgba(29,55,89,.6);animation:rai-pop .45s ease backwards}
+.v-bar{border-radius:3px;animation:rai-pop .4s ease backwards}
+.v-lane{border-radius:7px;background:#eef2f8;border:1px dashed #cbd7e8;animation:rai-pop .35s ease backwards}
+.v-dot{border-radius:50%;animation:rai-pop .35s ease backwards}
+.v-ln{height:2px;transform-origin:0 50%;width:var(--len);animation:rai-grow .55s ease backwards}
+.v-x{color:#d4696b;font-weight:800;font-size:22px;animation:rai-pop .4s ease backwards}
+.v-tk{color:#2e9e6a;font-weight:800;font-size:17px;animation:rai-pop .4s ease backwards}
+.v-lbl{font-size:10.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#8296b2;animation:rai-pop .4s ease backwards}
+.v-jit{animation:rai-pop .4s ease backwards, rai-jit 3.2s ease-in-out infinite .4s}
+.v-fill{transform-origin:left;transform:scaleX(var(--f,1));animation:rai-fill .85s cubic-bezier(.3,.8,.3,1) backwards}
+.v-rise{transform-origin:bottom;transform:scaleY(var(--f,1));animation:rai-rise .7s cubic-bezier(.3,.8,.3,1) backwards}
+.v-gauge{border-radius:999px 999px 0 0;border:12px solid #DCE6F2;border-bottom:none;animation:rai-pop .45s ease backwards}
+.v-needle{background:#1D3759;border-radius:2px;transform-origin:50% 100%;rotate:var(--a1);animation:rai-pop .3s ease backwards, rai-sweep 1.1s cubic-bezier(.3,.9,.3,1) backwards .3s}
+.v-slide{translate:var(--tx) 0;animation:rai-pop .4s ease backwards, rai-slide .9s cubic-bezier(.3,.8,.3,1) backwards .45s}
 @keyframes rai-pop{from{opacity:0;transform:scale(.55)}to{opacity:1;transform:scale(1)}}
 @keyframes rai-jit{0%,100%{translate:0 0}50%{translate:5px -6px}}
-@keyframes rai-grow{to{width:var(--len)}}
-@keyframes rai-fill{to{transform:scaleX(var(--f,1))}}
-@keyframes rai-rise{to{transform:scaleY(var(--f,1))}}
+@keyframes rai-grow{from{width:0}to{width:var(--len)}}
+@keyframes rai-fill{from{transform:scaleX(0)}to{transform:scaleX(var(--f,1))}}
+@keyframes rai-rise{from{transform:scaleY(0)}to{transform:scaleY(var(--f,1))}}
 @keyframes rai-sweep{from{rotate:var(--a0)}to{rotate:var(--a1)}}
-@keyframes rai-slide{to{translate:var(--tx) 0}}
-.v-slide{animation:rai-pop .4s ease forwards, rai-slide .9s cubic-bezier(.3,.8,.3,1) forwards .45s}
+@keyframes rai-slide{from{translate:0 0}to{translate:var(--tx) 0}}
 .rai-nav{display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:1px solid var(--line);padding-top:18px}
 .rai-dots{display:flex;gap:8px}
 .rai-dot{width:9px;height:9px;border-radius:50%;background:#d7dee9;transition:all .25s}
