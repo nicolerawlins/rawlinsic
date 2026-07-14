@@ -44,7 +44,7 @@ const NODES: Node[] = [
     result: ["Estimated time, actual time, team, cost & price all in one place", "Leaders track workshop speed, profitability, staffing & capacity", "Quotes and invoices automated; jobs assigned by capacity, not phone calls"],
     stack: ["Monday.com", "Make.com", "Tracket", "DocuSign"],
     quote: "Transformed from multiple software solutions into a streamlined, easy-to-use single source of truth — full visibility over what's happening across the entire company." },
-  { id: "sales-project", title: "Sales → Project", desc: "From opportunity to execution — connected.", accent: "#4D688C", icon: "flow", ang: 30,
+  { id: "sales-project", title: "Sales → Project", desc: "From opportunity to execution — connected.", accent: "#8FB9E8", icon: "flow", ang: 30,
     example: "Example 06", popupTitle: "Business Development → Project Handover", popupSubtitle: "130-person professional services firm",
     before: "Closed-won ran on memory", after: "Billing-ready in days, not weeks",
     problem: ["Handoff from Business Development to delivery & finance ran on email and memory", "Scope, fee, billing terms & owner moved late or incomplete", "Finance and PMs chased Business Development for info that should be settled at close", "Project setup dragged on for one to two weeks"],
@@ -170,7 +170,7 @@ function StepVisual({ tone }: { tone: "problem" | "built" | "result" }) {
   return (
     <div className="rai-vis vs-result">
       {f.map((v, k) => (<span key={k} className="row" style={{ top: `${20 + k * 20}%`, animationDelay: `${k * 0.1}s` }}><i style={{ ["--f" as string]: v, animationDelay: `${0.2 + k * 0.1}s` }} /></span>))}
-      <span className="tick" style={{ top: "74%", animationDelay: ".95s" }}><CheckMark color="#1D3759" /></span>
+      <span className="tick" style={{ top: "74%", animationDelay: ".95s" }}><CheckMark color="#2e9e6a" /></span>
     </div>
   );
 }
@@ -255,18 +255,22 @@ export default function AutomationIntegrationInteractive() {
 
     /* connectors: each node -> the R core (navy->gold, gently curved) */
     const cNavy = new THREE.Color(0x24406e), cGold = new THREE.Color(0xe0a63c);
+    const flows: { curve: THREE.QuadraticBezierCurve3; dot: THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>; off: number }[] = [];
     NODES.forEach((n, i) => {
       const a = (n.ang * Math.PI) / 180, dx = Math.sin(a), dz = Math.cos(a);
       const start = new THREE.Vector3(dx * R * 0.82, 0.14, dz * R * 0.82);
       const end = new THREE.Vector3(dx * 1.35, 0.3, dz * 1.35);
       const mid = start.clone().lerp(end, 0.5);
       const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
-      const tg = new THREE.TubeGeometry(curve, 44, 0.012, 8, false);
+      const tg = new THREE.TubeGeometry(curve, 44, 0.017, 8, false);
       const uvA = tg.attributes.uv, col = new Float32Array(uvA.count * 3), tmp = new THREE.Color();
-      for (let k = 0; k < uvA.count; k++) { const u = uvA.getX(k); tmp.copy(cNavy).lerp(cGold, Math.pow(u, 1.8)); col[k * 3] = tmp.r; col[k * 3 + 1] = tmp.g; col[k * 3 + 2] = tmp.b; }
+      for (let k = 0; k < uvA.count; k++) { const u = uvA.getX(k); tmp.copy(cNavy).lerp(cGold, Math.pow(u, 0.55)); col[k * 3] = tmp.r; col[k * 3 + 1] = tmp.g; col[k * 3 + 2] = tmp.b; }
       tg.setAttribute("color", new THREE.BufferAttribute(col, 3));
-      const tm = new THREE.MeshBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.5 });
+      const tm = new THREE.MeshBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.85 });
       rig.add(new THREE.Mesh(tg, tm)); disposables.push(tg, tm);
+      const dG = new THREE.SphereGeometry(0.05, 12, 12), dM = new THREE.MeshBasicMaterial({ color: 0xf5d089, transparent: true, opacity: 0.95 });
+      const dot = new THREE.Mesh(dG, dM); rig.add(dot); disposables.push(dG, dM);
+      flows.push({ curve, dot, off: i / NODES.length });
     });
 
     /* interaction */
@@ -289,6 +293,7 @@ export default function AutomationIntegrationInteractive() {
       if (!drag) { rotVel *= 0.92; rotY += rotVel; }
       rig.rotation.y = rotY + Math.sin(t * 0.18) * 0.14;
       center.position.y = 0.35 + Math.sin(t * 0.9) * 0.12;
+      flows.forEach((fl) => { const u = (t * 0.22 + fl.off) % 1; fl.curve.getPointAt(u, fl.dot.position); fl.dot.material.opacity = 0.15 + 0.85 * Math.sin(u * Math.PI); });
       nodeGroups.forEach((nd, i) => {
         nd.g.position.y = Math.sin(t * 0.9 + nd.phase) * 0.14;
         const sc = hover === i ? 1.07 : 1; nd.g.scale.setScalar(THREE.MathUtils.lerp(nd.g.scale.x, sc, 0.15));
@@ -352,7 +357,7 @@ export default function AutomationIntegrationInteractive() {
 
       {active && (
         <div className="rai-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) close(); }}>
-          <div className="rai-modal" role="dialog" aria-modal="true" aria-labelledby="rai-modal-title" style={{ ["--acc" as string]: "#1D3759" }}>
+          <div className="rai-modal" role="dialog" aria-modal="true" aria-labelledby="rai-modal-title" style={{ ["--acc" as string]: "#d99a2b" }}>
             <button ref={closeBtnRef} className="rai-close" onClick={close} aria-label="Close"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg></button>
             <div className="rai-modal-scroll">
               <div className="rai-modal-head">
@@ -372,7 +377,7 @@ export default function AutomationIntegrationInteractive() {
                       <li key={k} style={{ animationDelay: `${0.12 + k * 0.09}s` }}>
                         {STEPS[step].tone === "problem"
                           ? <XMark color="#e05656" />
-                          : <CheckMark color={STEPS[step].tone === "built" ? "#4D688C" : "#1D3759"} />}
+                          : <CheckMark color="#d99a2b" />}
                         <span>{tx}</span>
                       </li>
                     ))}
@@ -410,15 +415,16 @@ const CSS = `
 .rai-root *{box-sizing:border-box}
 .rai-stage{position:absolute;inset:0}
 .rai-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
-.rai-label{position:absolute;pointer-events:none;width:262px;opacity:0;transition:opacity .3s}
+.rai-label{position:absolute;pointer-events:none;width:250px;opacity:0;transition:opacity .3s}
 .rai-label.on{opacity:1}
 .rai-label.lft{text-align:right}
 .rai-label.rgt{text-align:left}
-.rai-label .tab{display:inline-block;background:#1D3759;color:#fff;font-size:23px;font-weight:800;letter-spacing:.4px;
-  padding:10px 20px;border-radius:6px;border-bottom:3px solid #d99a2b;box-shadow:0 12px 24px -8px rgba(0,0,0,.7);position:relative;z-index:2}
-.rai-label .body{background:#fff;border:1px solid rgba(29,55,89,.18);border-radius:7px;margin-top:-6px;
-  padding:16px 16px 13px;font-size:16px;line-height:1.42;color:#54647f;text-align:left;
-  box-shadow:0 18px 40px -14px rgba(0,0,0,.55)}
+.rai-label .tab{display:block;background:none;border:0;box-shadow:none;padding:0;
+  font-size:26px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:#fff;line-height:1.1;
+  text-shadow:0 2px 14px rgba(4,9,20,.98),0 0 34px rgba(4,9,20,.9),0 0 3px rgba(4,9,20,.9)}
+.rai-label .body{background:none;border:0;box-shadow:none;margin-top:9px;padding:0;
+  font-size:16.5px;line-height:1.45;color:#cfdaeb;
+  text-shadow:0 2px 12px rgba(4,9,20,1),0 0 26px rgba(4,9,20,.95),0 0 3px rgba(4,9,20,.9)}
 .rai-hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#c4cee0;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:8px 16px;pointer-events:none;opacity:.9}
 .rai-hint .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);animation:rai-ping 2s ease-out infinite}
 @keyframes rai-ping{0%{box-shadow:0 0 0 0 rgba(217,154,43,.5)}70%,100%{box-shadow:0 0 0 8px rgba(217,154,43,0)}}
@@ -453,8 +459,8 @@ const CSS = `
 .vs-built .sp{position:absolute;left:50%;top:50%;height:3px;background:#93a9c6;transform-origin:0 50%;width:0;animation:rai-grow .55s ease forwards}
 @keyframes rai-grow{to{width:var(--len)}}
 .vs-built .n{width:44px;height:30px;background:#C4D8F2}
-.vs-result .row{position:absolute;left:9%;height:16px;border-radius:9px;background:#DCE6F2;width:78%;opacity:0;animation:rai-pop .35s ease forwards}
-.vs-result .row i{position:absolute;left:0;top:0;bottom:0;border-radius:9px;background:#1D3759;transform-origin:left;transform:scaleX(0);animation:rai-fill .8s cubic-bezier(.3,.8,.3,1) forwards}
+.vs-result .row{position:absolute;left:9%;height:16px;border-radius:9px;background:#d8ecdf;width:78%;opacity:0;animation:rai-pop .35s ease forwards}
+.vs-result .row i{position:absolute;left:0;right:0;top:0;bottom:0;border-radius:9px;background:#2e9e6a;transform-origin:left;transform:scaleX(0);animation:rai-fill .8s cubic-bezier(.3,.8,.3,1) forwards}
 @keyframes rai-fill{to{transform:scaleX(var(--f))}}
 .vs-result .tick{position:absolute;right:6%;opacity:0;animation:rai-pop .4s ease forwards}
 .rai-nav{display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:1px solid var(--line);padding-top:18px}
@@ -464,8 +470,8 @@ const CSS = `
 .rai-btn{font:inherit;font-size:15px;font-weight:700;padding:11px 20px;border-radius:10px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--navy);transition:background .15s,opacity .15s}
 .rai-btn:hover{background:#f2f5fa}
 .rai-btn[disabled]{opacity:.35;cursor:default}
-.rai-btn-primary{background:var(--navy);color:#fff;border-color:var(--navy)}
-.rai-btn-primary:hover{background:#2b3f68}
+.rai-btn-primary{background:#d99a2b;color:#1D3759;border-color:#d99a2b}
+.rai-btn-primary:hover{background:#c98d22}
 .rai-final{margin-top:22px}
 .rai-ba{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:stretch;margin-bottom:24px}
 .rai-ba-card{border-radius:16px;padding:16px 16px 18px;border:1px solid var(--line)}
