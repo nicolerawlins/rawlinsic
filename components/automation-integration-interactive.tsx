@@ -125,12 +125,12 @@ function bObj(kind: string, accent: string): THREE.Group {
     ([0.72, 0.5, 0.28]).forEach((y) => { M(new THREE.BoxGeometry(0.13, 0.13, 0.03), acc).position.set(-0.16, y, 0.05); M(new THREE.BoxGeometry(0.26, 0.05, 0.02), navy).position.set(0.12, y, 0.05); });
   } else if (kind === "flow") {
     /* funnel (opportunity) -> arrow -> check (delivered) */
-    const fn = M(new THREE.ConeGeometry(0.25, 0.34, 26), acc); fn.rotation.x = Math.PI; fn.position.set(-0.44, 0.39, 0);
-    M(new THREE.CylinderGeometry(0.045, 0.045, 0.22, 16), acc).position.set(-0.44, 0.11, 0);
+    const fn = M(new THREE.ConeGeometry(0.21, 0.3, 26), acc); fn.rotation.x = Math.PI; fn.position.set(-0.38, 0.37, 0);
+    M(new THREE.CylinderGeometry(0.04, 0.04, 0.22, 16), acc).position.set(-0.38, 0.11, 0);
     const ar = new THREE.Group(); ar.position.set(0, 0.38, 0); g.add(ar);
     P(new THREE.BoxGeometry(0.2, 0.05, 0.05), navy, ar).position.x = -0.04;
     const hd2 = P(new THREE.ConeGeometry(0.07, 0.14, 18), navy, ar); hd2.rotation.z = -Math.PI / 2; hd2.position.x = 0.13;
-    const ck = new THREE.Group(); ck.position.set(0.45, 0.42, 0); g.add(ck);
+    const ck = new THREE.Group(); ck.position.set(0.38, 0.4, 0); g.add(ck);
     const c1 = P(new THREE.BoxGeometry(0.085, 0.23, 0.06), acc, ck); c1.rotation.z = Math.PI / 4; c1.position.set(-0.077, -0.005, 0);
     const c2 = P(new THREE.BoxGeometry(0.085, 0.42, 0.06), acc, ck); c2.rotation.z = -0.58; c2.position.set(0.105, 0.12, 0);
   }
@@ -201,7 +201,7 @@ function visualHTML(id: string, tone: string): string {
  } else if(id==='sales-project'){
   if(tone==='problem'){ // deal stuck at a gap
    h+=E('v-card v-jit','left:8%;top:32%;width:76px;height:70px;animation-delay:0s,.4s');
-   h+=E('v-lbl','left:9%;top:22%;'+D(.2),'Closed-won');
+   h+=E('v-lbl','left:9%;top:22%;'+D(.2),'Deal won');
    h+=E('v-ln','left:46%;top:20%;--len:0px;width:2px;height:120px;background:repeating-linear-gradient(180deg,'+CV.red+' 0 6px,transparent 6px 12px);animation:none;opacity:1');
    h+=E('v-card','left:64%;top:32%;width:76px;height:70px;opacity:.45;'+D(.3));
    h+=E('v-lbl','left:65%;top:22%;'+D(.4),'Delivery');
@@ -210,7 +210,7 @@ function visualHTML(id: string, tone: string): string {
    h+=E('v-card','left:64%;top:32%;width:76px;height:70px;'+D(.1));
    h+=E('v-ln','left:24%;top:46%;--len:150px;background:'+CV.gold+';'+D(.25));
    h+=E('v-card v-slide','left:8%;top:32%;width:76px;height:70px;--tx:150px;'+D(0));
-   h+=E('v-lbl','left:9%;top:22%;'+D(.2),'Closed-won');
+   h+=E('v-lbl','left:9%;top:22%;'+D(.2),'Deal won');
    h+=E('v-lbl','left:65%;top:22%;'+D(.2),'Project');
   } else { // project card + kickoff ticks
    h+=E('v-card','left:24%;top:14%;width:136px;height:150px;'+D(0));
@@ -346,22 +346,18 @@ export default function AutomationIntegrationInteractive() {
 
     /* connectors: each node -> the R core (navy->gold, gently curved) */
     const cNavy = new THREE.Color(0x24406e), cGold = new THREE.Color(0xe0a63c);
-    const flows: { curve: THREE.QuadraticBezierCurve3; dot: THREE.Mesh<THREE.BufferGeometry, THREE.MeshBasicMaterial>; off: number }[] = [];
     NODES.forEach((n, i) => {
       const a = (n.ang * Math.PI) / 180, dx = Math.sin(a), dz = Math.cos(a);
-      const start = new THREE.Vector3(dx * R * 0.82, 0.14, dz * R * 0.82);
-      const end = new THREE.Vector3(dx * 1.35, 0.3, dz * 1.35);
+      const start = new THREE.Vector3(dx * R * 0.82, -0.30, dz * R * 0.82);
+      const end = new THREE.Vector3(dx * 1.15, -0.27, dz * 1.15);
       const mid = start.clone().lerp(end, 0.5);
       const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
-      const tg = new THREE.TubeGeometry(curve, 44, 0.017, 8, false);
+      const tg = new THREE.TubeGeometry(curve, 44, 0.009, 8, false);
       const uvA = tg.attributes.uv, col = new Float32Array(uvA.count * 3), tmp = new THREE.Color();
       for (let k = 0; k < uvA.count; k++) { const u = uvA.getX(k); tmp.copy(cNavy).lerp(cGold, Math.pow(u, 0.55)); col[k * 3] = tmp.r; col[k * 3 + 1] = tmp.g; col[k * 3 + 2] = tmp.b; }
       tg.setAttribute("color", new THREE.BufferAttribute(col, 3));
-      const tm = new THREE.MeshBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.85 });
+      const tm = new THREE.MeshBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.8 });
       rig.add(new THREE.Mesh(tg, tm)); disposables.push(tg, tm);
-      const dG = new THREE.SphereGeometry(0.05, 12, 12), dM = new THREE.MeshBasicMaterial({ color: 0xf5d089, transparent: true, opacity: 0.95 });
-      const dot = new THREE.Mesh(dG, dM); rig.add(dot); disposables.push(dG, dM);
-      flows.push({ curve, dot, off: i / NODES.length });
     });
 
     /* interaction */
@@ -384,7 +380,6 @@ export default function AutomationIntegrationInteractive() {
       if (!drag) { rotVel *= 0.92; rotY += rotVel; }
       rig.rotation.y = rotY + Math.sin(t * 0.18) * 0.14;
       center.position.y = 0.35 + Math.sin(t * 0.9) * 0.12;
-      flows.forEach((fl) => { const u = (t * 0.22 + fl.off) % 1; fl.curve.getPointAt(u, fl.dot.position); fl.dot.material.opacity = 0.15 + 0.85 * Math.sin(u * Math.PI); });
       nodeGroups.forEach((nd, i) => {
         nd.g.position.y = Math.sin(t * 0.9 + nd.phase) * 0.14;
         const sc = hover === i ? 1.07 : 1; nd.g.scale.setScalar(THREE.MathUtils.lerp(nd.g.scale.x, sc, 0.15));
@@ -468,7 +463,7 @@ export default function AutomationIntegrationInteractive() {
                       <li key={k} style={{ animationDelay: `${0.12 + k * 0.09}s` }}>
                         {STEPS[step].tone === "problem"
                           ? <XMark color="#e05656" />
-                          : <CheckMark color="#d99a2b" />}
+                          : <CheckMark color="#c9a84c" />}
                         <span>{tx}</span>
                       </li>
                     ))}
@@ -511,10 +506,10 @@ const CSS = `
 .rai-label.lft{text-align:right}
 .rai-label.rgt{text-align:left}
 .rai-label .tab{display:block;background:none;border:0;box-shadow:none;padding:0;
-  font-size:26px;font-weight:800;letter-spacing:.7px;text-transform:uppercase;color:#fff;line-height:1.1;
+  font-size:19px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#fff;line-height:1.15;
   text-shadow:0 2px 14px rgba(4,9,20,.98),0 0 34px rgba(4,9,20,.9),0 0 3px rgba(4,9,20,.9)}
 .rai-label .body{background:none;border:0;box-shadow:none;margin-top:9px;padding:0;
-  font-size:16.5px;line-height:1.45;color:#cfdaeb;
+  font-size:14.5px;line-height:1.45;color:#c3d0e4;
   text-shadow:0 2px 12px rgba(4,9,20,1),0 0 26px rgba(4,9,20,.95),0 0 3px rgba(4,9,20,.9)}
 .rai-hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#c4cee0;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:8px 16px;pointer-events:none;opacity:.9}
 .rai-hint .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);animation:rai-ping 2s ease-out infinite}
@@ -523,17 +518,17 @@ const CSS = `
 .rai-overlay *{cursor:default}
 .rai-overlay .rai-close,.rai-overlay .rai-btn{cursor:pointer}
 .rai-overlay .rai-btn[disabled]{cursor:default}
-.rai-modal{position:relative;width:100%;max-width:960px;background:#fff;border-radius:22px;box-shadow:0 50px 100px -30px rgba(0,0,0,.7);overflow:hidden;border-top:4px solid var(--acc)}
+.rai-modal{position:relative;width:100%;max-width:960px;background:#fff;border-radius:22px;box-shadow:0 50px 100px -30px rgba(0,0,0,.7);overflow:hidden;border-top:4px solid #DCE6F2}
 .rai-modal-scroll{padding:32px clamp(20px,4vw,44px) 36px}
 .rai-close{position:absolute;top:14px;right:14px;z-index:5;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:#fff;color:var(--navy);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .15s,transform .15s}
 .rai-close:hover{background:#f1f4f9;transform:rotate(90deg)}
 .rai-modal-head{margin-bottom:22px;padding-right:40px}
-.rai-example{display:inline-block;background:var(--navy);color:#fff;font-size:12.5px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:7px 15px;border-radius:20px}
+.rai-example{display:inline-block;background:#C4D8F2;color:#1D3759;font-size:12.5px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:7px 15px;border-radius:20px}
 .rai-modal-title{font-size:clamp(28px,4.6vw,42px);font-weight:800;color:var(--navy);margin:14px 0 5px;letter-spacing:-.3px}
 .rai-modal-subtitle{font-size:17px;color:var(--muted);font-style:italic;margin:0}
 /* ---- story player ---- */
 .rai-story{display:grid;grid-template-columns:1.05fr 1fr;gap:26px;align-items:center;margin:26px 0 20px;min-height:250px}
-.rai-kicker{font-size:13px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--acc)}
+.rai-kicker{font-size:13px;font-weight:800;letter-spacing:2px;text-transform:uppercase;background:linear-gradient(145deg,#c9a84c,#e8d5a0,#d4b878);-webkit-background-clip:text;background-clip:text;color:transparent}
 .rai-step-title{font-size:30px;font-weight:800;color:var(--navy);margin:8px 0 16px;letter-spacing:-.2px}
 .rai-step-cap{font-size:17px;font-weight:700;color:var(--navy);margin:0 0 14px}
 .rai-step-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
@@ -568,12 +563,12 @@ const CSS = `
 .rai-nav{display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:1px solid var(--line);padding-top:18px}
 .rai-dots{display:flex;gap:8px}
 .rai-dot{width:9px;height:9px;border-radius:50%;background:#d7dee9;transition:all .25s}
-.rai-dot.on{background:var(--acc);width:26px;border-radius:6px}
+.rai-dot.on{background:linear-gradient(145deg,#c9a84c,#e8d5a0,#d4b878);width:26px;border-radius:6px}
 .rai-btn{font:inherit;font-size:15px;font-weight:700;padding:11px 20px;border-radius:10px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--navy);transition:background .15s,opacity .15s}
 .rai-btn:hover{background:#f2f5fa}
 .rai-btn[disabled]{opacity:.35;cursor:default}
-.rai-btn-primary{background:#d99a2b;color:#1D3759;border-color:#d99a2b}
-.rai-btn-primary:hover{background:#c98d22}
+.rai-btn-primary{background:linear-gradient(145deg,#b89a3e,#d4be78,#c9a84c,#e0cfa0,#b89a3e);color:#1D3759;border-color:#b89a3e;text-shadow:0 1px 0 rgba(255,255,255,.35)}
+.rai-btn-primary:hover{filter:brightness(1.06)}
 .rai-final{margin-top:22px}
 .rai-ba{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:stretch;margin-bottom:24px}
 .rai-ba-card{border-radius:16px;padding:16px 16px 18px;border:1px solid var(--line)}
@@ -599,7 +594,7 @@ const CSS = `
 .rai-col ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
 .rai-col li{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;line-height:1.5;color:var(--ink)}
 .rai-col li svg{flex:0 0 auto;margin-top:2px}
-.rai-quote{margin:0 0 24px;padding:16px 22px;border-left:3px solid var(--acc);background:#f7f9fc;border-radius:0 12px 12px 0;font-family:Georgia,serif;font-style:italic;font-size:17.5px;line-height:1.6;color:var(--navy)}
+.rai-quote{margin:0 0 24px;padding:16px 22px;border-left:4px solid #1D3759;background:#DCE6F2;border-radius:0 12px 12px 0;font-family:Georgia,serif;font-style:italic;font-size:17.5px;line-height:1.6;color:var(--navy)}
 .rai-stack{border-top:1px solid var(--line);padding-top:22px}
 .rai-stack-head{display:flex;align-items:center;justify-content:center;gap:14px;font-size:13px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--navy)}
 .rai-stack-line{height:1px;width:56px;background:var(--line)}
