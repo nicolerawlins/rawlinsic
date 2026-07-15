@@ -599,7 +599,13 @@ export default function AutomationIntegrationInteractive() {
     const fitPts: THREE.Vector3[] = [];
     NODES.forEach((n, i) => {
       const a = (n.ang * Math.PI) / 180, px = Math.sin(a) * R, pz = Math.cos(a) * R;
-      for (let c = 0; c < 8; c++) fitPts.push(new THREE.Vector3(px + (c & 1 ? 0.78 : -0.78), c & 2 ? 1.9 : -0.3, pz + (c & 4 ? 0.78 : -0.78)));
+      /* Follow the node's real silhouette, not a box around it. A box puts a
+         corner at icon-top height where nothing exists, so the fit reserved a
+         band of empty air above the hub. The platform is wide but low; only the
+         icon's middle is tall. */
+      for (let c = 0; c < 4; c++) fitPts.push(new THREE.Vector3(px + (c & 1 ? 0.78 : -0.78), 0.3, pz + (c & 2 ? 0.78 : -0.78)));
+      fitPts.push(new THREE.Vector3(px, 1.75, pz));
+      fitPts.push(new THREE.Vector3(px - 0.5, 1.55, pz), new THREE.Vector3(px + 0.5, 1.55, pz));
       const g = new THREE.Group(); g.position.set(px, 0, pz); rig.add(g);
       const pedMat = new THREE.MeshStandardMaterial({ color: 0xeef2f8, metalness: 0.05, roughness: 0.55 }); disposables.push(pedMat);
       const ped = new THREE.Mesh(pedGeo, pedMat); ped.castShadow = true; ped.receiveShadow = true; ped.userData.i = i; g.add(ped); hitMeshes.push(ped);
@@ -652,31 +658,45 @@ export default function AutomationIntegrationInteractive() {
     const D_MIN = 5;
     let camZ = BASE_Z, camY = BASE_Y;
 
-    /* Fit numerically: project the hub's corners and scale the distance until
-       they just fit. Solving this in closed form is easy to get subtly wrong
-       (it already was), and this self-corrects for tilt, aspect and fov. */
-    const FILL = 0.96; /* fraction of the view the hub should span */
+    /* Fit numerically: project the hub and scale the distance until it just
+       fits. Solving this in closed form is easy to get subtly wrong (it already
+       was), and this self-corrects for tilt, aspect and fov.
+       It also recentres vertically: the camera looks down, so the ring's near
+       side falls further below the origin than the far side rises above it.
+       Centring on the origin therefore fills to the bottom and leaves a band of
+       dead air at the top — which is the gap under the intro. */
+    /* Width and height are budgeted separately. Desktop keeps the hub off the
+       side labels (0.70 => ~200px clear each side at 1360); a phone has no side
+       labels so it can use the full width. */
+    const FILL_X = narrow ? 0.98 : 0.70, FILL_Y = 0.96;
     const q = new THREE.Vector3();
-    const solveDistance = () => {
-      let d = Math.max(D_MIN, 12);
-      for (let it = 0; it < 24; it++) {
-        camera.position.set(0, Math.sin(TILT) * d, Math.cos(TILT) * d);
-        camera.lookAt(camTarget); camera.updateMatrixWorld(true);
-        let m = 0;
-        for (const p of fitPts) { q.copy(p).project(camera); m = Math.max(m, Math.abs(q.x), Math.abs(q.y)); }
-        const k = m / FILL;
+    const solveFit = () => {
+      let d = Math.max(D_MIN, 12), ty = 0;
+      const t = Math.tan((camera.fov * Math.PI) / 360);
+      for (let it = 0; it < 30; it++) {
+        camera.position.set(0, ty + Math.sin(TILT) * d, Math.cos(TILT) * d);
+        camera.lookAt(0, ty, 0); camera.updateMatrixWorld(true);
+        let mx = 0, minY = Infinity, maxY = -Infinity;
+        for (const p of fitPts) {
+          q.copy(p).project(camera);
+          mx = Math.max(mx, Math.abs(q.x)); minY = Math.min(minY, q.y); maxY = Math.max(maxY, q.y);
+        }
+        const k = Math.max(mx / FILL_X, ((maxY - minY) / 2) / FILL_Y);
+        /* pull the projected centre onto the screen centre, damped */
+        ty += ((maxY + minY) / 2) * t * d * 0.9;
         d *= k;
-        if (Math.abs(k - 1) < 0.004) break;
+        if (Math.abs(k - 1) < 0.004 && Math.abs(maxY + minY) < 0.01) break;
       }
-      return Math.min(Math.max(d, D_MIN), 40);
+      return { d: Math.min(Math.max(d, D_MIN), 40), ty };
     };
 
     const resize = () => {
       const w = stage.clientWidth || window.innerWidth, h = stage.clientHeight || window.innerHeight;
       if (!w || !h) return;
       renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
-      const d = solveDistance();
-      camZ = Math.cos(TILT) * d; camY = Math.sin(TILT) * d;
+      const fit = solveFit();
+      camTarget.set(0, fit.ty, 0);
+      camZ = Math.cos(TILT) * fit.d; camY = fit.ty + Math.sin(TILT) * fit.d;
       /* label boxes are shrink-to-fit; cache widths for edge clamping */
       labelEls.current.forEach((el, i) => { labW.current[i] = el ? el.offsetWidth : 0; });
     };
@@ -802,7 +822,7 @@ export default function AutomationIntegrationInteractive() {
       </div>
       {/* sibling of the stage, not a child: the canvas is absolutely
           positioned, so a hint inside the stage lands at its top on mobile */}
-      <div className="rai-hint"><span className="dot" />Click on an icon to view applied solutions · drag to rotate</div>
+      <div className="rai-hint"><span className="dot" />Click an icon to view applied solutions · drag to rotate</div>
 
       {/* mobile only — the hub stays tappable, this just names the six */}
       <ul className="rai-mlist">
@@ -926,8 +946,8 @@ body:has(.rai-root) .intro-expand-btn{cursor:pointer}
   text-shadow:0 2px 12px rgba(4,9,20,1),0 0 26px rgba(4,9,20,.95),0 0 3px rgba(4,9,20,.9)}
 .rai-label .body span{display:block}
 .rai-hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#c4cee0;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:8px 16px;pointer-events:none;opacity:.9}
-.rai-hint .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);animation:rai-ping 2s ease-out infinite}
-@keyframes rai-ping{0%{box-shadow:0 0 0 0 rgba(217,154,43,.5)}70%,100%{box-shadow:0 0 0 8px rgba(217,154,43,0)}}
+.rai-hint .dot{width:8px;height:8px;border-radius:50%;background:linear-gradient(145deg,#c9a84c,#e8d5a0,#d4b878);animation:rai-ping 2s ease-out infinite}
+@keyframes rai-ping{0%{box-shadow:0 0 0 0 rgba(201,168,76,.5)}70%,100%{box-shadow:0 0 0 8px rgba(201,168,76,0)}}
 /* above the site nav (z-index 1000) so the popup isn't cut by the header */
 .rai-overlay{position:fixed;inset:0;z-index:1200;background:rgba(6,12,26,.68);display:flex;align-items:flex-start;justify-content:center;padding:32px 18px;overflow-y:auto;cursor:default}
 .rai-overlay *{cursor:default}
