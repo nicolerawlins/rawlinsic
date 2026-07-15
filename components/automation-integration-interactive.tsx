@@ -761,7 +761,7 @@ export default function AutomationIntegrationInteractive() {
           scroll observer to ever become visible */}
       <header className="rai-intro">
         <p className="section-label"><span className="gold-text">Automation &amp; AI</span></p>
-        <h1 className="section-title">Real-World <em>Examples</em></h1>
+        <h1 className="section-title">Applied <em>Solutions</em></h1>
         <button
           type="button"
           className={`intro-expand-btn${introOpen ? " expanded" : ""}`}
@@ -793,7 +793,7 @@ export default function AutomationIntegrationInteractive() {
       </div>
       {/* sibling of the stage, not a child: the canvas is absolutely
           positioned, so a hint inside the stage lands at its top on mobile */}
-      <div className="rai-hint"><span className="dot" />Click an icon to see a real example · drag to rotate</div>
+      <div className="rai-hint"><span className="dot" />Click on an icon to view applied solutions · drag to rotate</div>
 
       {/* mobile only — the hub stays tappable, this just names the six */}
       <ul className="rai-mlist">
