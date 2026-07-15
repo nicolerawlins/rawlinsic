@@ -515,6 +515,7 @@ function StoryScene3D({ sceneId, tone }: { sceneId: string; tone: string }) {
 export default function AutomationIntegrationInteractive() {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const [step, setStep] = useState(0);
+  const [introOpen, setIntroOpen] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
   const labelEls = useRef<(HTMLDivElement | null)[]>([]);
@@ -755,10 +756,29 @@ export default function AutomationIntegrationInteractive() {
     <>
     <div className="rai-root">
       <style>{CSS}</style>
+      {/* same pattern as the home page's "Why Rawlins" block — deliberately not
+          using .reveal, which starts at opacity:0 and needs the home page's
+          scroll observer to ever become visible */}
       <header className="rai-intro">
-        <span className="eyebrow">Real-world examples</span>
-        <h1>Smarter systems, proven in practice.</h1>
-        <p>Every example started the same way — disconnected tools, duplicated work, and information scattered across systems. We connected what each team already used, automated the manual steps, and brought the full picture into one clear view.</p>
+        <p className="section-label"><span className="gold-text">Real-world examples</span></p>
+        <h1 className="section-title">Smarter systems, <em>proven in practice</em></h1>
+        <button
+          type="button"
+          className={`intro-expand-btn${introOpen ? " expanded" : ""}`}
+          aria-expanded={introOpen}
+          aria-controls="rai-intro-more"
+          aria-label={introOpen ? "Hide details" : "Read more"}
+          onClick={() => setIntroOpen((o) => !o)}
+        >
+          <span className="intro-expand-icon">
+            <svg width="16" height="10" viewBox="0 0 16 10" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M1 1.5l7 7 7-7" />
+            </svg>
+          </span>
+        </button>
+        <div id="rai-intro-more" className={`intro-expandable${introOpen ? " expanded" : ""}`}>
+          <p className="section-text">Every example started the same way — disconnected tools, duplicated work, and information scattered across systems. We connected what each team already used, automated the manual steps, and brought the full picture into one clear view.</p>
+        </div>
       </header>
       <div className="rai-stage" ref={sceneRef}>
         <canvas className="rai-canvas" ref={canvasRef} />
@@ -865,15 +885,15 @@ body:has(.rai-root) .footer a,body:has(.rai-root) .footer button{cursor:pointer}
   background:var(--rawlins-bg,#1a3251)}
 @media (max-width:1003px){.rai-root{padding-top:64px}}
 .rai-root *,.rai-overlay *{box-sizing:border-box}
-/* Compact intro, not a hero: deliberately small so the hub keeps its height. */
-.rai-intro{flex:0 0 auto;width:100%;max-width:920px;margin:0 auto;padding:18px 24px 0;text-align:center}
-.rai-intro .eyebrow{display:block;font-family:var(--font-dm-sans),'DM Sans',sans-serif;
-  font-size:12px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#c9a84c;
-  background:linear-gradient(145deg,#c9a84c,#e8d5a0,#d4b878);-webkit-background-clip:text;background-clip:text;
-  -webkit-text-fill-color:transparent}
-.rai-intro h1{font-family:var(--font-dm-sans),'DM Sans',sans-serif;
-  font-size:clamp(21px,2.3vw,31px);font-weight:700;line-height:1.2;letter-spacing:-.2px;color:#fff;margin:9px 0 8px}
-.rai-intro p{font-size:14.5px;line-height:1.6;color:#c3d0e4;max-width:820px;margin:0 auto}
+/* Left-aligned block matching the home page's "Why Rawlins": the site's own
+   section-label / section-title / intro-expand-btn / intro-expandable classes
+   do the styling, this just places it. */
+.rai-intro{flex:0 0 auto;width:100%;max-width:1240px;margin:0 auto;padding:26px 60px 0;text-align:left}
+.rai-intro .section-title{margin:0;max-width:900px}
+.rai-intro .section-label{margin-bottom:14px}
+/* the site draws its own cursor and hides the native one; this page doesn't */
+body:has(.rai-root) .intro-expand-btn{cursor:pointer}
+@media (max-width:1003px){.rai-intro{padding:20px 24px 0}}
 /* takes whatever height the hero leaves */
 .rai-stage{position:relative;flex:1 1 auto;min-height:400px}
 .rai-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
@@ -984,7 +1004,6 @@ body:has(.rai-root) .footer a,body:has(.rai-root) .footer button{cursor:pointer}
   /* hero, hub, list, footer all stack — height comes from content */
   .rai-root{min-height:0}
   .rai-intro{padding:14px 18px 0}
-  .rai-intro p{font-size:13.5px}
   /* fixed-height hub here, so it must opt out of the desktop flex:1 */
   .rai-stage{flex:0 0 auto;min-height:0;height:clamp(300px,42vh,380px)}
   /* names live in the list below, so nothing competes with the hub */
