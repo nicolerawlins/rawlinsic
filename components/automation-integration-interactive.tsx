@@ -124,15 +124,23 @@ function bObj(kind: string, accent: string): THREE.Group {
     M(new THREE.BoxGeometry(0.24, 0.1, 0.09), navy).position.set(0, 0.98, 0.02);
     ([0.72, 0.5, 0.28]).forEach((y) => { M(new THREE.BoxGeometry(0.13, 0.13, 0.03), acc).position.set(-0.16, y, 0.05); M(new THREE.BoxGeometry(0.26, 0.05, 0.02), navy).position.set(0.12, y, 0.05); });
   } else if (kind === "flow") {
-    /* funnel (opportunity) -> arrow -> check (delivered) */
-    const fn = M(new THREE.ConeGeometry(0.21, 0.3, 26), acc); fn.rotation.x = Math.PI; fn.position.set(-0.38, 0.37, 0);
-    M(new THREE.CylinderGeometry(0.04, 0.04, 0.22, 16), acc).position.set(-0.38, 0.11, 0);
-    const ar = new THREE.Group(); ar.position.set(0, 0.38, 0); g.add(ar);
-    P(new THREE.BoxGeometry(0.2, 0.05, 0.05), navy, ar).position.x = -0.04;
-    const hd2 = P(new THREE.ConeGeometry(0.07, 0.14, 18), navy, ar); hd2.rotation.z = -Math.PI / 2; hd2.position.x = 0.13;
-    const ck = new THREE.Group(); ck.position.set(0.38, 0.4, 0); g.add(ck);
-    const c1 = P(new THREE.BoxGeometry(0.085, 0.23, 0.06), acc, ck); c1.rotation.z = Math.PI / 4; c1.position.set(-0.077, -0.005, 0);
-    const c2 = P(new THREE.BoxGeometry(0.085, 0.42, 0.06), acc, ck); c2.rotation.z = -0.58; c2.position.set(0.105, 0.12, 0);
+    /* funnel (opportunity) -> arrow -> check (delivered).
+       All three are extruded flat silhouettes on one baseline at a matched
+       0.4 height. A solid cone read as a plain disc from the camera's high
+       angle, which is why the funnel didn't look like a funnel. */
+    const ex = { depth: 0.16, bevelEnabled: true, bevelThickness: 0.014, bevelSize: 0.014, bevelSegments: 2 };
+    const fs = new THREE.Shape();
+    fs.moveTo(-0.16, 0.29); fs.lineTo(0.16, 0.29); fs.lineTo(0.045, 0.02);
+    fs.lineTo(0.045, -0.29); fs.lineTo(-0.045, -0.29); fs.lineTo(-0.045, 0.02); fs.closePath();
+    const fn = M(new THREE.ExtrudeGeometry(fs, ex), acc); fn.position.set(-0.34, 0.5, -0.08);
+    const as = new THREE.Shape();
+    as.moveTo(-0.18, 0.075); as.lineTo(0, 0.075); as.lineTo(0, 0.21); as.lineTo(0.18, 0);
+    as.lineTo(0, -0.21); as.lineTo(0, -0.075); as.lineTo(-0.18, -0.075); as.closePath();
+    const ar = M(new THREE.ExtrudeGeometry(as, ex), navy); ar.position.set(0.04, 0.5, -0.08);
+    /* compact check — a longer tail pushed the row past the platform edge */
+    const ck = new THREE.Group(); ck.position.set(0.42, 0.38, 0); g.add(ck);
+    const c1 = P(new THREE.BoxGeometry(0.1, 0.2, 0.16), acc, ck); c1.rotation.z = Math.PI / 4; c1.position.set(-0.06, 0, 0);
+    const c2 = P(new THREE.BoxGeometry(0.1, 0.44, 0.16), acc, ck); c2.rotation.z = -0.58; c2.position.set(0.1, 0.13, 0);
   }
   return g;
 }
@@ -147,8 +155,8 @@ function storyScene(id: string, tone: string): THREE.Group {
   const g = new THREE.Group();
   const mk = (hex: number, m = 0.18, r = 0.44) => new THREE.MeshStandardMaterial({ color: hex, metalness: m, roughness: r });
   const white = mk(0xf4f7fc, 0.1, 0.5), navy = mk(0x1d3759, 0.22, 0.44), slate = mk(0x4d688c, 0.2, 0.45),
-    lblue = mk(0xc4d8f2, 0.14, 0.46), gold = mk(0xc9a84c, 0.6, 0.24), green = mk(0x2e9e6a, 0.3, 0.36),
-    red = mk(0xd4696b, 0.25, 0.4);
+    lblue = mk(0xc4d8f2, 0.14, 0.46), pblue = mk(0xdce6f2, 0.12, 0.5), gold = mk(0xc9a84c, 0.6, 0.24),
+    green = mk(0x2e9e6a, 0.3, 0.36), red = mk(0xd4696b, 0.25, 0.4);
 
   const A = (geo: THREE.BufferGeometry, mat: THREE.Material, par: THREE.Object3D = g) => {
     const m = new THREE.Mesh(geo, mat); m.castShadow = true; m.receiveShadow = true; par.add(m); return m; };
@@ -158,6 +166,14 @@ function storyScene(id: string, tone: string): THREE.Group {
     const m = new THREE.Mesh(new THREE.BoxGeometry(w, 0.055, 0.014), mat); m.position.set(x, y, 0.045); m.castShadow = true; par.add(m); return m; };
   const pipe = (len: number, mat: THREE.Material = gold, t = 0.05) => A(new THREE.BoxGeometry(len, t, t), mat);
   const cyl = (r: number, h: number, mat: THREE.Material) => A(new THREE.CylinderGeometry(r, r, h, 40), mat);
+  /* same extruded silhouette as the Sales -> Project node icon, so the motif
+     matches between the hub and the story */
+  const funnel = (mat: THREE.Material = slate, s = 1) => {
+    const fs = new THREE.Shape();
+    fs.moveTo(-0.19 * s, 0.2 * s); fs.lineTo(0.19 * s, 0.2 * s); fs.lineTo(0.05 * s, 0);
+    fs.lineTo(0.05 * s, -0.2 * s); fs.lineTo(-0.05 * s, -0.2 * s); fs.lineTo(-0.05 * s, 0); fs.closePath();
+    return A(new THREE.ExtrudeGeometry(fs, { depth: 0.08, bevelEnabled: true, bevelThickness: 0.012, bevelSize: 0.012, bevelSegments: 2 }), mat);
+  };
   const tick = (mat: THREE.Material = gold, s = 1) => {
     const t = new THREE.Group(); g.add(t);
     const a = new THREE.Mesh(new THREE.BoxGeometry(0.08 * s, 0.21 * s, 0.07 * s), mat); a.rotation.z = Math.PI / 4; a.position.set(-0.07 * s, -0.005 * s, 0); a.castShadow = true; t.add(a);
@@ -179,7 +195,7 @@ function storyScene(id: string, tone: string): THREE.Group {
     return d; };
   /* Camera-facing structural label. Dark type on a white halo so it stays
      readable wherever it lands over the tableau's own shadows. */
-  const label = (text: string, color = "#3d5580") => {
+  const label = (text: string, color = "#1D3759") => {
     const fs = 44, pad = 18;
     const probe = document.createElement("canvas").getContext("2d");
     const font = '800 ' + fs + 'px ui-sans-serif, system-ui, -apple-system, sans-serif';
@@ -188,9 +204,7 @@ function storyScene(id: string, tone: string): THREE.Group {
     const x = c.getContext("2d");
     if (x) {
       x.font = font; x.textBaseline = "middle"; x.textAlign = "center";
-      x.shadowColor = "rgba(255,255,255,.95)"; x.shadowBlur = 10;
-      x.fillStyle = "#fff"; for (let i = 0; i < 4; i++) x.fillText(text, c.width / 2, c.height / 2);
-      x.shadowBlur = 0; x.fillStyle = color; x.fillText(text, c.width / 2, c.height / 2);
+      x.fillStyle = color; x.fillText(text, c.width / 2, c.height / 2);
     }
     const tex = new THREE.CanvasTexture(c); tex.anisotropy = 4;
     /* toneMapped:false — ACES would otherwise wash the type out to near-invisible */
@@ -240,7 +254,9 @@ function storyScene(id: string, tone: string): THREE.Group {
       monitor(1.66, 1.16, [0.46, 0.68, 0.5, 0.86]).position.set(-0.18, 1.16, -0.2);
       const d = card(0.92, 0.62); d.position.set(0.92, 0.5, 0.62); d.rotation.set(0.06, -0.24, 0);
       row(d, 0.5, 0.16, navy, -0.1); row(d, 0.36, 0.02, lblue, -0.17); row(d, 0.42, -0.12, lblue, -0.14);
-      tick(green, 0.9).position.set(1.3, 0.52, 0.72);
+      /* clear of the card's yawed front-right corner (x 1.358 / z 0.763), which
+         was swallowing the tick */
+      tick(green, 0.9).position.set(1.56, 0.5, 0.95);
     }
   } else if (id === "capacity") {
     if (tone === "problem") {
@@ -306,8 +322,7 @@ function storyScene(id: string, tone: string): THREE.Group {
       const d = card(0.86, 0.78); d.position.set(-1.16, 1.0, 0); d.rotation.set(0.04, 0.16, 0);
       row(d, 0.5, 0.22, navy, -0.1); row(d, 0.38, 0.06, lblue, -0.16); row(d, 0.44, -0.1, lblue, -0.13);
       /* funnel sits on the deal card, opening down into it */
-      const fn = A(new THREE.ConeGeometry(0.2, 0.3, 28), navy); fn.rotation.x = Math.PI; fn.position.set(-1.16, 1.56, 0.02);
-      const nk = cyl(0.035, 0.14, navy); nk.position.set(-1.16, 1.44, 0.02);
+      funnel(slate, 1.05).position.set(-1.16, 1.62, -0.04);
       const p = card(0.86, 0.78, 0.07, lblue); p.position.set(1.16, 1.0, 0); p.rotation.set(0.04, -0.16, 0);
       dashed(1.24, red, 4).position.set(0, 1.0, 0);
       cross(red, 1.0).position.set(0, 1.0, 0.34);
@@ -362,35 +377,45 @@ function storyScene(id: string, tone: string): THREE.Group {
         const dot = A(new THREE.SphereGeometry(0.055, 20, 16), gold); dot.position.set(-0.94, 1.06 + y, 0.06);
         row(c, 0.72 - k * 0.06, y, k === 0 ? navy : lblue, -0.06);
         const t = tick(gold, 0.45); t.position.set(0.36, 1.06 + y, 0.08); });
-      ([[1.06, 1.4, 0.3], [1.18, 0.98, 0.42], [1.02, 0.56, 0.34]] as [number, number, number][])
-        .forEach(([x, y, z], k) => { const a = card(0.42, 0.5); a.position.set(x, y, z); a.rotation.set(0.05, -0.34, 0.06 * (k - 1)); });
+      /* the attachments filed against the record — each one an actual doc */
+      ([[1.12, 1.42, 0.3], [1.24, 0.98, 0.42], [1.08, 0.54, 0.34]] as [number, number, number][])
+        .forEach(([x, y, z], k) => {
+          const a = card(0.46, 0.54); a.position.set(x, y, z); a.rotation.set(0.05, -0.34, 0.06 * (k - 1));
+          row(a, 0.24, 0.16, navy, -0.04); row(a, 0.18, 0.04, lblue, -0.07); row(a, 0.21, -0.08, lblue, -0.055);
+        });
       tick(green, 0.8).position.set(-0.94, 1.86, 0.2);
     }
   } else {
     /* service-handoff */
     if (tone === "problem") {
-      /* install finished; service arrives with an empty record */
-      const t1 = A(new RoundedBoxGeometry(0.62, 0.62, 0.3, 4, 0.08), slate); t1.position.set(-1.3, 0.5, 0);
-      const t2 = A(new RoundedBoxGeometry(0.62, 0.62, 0.3, 4, 0.08), lblue); t2.position.set(1.3, 0.5, 0);
-      const done = card(0.62, 0.74); done.position.set(-1.3, 1.36, 0.06); done.rotation.z = -0.06;
-      row(done, 0.34, 0.2, navy, -0.06); row(done, 0.26, 0.06, lblue, -0.1); row(done, 0.3, -0.08, lblue, -0.08);
-      const blank = card(0.62, 0.74, 0.07, lblue); blank.position.set(1.3, 1.36, 0.06); blank.rotation.z = 0.06;
-      dashed(1.5, red, 5).position.set(0, 1.3, 0);
-      cross(red, 1.0).position.set(0, 1.3, 0.34);
-      label("Install").position.set(-1.3, 0.02, 0.3);
-      label("Service").position.set(1.3, 0.02, 0.3);
+      /* install finishes holding a thick project history; service opens the
+         same record and finds it empty */
+      ([[-1.5, 0.94, -0.18, 0.11], [-1.36, 0.98, -0.02, 0.06]] as [number, number, number, number][])
+        .forEach(([x, y, z, rz]) => { const st = card(0.82, 0.98); st.position.set(x, y, z); st.rotation.z = rz; });
+      const done = card(0.82, 0.98); done.position.set(-1.22, 1.02, 0.16);
+      ([0.3, 0.14, -0.02, -0.18, -0.34] as number[]).forEach((y, k) => row(done, 0.46 - k * 0.05, y, k === 0 ? navy : lblue, -0.1));
+      const blank = card(0.82, 0.98); blank.position.set(1.22, 1.02, 0.16);
+      /* same record, ghosted out — nothing carried across */
+      ([0.3, 0.14, -0.02, -0.18, -0.34] as number[]).forEach((y, k) => row(blank, 0.46 - k * 0.05, y, pblue, -0.1));
+      dashed(1.36, red, 5).position.set(0, 1.02, 0.1);
+      cross(red, 1.0).position.set(0, 1.02, 0.36);
+      label("Install").position.set(-1.22, 0.3, 0.3);
+      label("Service").position.set(1.22, 0.3, 0.3);
     } else if (tone === "built") {
       /* every visit logged onto one gold thread that links the two teams */
-      const t1 = A(new RoundedBoxGeometry(0.58, 0.58, 0.28, 4, 0.08), slate); t1.position.set(-1.36, 0.62, 0);
-      const t2 = A(new RoundedBoxGeometry(0.58, 0.58, 0.28, 4, 0.08), lblue); t2.position.set(1.36, 0.62, 0);
-      const rail = pipe(2.16, gold, 0.055); rail.position.set(0, 0.62, 0);
+      ([-1.44, 1.44] as number[]).forEach((x) => {
+        const c = card(0.7, 0.88); c.position.set(x, 0.62, 0);
+        row(c, 0.4, 0.24, navy, -0.09); row(c, 0.3, 0.1, lblue, -0.14); row(c, 0.34, -0.04, lblue, -0.12);
+      });
+      const rail = pipe(2.18, gold, 0.055); rail.position.set(0, 0.62, 0);
       ([-0.66, 0, 0.66] as number[]).forEach((x) => {
         const bead = A(new THREE.SphereGeometry(0.1, 22, 18), gold); bead.position.set(x, 0.62, 0);
         const stem = pipe(0.04, gold, 0.04); stem.scale.y = 9; stem.position.set(x, 0.85, 0);
         const v = card(0.5, 0.44); v.position.set(x, 1.3, 0);
-        row(v, 0.28, 0.06, navy, -0.05); row(v, 0.2, -0.06, lblue, -0.09); });
-      label("Install").position.set(-1.36, 0.1, 0.3);
-      label("Service").position.set(1.36, 0.1, 0.3);
+        row(v, 0.28, 0.06, navy, -0.05); row(v, 0.2, -0.06, lblue, -0.09);
+      });
+      label("Install").position.set(-1.44, 0.02, 0.3);
+      label("Service").position.set(1.44, 0.02, 0.3);
     } else {
       /* the service tech opens the record and sees the whole history */
       const c = card(2.0, 1.3); c.position.set(0, 1.16, 0);
@@ -399,7 +424,6 @@ function storyScene(id: string, tone: string): THREE.Group {
         const d = A(new THREE.SphereGeometry(0.08, 22, 18), k === 3 ? green : navy); d.position.set(x, 1.44, 0.08); });
       ([1.1, 0.86] as number[]).forEach((y, k) => row(c, 1.1 - k * 0.34, y - 1.16, lblue, -0.36));
       const t = tick(gold, 0.5); t.position.set(0.74, 0.94, 0.08);
-      const who = A(new RoundedBoxGeometry(0.5, 0.5, 0.24, 4, 0.07), lblue); who.position.set(-1.38, 0.3, 0.4);
     }
   }
   return g;
@@ -436,8 +460,9 @@ function StoryScene3D({ sceneId, tone }: { sceneId: string; tone: string }) {
     const bb = new THREE.Box3().setFromObject(tab);
     const ctr = bb.getCenter(new THREE.Vector3()), size = bb.getSize(new THREE.Vector3());
     tab.position.set(-ctr.x, -ctr.y, -ctr.z);
-    const floor = new THREE.Mesh(new THREE.PlaneGeometry(14, 14), new THREE.ShadowMaterial({ opacity: 0.13 }));
-    floor.rotation.x = -Math.PI / 2; floor.position.y = -size.y / 2 - 0.06; floor.receiveShadow = true; rig.add(floor);
+    /* No ground plane: the key light threw long shadow smears across the
+       bottom of every tableau, right where the labels sit. Objects still
+       shadow each other, which is enough to read as solid. */
 
     /* frame it: fit the larger of width/height with a little breathing room */
     const fitH = size.y * 1.34, fitW = (size.x * 1.14) / (16 / 9);
@@ -620,10 +645,19 @@ export default function AutomationIntegrationInteractive() {
       const items = nodeGroups.map((nd, i) => {
         const world = new THREE.Vector3(); nd.g.getWorldPosition(world); world.y += 0.8;
         const p = world.clone().project(camera); const sx = (p.x * 0.5 + 0.5) * w;
-        return { i, sx, sy: (-p.y * 0.5 + 0.5) * h, vis: p.z < 1 && p.z > -1, left: sx < csx };
+        /* measure how wide this node actually is on screen, so the label can sit
+           just outside it rather than at a fixed guess of a distance */
+        let nMin = Infinity, nMax = -Infinity;
+        for (let a = 0; a < 8; a++) {
+          const cv = new THREE.Vector3(a & 1 ? 0.78 : -0.78, a & 2 ? 1.7 : 0, a & 4 ? 0.78 : -0.78);
+          cv.applyMatrix4(nd.g.matrixWorld).project(camera);
+          const cvx = (cv.x * 0.5 + 0.5) * w; nMin = Math.min(nMin, cvx); nMax = Math.max(nMax, cvx);
+        }
+        return { i, sx, sy: (-p.y * 0.5 + 0.5) * h, vis: p.z < 1 && p.z > -1, left: sx < csx, nMin, nMax };
       });
-      /* gap clears the (now larger) platform; cardW matches .rai-label's width */
-      const MINGAP = 124, cardW = 216, gap = 112, pad = 12;
+      /* cardW matches .rai-label's width; GAP is measured from the node's own
+         on-screen edge, so labels sit close whatever the hub's angle */
+      const MINGAP = 124, cardW = 216, GAP = 14, pad = 12;
       ([true, false]).forEach((side) => {
         const arr = items.filter((it) => it.left === side).sort((a, b) => a.sy - b.sy);
         for (let k = 1; k < arr.length; k++) { if (arr[k].sy - arr[k - 1].sy < MINGAP) arr[k].sy = arr[k - 1].sy + MINGAP; }
@@ -632,7 +666,7 @@ export default function AutomationIntegrationInteractive() {
       });
       items.forEach((it) => {
         const lab = labelEls.current[it.i]; if (!lab) return;
-        let x = it.left ? it.sx - gap : it.sx + gap;
+        let x = it.left ? it.nMin - GAP : it.nMax + GAP;
         if (it.left) { if (x - cardW < pad) x = pad + cardW; } else { if (x + cardW > w - pad) x = w - pad - cardW; }
         lab.style.left = x + "px"; lab.style.top = it.sy + "px";
         lab.style.transform = it.left ? "translate(-100%,-50%)" : "translate(0,-50%)";
