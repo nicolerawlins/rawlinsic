@@ -752,6 +752,7 @@ export default function AutomationIntegrationInteractive() {
   }, [narrow]);
 
   return (
+    <>
     <div className="rai-root">
       <style>{CSS}</style>
       <div className="rai-stage" ref={sceneRef}>
@@ -780,8 +781,11 @@ export default function AutomationIntegrationInteractive() {
           </li>
         ))}
       </ul>
+    </div>
 
-
+    {/* Sibling of .rai-root, not a child: .rai-root is position:fixed, which
+        makes its own stacking context — nesting the overlay inside trapped its
+        z-index there and the nav (z-index 1000) painted over the popup. */}
       {active && (
         <div className="rai-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) close(); }}>
           <div className="rai-modal" role="dialog" aria-modal="true" aria-labelledby="rai-modal-title" style={{ ["--acc" as string]: "#d99a2b" }}>
@@ -831,16 +835,28 @@ export default function AutomationIntegrationInteractive() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 
 const CSS = `
-.rai-root{--navy:#1e2d4d;--gold:#d99a2b;--ink:#3a4661;--muted:#7b869b;--line:#e6eaf1;position:fixed;inset:0;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#eaf0fb;
-  /* same flat --rawlins-bg the rest of the site's pages use, not a bespoke gradient */
-  background:var(--rawlins-bg,#060c16)}
-.rai-root *{box-sizing:border-box}
+/* The site hides the native cursor and each page draws its own dot+ring. This
+   page doesn't render that, and the hub sets its own grab/pointer cursors, so
+   restore the real cursor instead of leaving none over the nav. The site sets
+   cursor:none on body, a AND button, so the nav's own links need it too. */
+body:has(.rai-root){cursor:default}
+body:has(.rai-root) .nav a,body:has(.rai-root) .nav button,
+body:has(.rai-root) .mobile-menu a,body:has(.rai-root) .mobile-menu button{cursor:pointer}
+/* Tokens + font live on BOTH: the overlay is a sibling of .rai-root (see the
+   stacking-context note in the JSX), so it can't inherit them from it. */
+.rai-root,.rai-overlay{--navy:#1e2d4d;--gold:#d99a2b;--ink:#3a4661;--muted:#7b869b;--line:#e6eaf1;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+/* sits below the site nav (fixed, 80px; 64px on smaller screens) */
+.rai-root{position:fixed;inset:80px 0 0 0;color:#eaf0fb;
+  /* the same --rawlins-bg every other page uses */
+  background:var(--rawlins-bg,#1a3251)}
+@media (max-width:1003px){.rai-root{top:64px}}
+.rai-root *,.rai-overlay *{box-sizing:border-box}
 .rai-stage{position:absolute;inset:0}
 .rai-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
 /* width:max-content so the box hugs its text — a fixed width padded short
@@ -858,7 +874,8 @@ const CSS = `
 .rai-hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#c4cee0;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:8px 16px;pointer-events:none;opacity:.9}
 .rai-hint .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);animation:rai-ping 2s ease-out infinite}
 @keyframes rai-ping{0%{box-shadow:0 0 0 0 rgba(217,154,43,.5)}70%,100%{box-shadow:0 0 0 8px rgba(217,154,43,0)}}
-.rai-overlay{position:fixed;inset:0;z-index:1000;background:rgba(6,12,26,.68);display:flex;align-items:flex-start;justify-content:center;padding:32px 18px;overflow-y:auto;cursor:default}
+/* above the site nav (z-index 1000) so the popup isn't cut by the header */
+.rai-overlay{position:fixed;inset:0;z-index:1200;background:rgba(6,12,26,.68);display:flex;align-items:flex-start;justify-content:center;padding:32px 18px;overflow-y:auto;cursor:default}
 .rai-overlay *{cursor:default}
 .rai-overlay .rai-close,.rai-overlay .rai-btn{cursor:pointer}
 .rai-overlay .rai-btn[disabled]{cursor:default}
@@ -947,7 +964,8 @@ const CSS = `
   .rai-ba-arrow{transform:rotate(90deg)}
   .rai-cols{grid-template-columns:1fr}
   /* let the page scroll: hub on top, list underneath */
-  .rai-root{position:relative;inset:auto;min-height:100vh}
+  /* page scrolls here; clear the fixed 64px nav */
+  .rai-root{position:relative;inset:auto;min-height:100vh;padding-top:64px}
   .rai-stage{position:relative;height:clamp(300px,42vh,380px)}
   /* names live in the list below, so nothing competes with the hub */
   .rai-label{display:none}

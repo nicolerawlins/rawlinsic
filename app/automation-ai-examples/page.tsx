@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import SiteNav from "@/components/site-nav";
 import AutomationIntegrationInteractive from "@/components/automation-integration-interactive";
 
 /* Unlisted: reachable at /automation-ai-examples but deliberately kept out of
@@ -11,5 +12,10 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <AutomationIntegrationInteractive />;
+  return (
+    <>
+      <SiteNav />
+      <AutomationIntegrationInteractive />
+    </>
+  );
 }
