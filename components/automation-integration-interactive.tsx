@@ -338,7 +338,12 @@ export default function AutomationIntegrationInteractive() {
       const g = new THREE.Group(); g.position.set(px, 0, pz); rig.add(g);
       const pedMat = new THREE.MeshStandardMaterial({ color: 0xeef2f8, metalness: 0.05, roughness: 0.55 }); disposables.push(pedMat);
       const ped = new THREE.Mesh(pedGeo, pedMat); ped.castShadow = true; ped.receiveShadow = true; ped.userData.i = i; g.add(ped); hitMeshes.push(ped);
-      const obj = bObj(n.icon, n.accent); obj.position.y = 0.2; g.add(obj);
+      /* bigger icons, auto-centred on their platform and resting on its face */
+      const obj = bObj(n.icon, n.accent);
+      obj.scale.setScalar(1.28); obj.updateMatrixWorld(true);
+      const bb = new THREE.Box3().setFromObject(obj); const bc = bb.getCenter(new THREE.Vector3());
+      obj.position.set(-bc.x, 0.2 - bb.min.y, -bc.z);
+      g.add(obj);
       obj.traverse((o) => { const m = o as THREE.Mesh; if (m.isMesh) { m.userData.i = i; hitMeshes.push(m); disposables.push(m.geometry as THREE.BufferGeometry, m.material as THREE.Material); } });
       const gl = new THREE.PointLight(new THREE.Color(n.accent).getHex(), 3.2, 4.5, 2); gl.position.set(0, 1.0, 0.3); g.add(gl);
       nodeGroups.push({ g, phase: i * 1.1 });
@@ -410,7 +415,6 @@ export default function AutomationIntegrationInteractive() {
         if (it.left) { if (x - cardW < pad) x = pad + cardW; } else { if (x + cardW > w - pad) x = w - pad - cardW; }
         lab.style.left = x + "px"; lab.style.top = it.sy + "px";
         lab.style.transform = it.left ? "translate(-100%,-50%)" : "translate(0,-50%)";
-        lab.classList.toggle("lft", it.left); lab.classList.toggle("rgt", !it.left);
         lab.classList.toggle("on", it.vis);
       });
       renderer.render(scene, camera); raf = requestAnimationFrame(animate);
@@ -501,14 +505,12 @@ const CSS = `
 .rai-root *{box-sizing:border-box}
 .rai-stage{position:absolute;inset:0}
 .rai-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
-.rai-label{position:absolute;pointer-events:none;width:250px;opacity:0;transition:opacity .3s}
+.rai-label{position:absolute;pointer-events:none;width:216px;text-align:center;opacity:0;transition:opacity .3s}
 .rai-label.on{opacity:1}
-.rai-label.lft{text-align:right}
-.rai-label.rgt{text-align:left}
 .rai-label .tab{display:block;background:none;border:0;box-shadow:none;padding:0;
   font-size:19px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#fff;line-height:1.15;
   text-shadow:0 2px 14px rgba(4,9,20,.98),0 0 34px rgba(4,9,20,.9),0 0 3px rgba(4,9,20,.9)}
-.rai-label .body{background:none;border:0;box-shadow:none;margin-top:9px;padding:0;
+.rai-label .body{background:none;border:0;box-shadow:none;margin-top:9px;padding:0;text-align:center;
   font-size:14.5px;line-height:1.45;color:#c3d0e4;
   text-shadow:0 2px 12px rgba(4,9,20,1),0 0 26px rgba(4,9,20,.95),0 0 3px rgba(4,9,20,.9)}
 .rai-hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#c4cee0;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:8px 16px;pointer-events:none;opacity:.9}
@@ -566,12 +568,15 @@ const CSS = `
 .rai-nav{display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:1px solid var(--line);padding-top:18px}
 .rai-dots{display:flex;gap:8px}
 .rai-dot{width:9px;height:9px;border-radius:50%;background:#d7dee9;transition:all .25s}
-.rai-dot.on{background:linear-gradient(145deg,#c9a84c,#e8d5a0,#d4b878);width:26px;border-radius:6px}
+.rai-dot.on{background:linear-gradient(135deg,#c9a84c 0%,#e8d5a0 50%,#c9a84c 100%);width:26px;border-radius:6px}
 .rai-btn{font:inherit;font-size:15px;font-weight:700;padding:11px 20px;border-radius:10px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--navy);transition:background .15s,opacity .15s}
 .rai-btn:hover{background:#f2f5fa}
 .rai-btn[disabled]{opacity:.35;cursor:default}
-.rai-btn-primary{background:linear-gradient(145deg,#b89a3e,#d4be78,#c9a84c,#e0cfa0,#b89a3e);color:#1D3759;border-color:#b89a3e;text-shadow:0 1px 0 rgba(255,255,255,.35)}
-.rai-btn-primary:hover{filter:brightness(1.06)}
+/* matches .auto-hero-btn on the live rawlinsic.com site */
+.rai-btn-primary{background:linear-gradient(135deg,#c9a84c 0%,#e8d5a0 50%,#c9a84c 100%);
+  color:#060c16;border:1px solid transparent;text-shadow:none;
+  font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:14px 30px}
+.rai-btn-primary:hover{filter:brightness(1.04)}
 .rai-final{margin-top:22px}
 .rai-ba{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:stretch;margin-bottom:24px}
 .rai-ba-card{border-radius:16px;padding:16px 16px 18px;border:1px solid var(--line)}
