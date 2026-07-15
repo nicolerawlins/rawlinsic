@@ -586,7 +586,8 @@ export default function AutomationIntegrationInteractive() {
 
     const center = new THREE.Group(); rig.add(center);
     const rTex = new THREE.TextureLoader().load("/images/dev/r-icon.png"); rTex.colorSpace = THREE.SRGBColorSpace; rTex.anisotropy = 8;
-    const rGeo = new THREE.PlaneGeometry(2.15, 2.08); const rMat = new THREE.MeshBasicMaterial({ map: rTex, transparent: true, depthWrite: false, depthTest: false });
+    const rk = narrow ? 0.88 : 1; /* R core a touch smaller on a phone */
+    const rGeo = new THREE.PlaneGeometry(2.15 * rk, 2.08 * rk); const rMat = new THREE.MeshBasicMaterial({ map: rTex, transparent: true, depthWrite: false, depthTest: false });
     const rPlane = new THREE.Mesh(rGeo, rMat); rPlane.renderOrder = 20; scene.add(rPlane); disposables.push(rTex, rGeo, rMat);
 
     const pedGeo = new RoundedBoxGeometry(1.5, 0.4, 1.5, 4, 0.13); disposables.push(pedGeo);
@@ -644,10 +645,11 @@ export default function AutomationIntegrationInteractive() {
 
     const BASE_Z = 14.6, BASE_Y = narrow ? 11.0 : 7.8;
     const TILT = Math.atan(BASE_Y / BASE_Z);
-    /* Desktop keeps its hand-tuned framing as a floor; a phone may come as
-       close as it likes. Note this is the true eye-to-hub distance, not z —
-       the camera looks down from height, so z alone understates it. */
-    const D_MIN = narrow ? 5 : Math.hypot(BASE_Y, BASE_Z);
+    /* Just a sanity floor now. The old desktop floor (hypot(BASE_Y, BASE_Z) =
+       16.55) was tuned when the hub owned the whole viewport; with the intro
+       above it the stage is shorter, and the floor pinned the camera at 16.6
+       when the fit wanted ~11.7 — which is why the hub looked shrunken. */
+    const D_MIN = 5;
     let camZ = BASE_Z, camY = BASE_Y;
 
     /* Fit numerically: project the hub's corners and scale the distance until
@@ -754,6 +756,13 @@ export default function AutomationIntegrationInteractive() {
 
   return (
     <>
+    {/* the site's ambient background + drifting orbs, same as every other page.
+        Without these the page was only the flat --rawlins-bg underneath. */}
+    <div className="ambient-bg" />
+    <div className="ambient-orbs">
+      <div className="orb orb-1" /><div className="orb orb-2" /><div className="orb orb-3" /><div className="orb orb-4" />
+    </div>
+
     <div className="rai-root">
       <style>{CSS}</style>
       {/* same pattern as the home page's "Why Rawlins" block — deliberately not
@@ -880,9 +889,10 @@ body:has(.rai-root) .footer a,body:has(.rai-root) .footer button{cursor:pointer}
 /* Flex column rather than position:fixed, so the hero and hub share the
    viewport and the footer has somewhere to go below. Padding clears the fixed
    nav (80px; 64px on smaller screens). */
-.rai-root{position:relative;min-height:100vh;display:flex;flex-direction:column;padding-top:80px;color:#eaf0fb;
-  /* the same --rawlins-bg every other page uses */
-  background:var(--rawlins-bg,#1a3251)}
+/* transparent + above the orbs (z-index 1), so the site's ambient background
+   shows through instead of a flat fill covering it */
+.rai-root{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column;padding-top:80px;color:#eaf0fb;
+  background:transparent}
 @media (max-width:1003px){.rai-root{padding-top:64px}}
 .rai-root *,.rai-overlay *{box-sizing:border-box}
 /* Centred block using the home page's "Why Rawlins" pattern: the site's own
