@@ -580,7 +580,7 @@ export default function AutomationIntegrationInteractive() {
     ground.rotation.x = -Math.PI / 2; ground.position.y = -1.15; ground.receiveShadow = true; scene.add(ground);
 
     const rig = new THREE.Group(); scene.add(rig);
-    const R = narrow ? 3.0 : 4.6; const hitMeshes: THREE.Object3D[] = [];
+    const R = narrow ? 2.5 : 4.6; const hitMeshes: THREE.Object3D[] = [];
     const disposables: { dispose: () => void }[] = [];
 
     const center = new THREE.Group(); rig.add(center);
@@ -644,7 +644,7 @@ export default function AutomationIntegrationInteractive() {
       /* Pull back until the whole ring fits the narrow axis, holding the same
          viewing angle. A portrait phone has a very narrow horizontal FOV, so
          without this the hub runs off both edges. */
-      const need = R + (narrow ? 3.2 : 1.2);
+      const need = R + (narrow ? 2.8 : 1.2);
       const t = Math.tan((camera.fov * Math.PI) / 360);
       camZ = Math.min(Math.max(BASE_Z, need / (t * Math.max(camera.aspect, 0.01))), 30);
       camY = BASE_Y * (camZ / BASE_Z);
