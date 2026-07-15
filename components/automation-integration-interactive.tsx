@@ -767,7 +767,8 @@ const CSS = `
 .rai-btn-primary{background:linear-gradient(135deg,#c9a84c 0%,#e8d5a0 50%,#c9a84c 100%);
   color:#060c16;border:1px solid transparent;text-shadow:none;
   font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:14px 30px}
-.rai-btn-primary:hover{filter:brightness(1.04)}
+/* re-state the gradient: .rai-btn:hover's `background` shorthand would blank it */
+.rai-btn-primary:hover{background:linear-gradient(135deg,#c9a84c 0%,#e8d5a0 50%,#c9a84c 100%);filter:brightness(1.04)}
 .rai-final{margin-top:22px}
 .rai-ba{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:stretch;margin-bottom:24px}
 .rai-ba-card{border-radius:16px;padding:16px 16px 18px;border:1px solid var(--line)}
