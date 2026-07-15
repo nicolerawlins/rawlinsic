@@ -580,7 +580,7 @@ export default function AutomationIntegrationInteractive() {
     ground.rotation.x = -Math.PI / 2; ground.position.y = -1.15; ground.receiveShadow = true; scene.add(ground);
 
     const rig = new THREE.Group(); scene.add(rig);
-    const R = narrow ? 3.2 : 4.6; const hitMeshes: THREE.Object3D[] = [];
+    const R = narrow ? 3.0 : 4.6; const hitMeshes: THREE.Object3D[] = [];
     const disposables: { dispose: () => void }[] = [];
 
     const center = new THREE.Group(); rig.add(center);
@@ -644,7 +644,7 @@ export default function AutomationIntegrationInteractive() {
       /* Pull back until the whole ring fits the narrow axis, holding the same
          viewing angle. A portrait phone has a very narrow horizontal FOV, so
          without this the hub runs off both edges. */
-      const need = R + (narrow ? 2.4 : 1.2);
+      const need = R + (narrow ? 3.2 : 1.2);
       const t = Math.tan((camera.fov * Math.PI) / 360);
       camZ = Math.min(Math.max(BASE_Z, need / (t * Math.max(camera.aspect, 0.01))), 30);
       camY = BASE_Y * (camZ / BASE_Z);
@@ -898,15 +898,15 @@ const CSS = `
   .rai-ba-arrow{transform:rotate(90deg)}
   .rai-cols{grid-template-columns:1fr}
   /* hub fills the screen; the hint sits under it */
-  .rai-root{position:relative;inset:auto;min-height:100vh}
-  .rai-stage{position:relative;height:72vh;min-height:430px}
+  .rai-root{position:relative;inset:auto;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
+  .rai-stage{position:relative;height:clamp(280px,40vh,350px);flex:0 0 auto}
   /* name tiles beside each icon: title only, and tappable in their own right
      since the icons themselves are small targets on a phone */
-  .rai-label{max-width:96px;pointer-events:auto;cursor:pointer;
-    padding:7px 8px;border-radius:10px;border:1px solid rgba(255,255,255,.16);
+  .rai-label{max-width:72px;pointer-events:auto;cursor:pointer;
+    padding:6px 7px;border-radius:10px;border:1px solid rgba(255,255,255,.16);
     background:linear-gradient(180deg,rgba(16,28,52,.92),rgba(10,18,38,.92));
     border-left:3px solid var(--acc)}
-  .rai-label .tab{font-size:10px;letter-spacing:.3px;line-height:1.25;text-shadow:none}
+  .rai-label .tab{font-size:9px;letter-spacing:.2px;line-height:1.25;text-shadow:none}
   .rai-label .body{display:none}
   .rai-hint{position:relative;left:auto;bottom:auto;transform:none;margin:10px auto 22px;
     width:calc(100% - 28px);max-width:420px;justify-content:center;text-align:center;
