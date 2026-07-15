@@ -543,21 +543,25 @@ export default function AutomationIntegrationInteractive() {
     const rPlane = new THREE.Mesh(rGeo, rMat); rPlane.renderOrder = 20; scene.add(rPlane); disposables.push(rTex, rGeo, rMat);
 
     const pedGeo = new RoundedBoxGeometry(1.5, 0.4, 1.5, 4, 0.13); disposables.push(pedGeo);
-    const nodeGroups: { g: THREE.Group; phase: number }[] = [];
+    const nodeGroups: { g: THREE.Group; spin: THREE.Group; phase: number }[] = [];
     NODES.forEach((n, i) => {
       const a = (n.ang * Math.PI) / 180, px = Math.sin(a) * R, pz = Math.cos(a) * R;
       const g = new THREE.Group(); g.position.set(px, 0, pz); rig.add(g);
       const pedMat = new THREE.MeshStandardMaterial({ color: 0xeef2f8, metalness: 0.05, roughness: 0.55 }); disposables.push(pedMat);
       const ped = new THREE.Mesh(pedGeo, pedMat); ped.castShadow = true; ped.receiveShadow = true; ped.userData.i = i; g.add(ped); hitMeshes.push(ped);
-      /* bigger icons, auto-centred on their platform and resting on its face */
+      /* bigger icons, auto-centred on their platform and resting on its face.
+         The icon hangs off a `spin` pivot placed on the platform's own axis, so
+         billboarding it turns it on the spot instead of swinging it in a circle
+         (bObj builds each icon around its own origin, not its visual centre). */
       const obj = bObj(n.icon, n.accent);
       obj.scale.setScalar(1.28); obj.updateMatrixWorld(true);
       const bb = new THREE.Box3().setFromObject(obj); const bc = bb.getCenter(new THREE.Vector3());
-      obj.position.set(-bc.x, 0.2 - bb.min.y, -bc.z);
-      g.add(obj);
+      const spin = new THREE.Group(); spin.position.y = 0.2 - bb.min.y; g.add(spin);
+      obj.position.set(-bc.x, 0, -bc.z);
+      spin.add(obj);
       obj.traverse((o) => { const m = o as THREE.Mesh; if (m.isMesh) { m.userData.i = i; hitMeshes.push(m); disposables.push(m.geometry as THREE.BufferGeometry, m.material as THREE.Material); } });
       const gl = new THREE.PointLight(new THREE.Color(n.accent).getHex(), 3.2, 4.5, 2); gl.position.set(0, 1.0, 0.3); g.add(gl);
-      nodeGroups.push({ g, phase: i * 1.1 });
+      nodeGroups.push({ g, spin, phase: i * 1.1 });
     });
 
     /* connectors: each node -> the R core (navy->gold, gently curved) */
@@ -599,6 +603,11 @@ export default function AutomationIntegrationInteractive() {
       nodeGroups.forEach((nd, i) => {
         nd.g.position.y = Math.sin(t * 0.9 + nd.phase) * 0.14;
         const sc = hover === i ? 1.07 : 1; nd.g.scale.setScalar(THREE.MathUtils.lerp(nd.g.scale.x, sc, 0.15));
+        /* keep each icon turned toward the viewer as the hub rotates, so you
+           never see its back. rig only yaws, so cancelling rig.rotation.y is
+           enough to pin the icon's world yaw at the camera. */
+        const wp = new THREE.Vector3(); nd.spin.getWorldPosition(wp);
+        nd.spin.rotation.y = Math.atan2(camera.position.x - wp.x, camera.position.z - wp.z) - rig.rotation.y;
       });
       { const cw = new THREE.Vector3(); center.getWorldPosition(cw); const tc = camera.position.clone().sub(cw).normalize(); rPlane.position.copy(cw).addScaledVector(tc, 0.3); rPlane.quaternion.copy(camera.quaternion); }
       camera.position.x = THREE.MathUtils.lerp(camera.position.x, pointer.x * 0.8, 0.04);
