@@ -13,6 +13,9 @@ import { RoundedBoxGeometry } from "three/examples/jsm/geometries/RoundedBoxGeom
 
 type Node = {
   id: string; title: string; desc: string; accent: string;
+  /* descLines: forced line breaks for the hub label (desc stays the plain
+     string for the mobile list). labDy: nudge the label up/down in px. */
+  descLines?: string[]; labDy?: number;
   icon: "chart" | "gauge" | "db" | "flow" | "pin" | "handoff"; ang: number;
   example: string; popupTitle: string; popupSubtitle: string;
   before: string; after: string;
@@ -20,7 +23,7 @@ type Node = {
 };
 
 const NODES: Node[] = [
-  { id: "reporting", title: "Reporting", desc: "Real-time insights that drive action.", accent: "#3a83d6", icon: "chart", ang: 210,
+  { id: "reporting", title: "Reporting", desc: "Real-time insights that drive action.", descLines: ["Real-time insights", "that drive action."], labDy: -34, accent: "#3a83d6", icon: "chart", ang: 210,
     example: "Example 01", popupTitle: "Project Accounting & Reporting", popupSubtitle: "Project-based technical services firm",
     before: "Data everywhere, no operating picture", after: "One view, drill-down on demand",
     problem: ["Project, accounting, CRM, time & reporting data lived in separate systems", "Teams manually pushed data into spreadsheets to get usable views", "Leaders needed both high-level and department-level visibility", "Field staff had no easy mobile access to site maps, photos & docs"],
@@ -28,7 +31,7 @@ const NODES: Node[] = [
     result: ["Leaders got a clean operating view without rebuilding reports", "Project teams reached records and files from the field", "Reliable data flow cut manual handling and lifted confidence"],
     stack: ["Monday.com", "Make.com", "QuickBooks", "QuickBooks Time", "Looker Studio", "Google Drive"],
     quote: "We already had the information — it was just spread across too many places. Once the systems were connected, we could finally see the project picture without rebuilding it every time." },
-  { id: "capacity", title: "Capacity", desc: "See capacity before it becomes a bottleneck.", accent: "#e0a63c", icon: "gauge", ang: 150,
+  { id: "capacity", title: "Capacity", desc: "See capacity before it becomes a bottleneck.", descLines: ["See capacity before it", "becomes a bottleneck."], labDy: -34, accent: "#e0a63c", icon: "gauge", ang: 150,
     example: "Example 04", popupTitle: "Capacity Planning", popupSubtitle: "Field services / drilling organization",
     before: "Capacity run on guesswork", after: "Capacity you can actually see",
     problem: ["Capacity depended on scattered updates and local knowledge", "No view of equipment location, booking length or downtime", "People & equipment constraints managed inconsistently", "Service windows — PTO for machines — were invisible in the plan"],
@@ -36,7 +39,7 @@ const NODES: Node[] = [
     result: ["See capacity before bottlenecks become emergencies", "Know what's booked, available or out of service", "Specialized assets scheduled right alongside people"],
     stack: ["Monday.com", "Make.com"],
     quote: "We stopped relying on scattered updates to understand capacity. We could finally see what was available, what was booked, and where the constraint was coming from." },
-  { id: "single-source", title: "Single Source", desc: "One source of truth across your team.", accent: "#33b07a", icon: "db", ang: 90,
+  { id: "single-source", title: "Single Source", desc: "One source of truth across your team.", descLines: ["One source of truth", "across your team."], accent: "#33b07a", icon: "db", ang: 90,
     example: "Example 05", popupTitle: "Single Source of Truth", popupSubtitle: "100+ employee manufacturing firm",
     before: "Workshops siloed, data unused", after: "One system, full-company view",
     problem: ["Manufacturing spread across workshops with poor office↔floor comms", "No reliable way to record time against a specific item built", "Data sat unused — no dashboards on production, staffing or capacity", "Heavy manual entry to match materials, time and cost"],
@@ -44,7 +47,7 @@ const NODES: Node[] = [
     result: ["Estimated time, actual time, team, cost & price all in one place", "Leaders track workshop speed, profitability, staffing & capacity", "Quotes and invoices automated; jobs assigned by capacity, not phone calls"],
     stack: ["Monday.com", "Make.com", "Tracket", "DocuSign"],
     quote: "Transformed from multiple software solutions into a streamlined, easy-to-use single source of truth — full visibility over what's happening across the entire company." },
-  { id: "sales-project", title: "Sales → Project", desc: "From opportunity to execution — connected.", accent: "#8FB9E8", icon: "flow", ang: 30,
+  { id: "sales-project", title: "Sales → Project", desc: "From opportunity to execution — connected.", descLines: ["From opportunity to", "execution — connected."], labDy: 34, accent: "#8FB9E8", icon: "flow", ang: 30,
     example: "Example 06", popupTitle: "Business Development → Project Handover", popupSubtitle: "130-person professional services firm",
     before: "Closed-won ran on memory", after: "Billing-ready in days, not weeks",
     problem: ["Handoff from Business Development to delivery & finance ran on email and memory", "Scope, fee, billing terms & owner moved late or incomplete", "Finance and PMs chased Business Development for info that should be settled at close", "Project setup dragged on for one to two weeks"],
@@ -52,7 +55,7 @@ const NODES: Node[] = [
     result: ["Setup went from 1–2 weeks of back-and-forth to billing-ready in days", "Finance stopped chasing Business Development for basic setup information", "PMs walked into kickoffs with everything they needed"],
     stack: ["Salesforce", "Monday.com", "Make.com", "QuickBooks", "SharePoint", "Teams"],
     quote: "Project setup went from one to two weeks of back-and-forth to billing-ready in a few business days. Finance stopped chasing Business Development, and PMs walked into kickoffs with what they needed." },
-  { id: "field-reporting", title: "Field Reporting", desc: "Capture field data that fuels better decisions.", accent: "#e07a3c", icon: "pin", ang: 330,
+  { id: "field-reporting", title: "Field Reporting", desc: "Capture field data that fuels better decisions.", descLines: ["Capture field data that", "fuels better decisions."], labDy: 34, accent: "#e07a3c", icon: "pin", ang: 330,
     example: "Example 03", popupTitle: "Field Reporting", popupSubtitle: "Field-service / project delivery firm",
     before: "Records that vanished after the visit", after: "Captured on site, filed automatically",
     problem: ["Site-visit info existed but wasn't structured for later use", "Attachments and field details were hard to retrieve afterward", "Office staff had to chase individuals to see what happened"],
@@ -60,7 +63,7 @@ const NODES: Node[] = [
     result: ["Field information became easy to find, reuse and report on", "Attachments landed in the right place automatically", "The office gained clean visibility into every site visit"],
     stack: ["Monday.com", "Make.com", "Google Calendar", "Google Drive"],
     quote: "Our team was already capturing the information. The value came from making sure it landed somewhere useful without another person having to chase it down." },
-  { id: "service-handoff", title: "Service Handoff", desc: "Seamless transitions. No dropped information.", accent: "#2ab0ab", icon: "handoff", ang: 270,
+  { id: "service-handoff", title: "Service Handoff", desc: "Seamless transitions. No dropped information.", descLines: ["Seamless transitions.", "No dropped information."], accent: "#2ab0ab", icon: "handoff", ang: 270,
     example: "Example 02", popupTitle: "Project → Service Handoff", popupSubtitle: "Install & service / maintenance firm",
     before: "Service teams starting from zero", after: "History follows the work",
     problem: ["Completed projects moved to service, but the handoff was siloed", "Service teams had limited insight into what install had done", "Staff often started from scratch to understand project history", "PMs had no time to walk service through each project"],
@@ -512,6 +515,7 @@ export default function AutomationIntegrationInteractive() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const sceneRef = useRef<HTMLDivElement>(null);
   const labelEls = useRef<(HTMLDivElement | null)[]>([]);
+  const labW = useRef<number[]>([]);
   const openRef = useRef<(i: number) => void>(() => {});
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const lastFocused = useRef<HTMLElement | null>(null);
@@ -618,7 +622,22 @@ export default function AutomationIntegrationInteractive() {
     const clickAt = (e: PointerEvent) => { if (openIdxRef.current !== null) return; const r = canvas.getBoundingClientRect(); pointer.x = ((e.clientX - r.left) / r.width) * 2 - 1; pointer.y = -((e.clientY - r.top) / r.height) * 2 + 1; ray.setFromCamera(pointer, camera); const hit = ray.intersectObjects(hitMeshes, false); if (hit.length) openRef.current(hit[0].object.userData.i as number); };
     canvas.addEventListener("pointerdown", onDown); canvas.addEventListener("pointerup", onUp); canvas.addEventListener("pointermove", onMove);
 
-    const resize = () => { const w = stage.clientWidth || window.innerWidth, h = stage.clientHeight || window.innerHeight; if (!w || !h) return; renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); };
+    const BASE_Z = 14.6, BASE_Y = 7.8;
+    let camZ = BASE_Z, camY = BASE_Y;
+    const resize = () => {
+      const w = stage.clientWidth || window.innerWidth, h = stage.clientHeight || window.innerHeight;
+      if (!w || !h) return;
+      renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+      /* Pull back until the whole ring fits the narrow axis, holding the same
+         viewing angle. A portrait phone has a very narrow horizontal FOV, so
+         without this the hub runs off both edges. */
+      const need = R + 1.6;
+      const t = Math.tan((camera.fov * Math.PI) / 360);
+      camZ = Math.min(Math.max(BASE_Z, need / (t * Math.max(camera.aspect, 0.01))), 30);
+      camY = BASE_Y * (camZ / BASE_Z);
+      /* label boxes are shrink-to-fit; cache widths for edge clamping */
+      labelEls.current.forEach((el, i) => { labW.current[i] = el ? el.offsetWidth : 0; });
+    };
     window.addEventListener("resize", resize);
     const ro = new ResizeObserver(resize); ro.observe(stage);
     resize();
@@ -640,7 +659,8 @@ export default function AutomationIntegrationInteractive() {
       });
       { const cw = new THREE.Vector3(); center.getWorldPosition(cw); const tc = camera.position.clone().sub(cw).normalize(); rPlane.position.copy(cw).addScaledVector(tc, 0.3); rPlane.quaternion.copy(camera.quaternion); }
       camera.position.x = THREE.MathUtils.lerp(camera.position.x, pointer.x * 0.8, 0.04);
-      camera.position.y = THREE.MathUtils.lerp(camera.position.y, 7.8 - pointer.y * 0.6, 0.04);
+      camera.position.y = THREE.MathUtils.lerp(camera.position.y, camY - pointer.y * 0.6, 0.04);
+      camera.position.z = THREE.MathUtils.lerp(camera.position.z, camZ, 0.08);
       camera.lookAt(camTarget);
       if (openIdxRef.current !== null) { hover = -1; canvas.style.cursor = "default"; }
       else { ray.setFromCamera(pointer, camera); const hit = ray.intersectObjects(hitMeshes, false); const idx = hit.length ? (hit[0].object.userData.i as number) : -1; if (idx !== hover) { hover = idx; canvas.style.cursor = idx >= 0 ? "pointer" : "grab"; } }
@@ -657,21 +677,23 @@ export default function AutomationIntegrationInteractive() {
           cv.applyMatrix4(nd.g.matrixWorld).project(camera);
           const cvx = (cv.x * 0.5 + 0.5) * w; nMin = Math.min(nMin, cvx); nMax = Math.max(nMax, cvx);
         }
-        return { i, sx, sy: (-p.y * 0.5 + 0.5) * h, vis: p.z < 1 && p.z > -1, left: sx < csx, nMin, nMax };
+        return { i, sx, sy: (-p.y * 0.5 + 0.5) * h + (NODES[i].labDy || 0), vis: p.z < 1 && p.z > -1, left: sx < csx, nMin, nMax };
       });
-      /* cardW matches .rai-label's width; GAP is measured from the node's own
-         on-screen edge, so labels sit close whatever the hub's angle */
-      const MINGAP = 124, cardW = 216, GAP = 14, pad = 12;
+      /* GAP is measured from the node's own on-screen edge, so labels sit close
+         whatever the hub's angle. MINGAP only de-collides labels that would
+         actually overlap — a bigger value drags them away from their icons. */
+      const MINGAP = 90, GAP = 10, pad = 12;
       ([true, false]).forEach((side) => {
         const arr = items.filter((it) => it.left === side).sort((a, b) => a.sy - b.sy);
         for (let k = 1; k < arr.length; k++) { if (arr[k].sy - arr[k - 1].sy < MINGAP) arr[k].sy = arr[k - 1].sy + MINGAP; }
-        if (arr.length) { const over = arr[arr.length - 1].sy - (h - 72); if (over > 0) arr.forEach((a) => { a.sy -= over; }); }
-        arr.forEach((a) => { a.sy = Math.min(Math.max(a.sy, 72), h - 72); });
+        if (arr.length) { const over = arr[arr.length - 1].sy - (h - 60); if (over > 0) arr.forEach((a) => { a.sy -= over; }); }
+        arr.forEach((a) => { a.sy = Math.min(Math.max(a.sy, 56), h - 56); });
       });
       items.forEach((it) => {
         const lab = labelEls.current[it.i]; if (!lab) return;
+        const lw = labW.current[it.i] || 216;
         let x = it.left ? it.nMin - GAP : it.nMax + GAP;
-        if (it.left) { if (x - cardW < pad) x = pad + cardW; } else { if (x + cardW > w - pad) x = w - pad - cardW; }
+        if (it.left) { if (x - lw < pad) x = pad + lw; } else { if (x + lw > w - pad) x = w - pad - lw; }
         lab.style.left = x + "px"; lab.style.top = it.sy + "px";
         lab.style.transform = it.left ? "translate(-100%,-50%)" : "translate(0,-50%)";
         lab.classList.toggle("on", it.vis);
@@ -698,11 +720,27 @@ export default function AutomationIntegrationInteractive() {
         {NODES.map((n, i) => (
           <div className="rai-label" key={n.id} style={{ ["--acc" as string]: n.accent }} ref={(el) => { labelEls.current[i] = el; }}>
             <div className="tab">{n.title}</div>
-            <div className="body">{n.desc}</div>
+            <div className="body">
+              {n.descLines ? n.descLines.map((l) => <span key={l}>{l}</span>) : n.desc}
+            </div>
           </div>
         ))}
         <div className="rai-hint"><span className="dot" />Click a capability to see a real example · drag to rotate</div>
       </div>
+
+      {/* Side labels can't work on a portrait phone — the ring spans the full
+          width, so there is no room beside an icon. Below the hub the same six
+          capabilities become a tappable list. */}
+      <ul className="rai-mlist">
+        {NODES.map((n, i) => (
+          <li key={n.id}>
+            <button type="button" className="rai-mcard" style={{ ["--acc" as string]: n.accent }} onClick={() => openRef.current?.(i)}>
+              <span className="t">{n.title}</span>
+              <span className="d">{n.desc}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
 
       {active && (
         <div className="rai-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) close(); }}>
@@ -764,14 +802,18 @@ const CSS = `
 .rai-root *{box-sizing:border-box}
 .rai-stage{position:absolute;inset:0}
 .rai-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
-.rai-label{position:absolute;pointer-events:none;width:216px;text-align:center;opacity:0;transition:opacity .3s}
+/* width:max-content so the box hugs its text — a fixed width padded short
+   lines with dead space and pushed the label away from its icon */
+.rai-label{position:absolute;pointer-events:none;width:max-content;max-width:216px;text-align:center;opacity:0;transition:opacity .3s}
 .rai-label.on{opacity:1}
 .rai-label .tab{display:block;background:none;border:0;box-shadow:none;padding:0;
+  font-family:var(--font-dm-sans),'DM Sans',sans-serif;
   font-size:19px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#fff;line-height:1.15;
   text-shadow:0 2px 14px rgba(4,9,20,.98),0 0 34px rgba(4,9,20,.9),0 0 3px rgba(4,9,20,.9)}
 .rai-label .body{background:none;border:0;box-shadow:none;margin-top:9px;padding:0;text-align:center;
   font-size:14.5px;line-height:1.45;color:#c3d0e4;
   text-shadow:0 2px 12px rgba(4,9,20,1),0 0 26px rgba(4,9,20,.95),0 0 3px rgba(4,9,20,.9)}
+.rai-label .body span{display:block}
 .rai-hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#c4cee0;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:8px 16px;pointer-events:none;opacity:.9}
 .rai-hint .dot{width:8px;height:8px;border-radius:50%;background:var(--gold);animation:rai-ping 2s ease-out infinite}
 @keyframes rai-ping{0%{box-shadow:0 0 0 0 rgba(217,154,43,.5)}70%,100%{box-shadow:0 0 0 8px rgba(217,154,43,0)}}
@@ -785,12 +827,12 @@ const CSS = `
 .rai-close:hover{background:#f1f4f9;transform:rotate(90deg)}
 .rai-modal-head{margin-bottom:22px;padding-right:40px}
 .rai-example{display:inline-block;background:#C4D8F2;color:#1D3759;font-size:12.5px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;padding:7px 15px;border-radius:20px}
-.rai-modal-title{font-size:clamp(28px,4.6vw,42px);font-weight:800;color:var(--navy);margin:14px 0 5px;letter-spacing:-.3px}
+.rai-modal-title{font-family:var(--font-dm-sans),'DM Sans',sans-serif;font-size:clamp(28px,4.6vw,42px);font-weight:800;color:var(--navy);margin:14px 0 5px;letter-spacing:-.3px}
 .rai-modal-subtitle{font-size:17px;color:var(--muted);font-style:italic;margin:0}
 /* ---- story player ---- */
 .rai-story{display:grid;grid-template-columns:1.05fr 1fr;gap:26px;align-items:center;margin:26px 0 20px;min-height:250px}
 .rai-kicker{font-size:13px;font-weight:800;letter-spacing:2px;text-transform:uppercase;background:linear-gradient(145deg,#c9a84c,#e8d5a0,#d4b878);-webkit-background-clip:text;background-clip:text;color:transparent}
-.rai-step-title{font-size:30px;font-weight:800;color:var(--navy);margin:8px 0 16px;letter-spacing:-.2px}
+.rai-step-title{font-family:var(--font-dm-sans),'DM Sans',sans-serif;font-size:30px;font-weight:800;color:var(--navy);margin:8px 0 16px;letter-spacing:-.2px}
 .rai-step-cap{font-size:17px;font-weight:700;color:var(--navy);margin:0 0 14px}
 .rai-step-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
 .rai-step-list li{display:flex;gap:11px;align-items:flex-start;font-size:16.5px;line-height:1.5;color:#46566f;animation:rai-li .45s ease backwards}
@@ -848,5 +890,30 @@ const CSS = `
 .rai-stack-items{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;margin-top:18px}
 .rai-chip{display:inline-flex;align-items:center;gap:8px;font-size:14.5px;font-weight:600;color:var(--navy);background:#fff;border:1px solid var(--line);border-radius:11px;padding:8px 14px;box-shadow:0 6px 16px -12px rgba(30,45,77,.35)}
 .rai-chip-dot{width:9px;height:9px;border-radius:50%}
-@media (max-width:760px){.rai-story{grid-template-columns:1fr}.rai-ba{grid-template-columns:1fr}.rai-ba-arrow{transform:rotate(90deg)}.rai-cols{grid-template-columns:1fr}.rai-label{width:130px}.rai-label .t{font-size:12px}.rai-label .d{font-size:10.5px}}
+/* the tappable capability list — mobile only */
+.rai-mlist{display:none;list-style:none;margin:0;padding:0 14px 30px;gap:10px;grid-template-columns:1fr 1fr}
+.rai-mcard{display:flex;flex-direction:column;gap:5px;width:100%;height:100%;text-align:left;cursor:pointer;
+  padding:13px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.14);
+  background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.04));
+  border-left:3px solid var(--acc)}
+.rai-mcard .t{font-family:var(--font-dm-sans),'DM Sans',sans-serif;
+  font-size:13px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#fff;line-height:1.2}
+.rai-mcard .d{font-size:12px;line-height:1.4;color:#b9c7de}
+
+@media (max-width:760px){
+  .rai-story{grid-template-columns:1fr}
+  .rai-ba{grid-template-columns:1fr}
+  .rai-ba-arrow{transform:rotate(90deg)}
+  .rai-cols{grid-template-columns:1fr}
+  /* let the page scroll: hub on top, list underneath */
+  .rai-root{position:relative;inset:auto;min-height:100vh}
+  .rai-stage{position:relative;height:46vh;min-height:280px}
+  .rai-label{display:none}
+  .rai-mlist{display:grid}
+  .rai-hint{position:relative;left:auto;bottom:auto;transform:none;margin:14px auto 16px;
+    width:calc(100% - 28px);max-width:420px;justify-content:center;text-align:center;
+    white-space:normal;font-size:11px;letter-spacing:.4px;line-height:1.35;border-radius:14px;padding:10px 14px}
+  .rai-hint .dot{flex:0 0 auto}
+}
+@media (max-width:400px){.rai-mlist{grid-template-columns:1fr}}
 `;
