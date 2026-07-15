@@ -636,17 +636,25 @@ export default function AutomationIntegrationInteractive() {
     canvas.addEventListener("pointerdown", onDown); canvas.addEventListener("pointerup", onUp); canvas.addEventListener("pointermove", onMove);
 
     const BASE_Z = 14.6, BASE_Y = narrow ? 11.0 : 7.8;
+    const TILT = Math.atan(BASE_Y / BASE_Z);
     let camZ = BASE_Z, camY = BASE_Y;
     const resize = () => {
       const w = stage.clientWidth || window.innerWidth, h = stage.clientHeight || window.innerHeight;
       if (!w || !h) return;
       renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
-      /* Pull back until the whole ring fits the narrow axis, holding the same
-         viewing angle. A portrait phone has a very narrow horizontal FOV, so
-         without this the hub runs off both edges. */
-      const need = R + 1.1;
       const t = Math.tan((camera.fov * Math.PI) / 360);
-      camZ = Math.min(Math.max(BASE_Z, need / (t * Math.max(camera.aspect, 0.01))), 30);
+      const asp = Math.max(camera.aspect, 0.01);
+      if (narrow) {
+        /* Fill the phone: solve both axes and use exactly that distance. The
+           desktop's 14.6 was acting as a floor here, holding the camera far
+           back when the fit only wanted ~9 — that is why the hub was tiny. */
+        const dH = (R + 0.9) / (t * asp);
+        const dV = (R * Math.sin(TILT) + 1.0) / t;
+        camZ = Math.min(Math.max(dH, dV), 30);
+      } else {
+        /* desktop keeps its designed framing; only ever pull back */
+        camZ = Math.min(Math.max(BASE_Z, (R + 1.2) / (t * asp)), 30);
+      }
       camY = BASE_Y * (camZ / BASE_Z);
       /* label boxes are shrink-to-fit; cache widths for edge clamping */
       labelEls.current.forEach((el, i) => { labW.current[i] = el ? el.offsetWidth : 0; });
@@ -921,7 +929,7 @@ const CSS = `
   .rai-cols{grid-template-columns:1fr}
   /* let the page scroll: hub on top, list underneath */
   .rai-root{position:relative;inset:auto;min-height:100vh}
-  .rai-stage{position:relative;height:clamp(260px,34vh,320px)}
+  .rai-stage{position:relative;height:clamp(250px,33vh,300px)}
   /* names live in the list below, so nothing competes with the hub */
   .rai-label{display:none}
   .rai-mlist{display:grid}
