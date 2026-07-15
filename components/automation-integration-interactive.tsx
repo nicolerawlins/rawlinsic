@@ -725,8 +725,10 @@ export default function AutomationIntegrationInteractive() {
             </div>
           </div>
         ))}
-        <div className="rai-hint"><span className="dot" />Click a capability to see a real example · drag to rotate</div>
       </div>
+      {/* sibling of the stage, not a child: the canvas is absolutely
+          positioned, so a hint inside the stage lands at its top on mobile */}
+      <div className="rai-hint"><span className="dot" />Click a capability to see a real example · drag to rotate</div>
 
       {/* Side labels can't work on a portrait phone — the ring spans the full
           width, so there is no room beside an icon. Below the hub the same six
