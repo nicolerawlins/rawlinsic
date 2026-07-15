@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import SiteNav from "@/components/site-nav";
+import SiteFooter from "@/components/site-footer";
 import AutomationIntegrationInteractive from "@/components/automation-integration-interactive";
 
 /* Unlisted: reachable at /automation-ai-examples but deliberately kept out of
@@ -16,6 +17,7 @@ export default function Page() {
     <>
       <SiteNav />
       <AutomationIntegrationInteractive />
+      <SiteFooter />
     </>
   );
 }

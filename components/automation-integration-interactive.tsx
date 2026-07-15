@@ -846,18 +846,21 @@ const CSS = `
    cursor:none on body, a AND button, so the nav's own links need it too. */
 body:has(.rai-root){cursor:default}
 body:has(.rai-root) .nav a,body:has(.rai-root) .nav button,
-body:has(.rai-root) .mobile-menu a,body:has(.rai-root) .mobile-menu button{cursor:pointer}
+body:has(.rai-root) .mobile-menu a,body:has(.rai-root) .mobile-menu button,
+body:has(.rai-root) .footer a,body:has(.rai-root) .footer button{cursor:pointer}
 /* Tokens + font live on BOTH: the overlay is a sibling of .rai-root (see the
    stacking-context note in the JSX), so it can't inherit them from it. */
 .rai-root,.rai-overlay{--navy:#1e2d4d;--gold:#d99a2b;--ink:#3a4661;--muted:#7b869b;--line:#e6eaf1;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-/* sits below the site nav (fixed, 80px; 64px on smaller screens) */
-.rai-root{position:fixed;inset:80px 0 0 0;color:#eaf0fb;
+/* One viewport tall rather than position:fixed, so the footer has somewhere to
+   go and the page can scroll to it. The stage starts below the fixed nav
+   (80px; 64px on smaller screens). */
+.rai-root{position:relative;height:100vh;color:#eaf0fb;
   /* the same --rawlins-bg every other page uses */
   background:var(--rawlins-bg,#1a3251)}
-@media (max-width:1003px){.rai-root{top:64px}}
 .rai-root *,.rai-overlay *{box-sizing:border-box}
-.rai-stage{position:absolute;inset:0}
+.rai-stage{position:absolute;top:80px;left:0;right:0;bottom:0}
+@media (max-width:1003px){.rai-stage{top:64px}}
 .rai-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
 /* width:max-content so the box hugs its text — a fixed width padded short
    lines with dead space and pushed the label away from its icon */
@@ -963,10 +966,12 @@ body:has(.rai-root) .mobile-menu a,body:has(.rai-root) .mobile-menu button{curso
   .rai-ba{grid-template-columns:1fr}
   .rai-ba-arrow{transform:rotate(90deg)}
   .rai-cols{grid-template-columns:1fr}
-  /* let the page scroll: hub on top, list underneath */
-  /* page scrolls here; clear the fixed 64px nav */
-  .rai-root{position:relative;inset:auto;min-height:100vh;padding-top:64px}
-  .rai-stage{position:relative;height:clamp(300px,42vh,380px)}
+  /* hub on top, list underneath, footer after — height comes from content, and
+     padding clears the fixed 64px nav */
+  .rai-root{position:relative;inset:auto;height:auto;padding-top:64px}
+  /* top:auto matters: the stage goes back into flow here, and the desktop
+     top:64px would otherwise shift it down again on top of that padding */
+  .rai-stage{position:relative;top:auto;height:clamp(300px,42vh,380px)}
   /* names live in the list below, so nothing competes with the hub */
   .rai-label{display:none}
   .rai-mlist{display:grid}
