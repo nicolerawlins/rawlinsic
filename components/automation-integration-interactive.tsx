@@ -674,6 +674,8 @@ export default function AutomationIntegrationInteractive() {
       renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
       const d = solveDistance();
       camZ = Math.cos(TILT) * d; camY = Math.sin(TILT) * d;
+      /* TEMP diagnostic */
+      (window as unknown as { __raiDebug?: unknown }).__raiDebug = { narrow, R, TILT, D_MIN, solved: d, camZ, camY, aspect: camera.aspect, stage: w + "x" + h };
       /* label boxes are shrink-to-fit; cache widths for edge clamping */
       labelEls.current.forEach((el, i) => { labW.current[i] = el ? el.offsetWidth : 0; });
     };
