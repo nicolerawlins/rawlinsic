@@ -631,7 +631,7 @@ export default function AutomationIntegrationInteractive() {
       /* Pull back until the whole ring fits the narrow axis, holding the same
          viewing angle. A portrait phone has a very narrow horizontal FOV, so
          without this the hub runs off both edges. */
-      const need = R + 1.6;
+      const need = R + 1.2;
       const t = Math.tan((camera.fov * Math.PI) / 360);
       camZ = Math.min(Math.max(BASE_Z, need / (t * Math.max(camera.aspect, 0.01))), 30);
       camY = BASE_Y * (camZ / BASE_Z);
@@ -909,7 +909,9 @@ const CSS = `
   .rai-cols{grid-template-columns:1fr}
   /* let the page scroll: hub on top, list underneath */
   .rai-root{position:relative;inset:auto;min-height:100vh}
-  .rai-stage{position:relative;height:46vh;min-height:280px}
+  /* a shorter (wider-aspect) stage leaves less dead space under the hub —
+     the fit distance is driven by the narrow axis */
+  .rai-stage{position:relative;height:38vh;min-height:264px}
   .rai-label{display:none}
   .rai-mlist{display:grid}
   .rai-hint{position:relative;left:auto;bottom:auto;transform:none;margin:14px auto 16px;
