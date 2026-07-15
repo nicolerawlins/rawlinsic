@@ -512,7 +512,7 @@ function StoryScene3D({ sceneId, tone }: { sceneId: string; tone: string }) {
   return <div className="rai-vis" ref={host} />;
 }
 
-export default function AutomationIntegrationInteractive() {
+export default function AutomationIntegrationInteractive({ embedded = false }: { embedded?: boolean } = {}) {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const [step, setStep] = useState(0);
   const [introOpen, setIntroOpen] = useState(false);
@@ -629,7 +629,7 @@ export default function AutomationIntegrationInteractive() {
     NODES.forEach((n, i) => {
       const a = (n.ang * Math.PI) / 180, dx = Math.sin(a), dz = Math.cos(a);
       const start = new THREE.Vector3(dx * R * 0.82, -0.30, dz * R * 0.82);
-      const end = new THREE.Vector3(dx * 1.15, -0.27, dz * 1.15);
+      const end = new THREE.Vector3(dx * 1.15 * rk, -0.27, dz * 1.15 * rk);
       const mid = start.clone().lerp(end, 0.5);
       const curve = new THREE.QuadraticBezierCurve3(start, mid, end);
       const tg = new THREE.TubeGeometry(curve, 44, 0.009, 8, false);
@@ -668,7 +668,7 @@ export default function AutomationIntegrationInteractive() {
     /* Width and height are budgeted separately. Desktop keeps the hub off the
        side labels (0.70 => ~200px clear each side at 1360); a phone has no side
        labels so it can use the full width. */
-    const FILL_X = narrow ? 0.98 : 0.70, FILL_Y = 0.96;
+    const FILL_X = narrow ? 0.98 : 0.66, FILL_Y = narrow ? 0.96 : 0.90;
     const q = new THREE.Vector3();
     const solveFit = () => {
       let d = Math.max(D_MIN, 12), ty = 0;
@@ -777,13 +777,15 @@ export default function AutomationIntegrationInteractive() {
   return (
     <>
     {/* the site's ambient background + drifting orbs, same as every other page.
-        Without these the page was only the flat --rawlins-bg underneath. */}
-    <div className="ambient-bg" />
-    <div className="ambient-orbs">
-      <div className="orb orb-1" /><div className="orb orb-2" /><div className="orb orb-3" /><div className="orb orb-4" />
-    </div>
+        Skipped when embedded — the host page already draws its own. */}
+    {!embedded && <>
+      <div className="ambient-bg" />
+      <div className="ambient-orbs">
+        <div className="orb orb-1" /><div className="orb orb-2" /><div className="orb orb-3" /><div className="orb orb-4" />
+      </div>
+    </>}
 
-    <div className="rai-root">
+    <div className={"rai-root" + (embedded ? " rai-embed" : "")}>
       <style>{CSS}</style>
       {/* same pattern as the home page's "Why Rawlins" block — deliberately not
           using .reveal, which starts at opacity:0 and needs the home page's
@@ -915,6 +917,14 @@ body:has(.rai-root) .footer a,body:has(.rai-root) .footer button{cursor:pointer}
   background:transparent}
 @media (max-width:1003px){.rai-root{padding-top:64px}}
 .rai-root *,.rai-overlay *{box-sizing:border-box}
+/* Embedded in another page: it's a section, not the page. No nav offset, height
+   from content, and no full-viewport minimum. */
+.rai-root.rai-embed{min-height:0;padding-top:0}
+.rai-root.rai-embed .rai-stage{flex:0 0 auto;height:clamp(420px,58vh,640px);min-height:0}
+/* touch-action:none on the canvas would trap the page scroll on a phone when
+   this sits mid-page; pan-y keeps vertical scrolling while horizontal drag
+   still rotates the hub */
+.rai-root.rai-embed .rai-canvas{touch-action:pan-y}
 /* Centred block using the home page's "Why Rawlins" pattern: the site's own
    section-label / section-title / intro-expand-btn / intro-expandable classes
    do the styling, this just centres and places it. */
@@ -931,7 +941,7 @@ body:has(.rai-root) .footer a,body:has(.rai-root) .footer button{cursor:pointer}
 body:has(.rai-root) .intro-expand-btn{cursor:pointer}
 @media (max-width:1003px){.rai-intro{padding:38px 24px 0}}
 /* takes whatever height the hero leaves */
-.rai-stage{position:relative;flex:1 1 auto;min-height:400px}
+.rai-stage{position:relative;flex:1 1 auto;min-height:400px;margin-bottom:56px}
 .rai-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
 /* width:max-content so the box hugs its text — a fixed width padded short
    lines with dead space and pushed the label away from its icon */
@@ -1041,7 +1051,7 @@ body:has(.rai-root) .intro-expand-btn{cursor:pointer}
   .rai-root{min-height:0}
   .rai-intro{padding:22px 18px 0}
   /* fixed-height hub here, so it must opt out of the desktop flex:1 */
-  .rai-stage{flex:0 0 auto;min-height:0;height:clamp(300px,42vh,380px)}
+  .rai-stage{flex:0 0 auto;min-height:0;height:clamp(300px,42vh,380px);margin-bottom:0}
   /* names live in the list below, so nothing competes with the hub */
   .rai-label{display:none}
   .rai-mlist{display:grid}
