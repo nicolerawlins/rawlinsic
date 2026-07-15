@@ -519,6 +519,16 @@ export default function AutomationIntegrationInteractive() {
   const sceneRef = useRef<HTMLDivElement>(null);
   const labelEls = useRef<(HTMLDivElement | null)[]>([]);
   const labW = useRef<number[]>([]);
+  /* A phone needs a tighter ring and a steeper look so the name tiles have
+     room beside each icon. R is baked into the connector geometry, so the
+     scene is rebuilt when this flips. */
+  const [narrow, setNarrow] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width:760px)");
+    const sync = () => setNarrow(mq.matches);
+    sync(); mq.addEventListener("change", sync);
+    return () => mq.removeEventListener("change", sync);
+  }, []);
   const openRef = useRef<(i: number) => void>(() => {});
   const closeBtnRef = useRef<HTMLButtonElement>(null);
   const lastFocused = useRef<HTMLElement | null>(null);
@@ -557,7 +567,7 @@ export default function AutomationIntegrationInteractive() {
     renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.08; renderer.outputColorSpace = THREE.SRGBColorSpace;
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100); camera.position.set(0, 7.8, 14.6);
+    const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100); camera.position.set(0, narrow ? 11.0 : 7.8, 14.6);
     const camTarget = new THREE.Vector3(0, 0.05, 0);
     scene.add(new THREE.HemisphereLight(0x6f92c8, 0x0a1224, 0.75));
     const key = new THREE.DirectionalLight(0xffffff, 1.9); key.position.set(6, 11, 7); key.castShadow = true;
@@ -570,7 +580,7 @@ export default function AutomationIntegrationInteractive() {
     ground.rotation.x = -Math.PI / 2; ground.position.y = -1.15; ground.receiveShadow = true; scene.add(ground);
 
     const rig = new THREE.Group(); scene.add(rig);
-    const R = 4.6; const hitMeshes: THREE.Object3D[] = [];
+    const R = narrow ? 3.2 : 4.6; const hitMeshes: THREE.Object3D[] = [];
     const disposables: { dispose: () => void }[] = [];
 
     const center = new THREE.Group(); rig.add(center);
@@ -625,7 +635,7 @@ export default function AutomationIntegrationInteractive() {
     const clickAt = (e: PointerEvent) => { if (openIdxRef.current !== null) return; const r = canvas.getBoundingClientRect(); pointer.x = ((e.clientX - r.left) / r.width) * 2 - 1; pointer.y = -((e.clientY - r.top) / r.height) * 2 + 1; ray.setFromCamera(pointer, camera); const hit = ray.intersectObjects(hitMeshes, false); if (hit.length) openRef.current(hit[0].object.userData.i as number); };
     canvas.addEventListener("pointerdown", onDown); canvas.addEventListener("pointerup", onUp); canvas.addEventListener("pointermove", onMove);
 
-    const BASE_Z = 14.6, BASE_Y = 7.8;
+    const BASE_Z = 14.6, BASE_Y = narrow ? 11.0 : 7.8;
     let camZ = BASE_Z, camY = BASE_Y;
     const resize = () => {
       const w = stage.clientWidth || window.innerWidth, h = stage.clientHeight || window.innerHeight;
@@ -634,7 +644,7 @@ export default function AutomationIntegrationInteractive() {
       /* Pull back until the whole ring fits the narrow axis, holding the same
          viewing angle. A portrait phone has a very narrow horizontal FOV, so
          without this the hub runs off both edges. */
-      const need = R + 1.2;
+      const need = R + (narrow ? 2.4 : 1.2);
       const t = Math.tan((camera.fov * Math.PI) / 360);
       camZ = Math.min(Math.max(BASE_Z, need / (t * Math.max(camera.aspect, 0.01))), 30);
       camY = BASE_Y * (camZ / BASE_Z);
@@ -680,12 +690,12 @@ export default function AutomationIntegrationInteractive() {
           cv.applyMatrix4(nd.g.matrixWorld).project(camera);
           const cvx = (cv.x * 0.5 + 0.5) * w; nMin = Math.min(nMin, cvx); nMax = Math.max(nMax, cvx);
         }
-        return { i, sx, sy: (-p.y * 0.5 + 0.5) * h + (NODES[i].labDy || 0), vis: p.z < 1 && p.z > -1, left: sx < csx, nMin, nMax };
+        return { i, sx, sy: (-p.y * 0.5 + 0.5) * h + (NODES[i].labDy || 0) * (narrow ? 0.4 : 1), vis: p.z < 1 && p.z > -1, left: sx < csx, nMin, nMax };
       });
       /* GAP is measured from the node's own on-screen edge, so labels sit close
          whatever the hub's angle. MINGAP only de-collides labels that would
          actually overlap — a bigger value drags them away from their icons. */
-      const MINGAP = 90, GAP = 10, pad = 12;
+      const MINGAP = narrow ? 42 : 90, GAP = narrow ? 6 : 10, pad = 8;
       ([true, false]).forEach((side) => {
         const arr = items.filter((it) => it.left === side).sort((a, b) => a.sy - b.sy);
         for (let k = 1; k < arr.length; k++) { if (arr[k].sy - arr[k - 1].sy < MINGAP) arr[k].sy = arr[k - 1].sy + MINGAP; }
@@ -713,7 +723,7 @@ export default function AutomationIntegrationInteractive() {
       disposables.forEach((d) => d.dispose());
       renderer.dispose();
     };
-  }, []);
+  }, [narrow]);
 
   return (
     <div className="rai-root">
@@ -721,7 +731,7 @@ export default function AutomationIntegrationInteractive() {
       <div className="rai-stage" ref={sceneRef}>
         <canvas className="rai-canvas" ref={canvasRef} />
         {NODES.map((n, i) => (
-          <div className="rai-label" key={n.id} style={{ ["--acc" as string]: n.accent }} ref={(el) => { labelEls.current[i] = el; }}>
+          <div className="rai-label" key={n.id} style={{ ["--acc" as string]: n.accent }} onClick={() => openRef.current?.(i)} ref={(el) => { labelEls.current[i] = el; }}>
             <div className="tab">{n.title}</div>
             <div className="body">
               {n.descLines ? n.descLines.map((l) => <span key={l}>{l}</span>) : n.desc}
@@ -733,19 +743,6 @@ export default function AutomationIntegrationInteractive() {
           positioned, so a hint inside the stage lands at its top on mobile */}
       <div className="rai-hint"><span className="dot" />Click a capability to see a real example · drag to rotate</div>
 
-      {/* Side labels can't work on a portrait phone — the ring spans the full
-          width, so there is no room beside an icon. Below the hub the same six
-          capabilities become a tappable list. */}
-      <ul className="rai-mlist">
-        {NODES.map((n, i) => (
-          <li key={n.id}>
-            <button type="button" className="rai-mcard" style={{ ["--acc" as string]: n.accent }} onClick={() => openRef.current?.(i)}>
-              <span className="t">{n.title}</span>
-              <span className="d">{n.desc}</span>
-            </button>
-          </li>
-        ))}
-      </ul>
 
       {active && (
         <div className="rai-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) close(); }}>
@@ -895,32 +892,25 @@ const CSS = `
 .rai-stack-items{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;margin-top:18px}
 .rai-chip{display:inline-flex;align-items:center;gap:8px;font-size:14.5px;font-weight:600;color:var(--navy);background:#fff;border:1px solid var(--line);border-radius:11px;padding:8px 14px;box-shadow:0 6px 16px -12px rgba(30,45,77,.35)}
 .rai-chip-dot{width:9px;height:9px;border-radius:50%}
-/* the tappable capability list — mobile only */
-.rai-mlist{display:none;list-style:none;margin:0;padding:0 14px 30px;gap:10px;grid-template-columns:1fr 1fr}
-.rai-mcard{display:flex;flex-direction:column;gap:5px;width:100%;height:100%;text-align:left;cursor:pointer;
-  padding:13px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.14);
-  background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.04));
-  border-left:3px solid var(--acc)}
-.rai-mcard .t{font-family:var(--font-dm-sans),'DM Sans',sans-serif;
-  font-size:13px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#fff;line-height:1.2}
-.rai-mcard .d{font-size:12px;line-height:1.4;color:#b9c7de}
-
 @media (max-width:760px){
   .rai-story{grid-template-columns:1fr}
   .rai-ba{grid-template-columns:1fr}
   .rai-ba-arrow{transform:rotate(90deg)}
   .rai-cols{grid-template-columns:1fr}
-  /* let the page scroll: hub on top, list underneath */
+  /* hub fills the screen; the hint sits under it */
   .rai-root{position:relative;inset:auto;min-height:100vh}
-  /* a shorter (wider-aspect) stage leaves less dead space under the hub —
-     the fit distance is driven by the narrow axis */
-  .rai-stage{position:relative;height:38vh;min-height:264px}
-  .rai-label{display:none}
-  .rai-mlist{display:grid}
-  .rai-hint{position:relative;left:auto;bottom:auto;transform:none;margin:14px auto 16px;
+  .rai-stage{position:relative;height:72vh;min-height:430px}
+  /* name tiles beside each icon: title only, and tappable in their own right
+     since the icons themselves are small targets on a phone */
+  .rai-label{max-width:96px;pointer-events:auto;cursor:pointer;
+    padding:7px 8px;border-radius:10px;border:1px solid rgba(255,255,255,.16);
+    background:linear-gradient(180deg,rgba(16,28,52,.92),rgba(10,18,38,.92));
+    border-left:3px solid var(--acc)}
+  .rai-label .tab{font-size:10px;letter-spacing:.3px;line-height:1.25;text-shadow:none}
+  .rai-label .body{display:none}
+  .rai-hint{position:relative;left:auto;bottom:auto;transform:none;margin:10px auto 22px;
     width:calc(100% - 28px);max-width:420px;justify-content:center;text-align:center;
     white-space:normal;font-size:11px;letter-spacing:.4px;line-height:1.35;border-radius:14px;padding:10px 14px}
   .rai-hint .dot{flex:0 0 auto}
 }
-@media (max-width:400px){.rai-mlist{grid-template-columns:1fr}}
 `;
