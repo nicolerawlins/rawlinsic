@@ -471,17 +471,20 @@ function StoryScene3D({ sceneId, tone }: { sceneId: string; tone: string }) {
        bottom of every tableau, right where the labels sit. Objects still
        shadow each other, which is enough to read as solid. */
 
-    /* frame it: fit the larger of width/height with a little breathing room */
-    const fitH = size.y * 1.34, fitW = (size.x * 1.14) / (16 / 9);
-    const dist = (Math.max(fitH, fitW) / 2) / Math.tan((camera.fov * Math.PI) / 360);
-    camera.position.set(0, size.y * 0.16, dist + size.z * 0.6);
-    camera.lookAt(0, 0, 0);
-
-    const ro = new ResizeObserver(() => {
+    /* Frame it against the view's real aspect and refit on every resize. This
+       used to assume 16/9, so a narrower canvas (phone) cropped the sides. */
+    const fit = () => {
       const w = el.clientWidth || 1, h = el.clientHeight || 1;
       renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
-    });
+      const t = Math.tan((camera.fov * Math.PI) / 360);
+      const distV = (size.y * 1.34) / 2 / t;
+      const distH = (size.x * 1.14) / 2 / (t * Math.max(camera.aspect, 0.01));
+      camera.position.set(0, size.y * 0.16, Math.max(distV, distH) + size.z * 0.6);
+      camera.lookAt(0, 0, 0);
+    };
+    const ro = new ResizeObserver(fit);
     ro.observe(el);
+    fit();
 
     let raf = 0; const t0 = performance.now();
     const tick = () => {
