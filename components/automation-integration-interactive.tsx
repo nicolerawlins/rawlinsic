@@ -921,7 +921,7 @@ const CSS = `
   .rai-cols{grid-template-columns:1fr}
   /* let the page scroll: hub on top, list underneath */
   .rai-root{position:relative;inset:auto;min-height:100vh}
-  .rai-stage{position:relative;height:clamp(320px,44vh,420px)}
+  .rai-stage{position:relative;height:clamp(260px,34vh,320px)}
   /* names live in the list below, so nothing competes with the hub */
   .rai-label{display:none}
   .rai-mlist{display:grid}
