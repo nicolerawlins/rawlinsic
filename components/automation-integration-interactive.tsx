@@ -613,7 +613,8 @@ export default function AutomationIntegrationInteractive() {
         const p = world.clone().project(camera); const sx = (p.x * 0.5 + 0.5) * w;
         return { i, sx, sy: (-p.y * 0.5 + 0.5) * h, vis: p.z < 1 && p.z > -1, left: sx < csx };
       });
-      const MINGAP = 124, cardW = 264, gap = 62, pad = 12;
+      /* gap clears the (now larger) platform; cardW matches .rai-label's width */
+      const MINGAP = 124, cardW = 216, gap = 112, pad = 12;
       ([true, false]).forEach((side) => {
         const arr = items.filter((it) => it.left === side).sort((a, b) => a.sy - b.sy);
         for (let k = 1; k < arr.length; k++) { if (arr[k].sy - arr[k - 1].sy < MINGAP) arr[k].sy = arr[k - 1].sy + MINGAP; }
