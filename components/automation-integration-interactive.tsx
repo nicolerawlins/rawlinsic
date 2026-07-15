@@ -755,6 +755,12 @@ export default function AutomationIntegrationInteractive() {
     <>
     <div className="rai-root">
       <style>{CSS}</style>
+      {/* reuses the site's own hero classes so it reads like every other page */}
+      <header className="rai-hero">
+        <span className="hero-label"><span className="gold-text">Real-world examples</span></span>
+        <h1 className="hero-title">Smarter systems, proven in practice.</h1>
+        <p className="hero-sub">Every example started the same way — disconnected tools, duplicated work, and information scattered across systems. We connected what each team already used, automated the manual steps, and brought the full picture into one clear view.</p>
+      </header>
       <div className="rai-stage" ref={sceneRef}>
         <canvas className="rai-canvas" ref={canvasRef} />
         {NODES.map((n, i) => (
@@ -852,15 +858,21 @@ body:has(.rai-root) .footer a,body:has(.rai-root) .footer button{cursor:pointer}
    stacking-context note in the JSX), so it can't inherit them from it. */
 .rai-root,.rai-overlay{--navy:#1e2d4d;--gold:#d99a2b;--ink:#3a4661;--muted:#7b869b;--line:#e6eaf1;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
-/* One viewport tall rather than position:fixed, so the footer has somewhere to
-   go and the page can scroll to it. The stage starts below the fixed nav
-   (80px; 64px on smaller screens). */
-.rai-root{position:relative;height:100vh;color:#eaf0fb;
+/* Flex column rather than position:fixed, so the hero and hub share the
+   viewport and the footer has somewhere to go below. Padding clears the fixed
+   nav (80px; 64px on smaller screens). */
+.rai-root{position:relative;min-height:100vh;display:flex;flex-direction:column;padding-top:80px;color:#eaf0fb;
   /* the same --rawlins-bg every other page uses */
   background:var(--rawlins-bg,#1a3251)}
+@media (max-width:1003px){.rai-root{padding-top:64px}}
 .rai-root *,.rai-overlay *{box-sizing:border-box}
-.rai-stage{position:absolute;top:80px;left:0;right:0;bottom:0}
-@media (max-width:1003px){.rai-stage{top:64px}}
+.rai-hero{flex:0 0 auto;width:100%;max-width:980px;margin:0 auto;padding:22px 24px 2px;text-align:center}
+.rai-hero .hero-title{margin-bottom:14px}
+/* wider than the site's 560px default: keeps the intro to 3 lines so the hub
+   below it keeps its height */
+.rai-hero .hero-sub{max-width:860px}
+/* takes whatever height the hero leaves */
+.rai-stage{position:relative;flex:1 1 auto;min-height:400px}
 .rai-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
 /* width:max-content so the box hugs its text — a fixed width padded short
    lines with dead space and pushed the label away from its icon */
@@ -966,12 +978,11 @@ body:has(.rai-root) .footer a,body:has(.rai-root) .footer button{cursor:pointer}
   .rai-ba{grid-template-columns:1fr}
   .rai-ba-arrow{transform:rotate(90deg)}
   .rai-cols{grid-template-columns:1fr}
-  /* hub on top, list underneath, footer after — height comes from content, and
-     padding clears the fixed 64px nav */
-  .rai-root{position:relative;inset:auto;height:auto;padding-top:64px}
-  /* top:auto matters: the stage goes back into flow here, and the desktop
-     top:64px would otherwise shift it down again on top of that padding */
-  .rai-stage{position:relative;top:auto;height:clamp(300px,42vh,380px)}
+  /* hero, hub, list, footer all stack — height comes from content */
+  .rai-root{min-height:0}
+  .rai-hero{padding:18px 18px 2px}
+  /* fixed-height hub here, so it must opt out of the desktop flex:1 */
+  .rai-stage{flex:0 0 auto;min-height:0;height:clamp(300px,42vh,380px)}
   /* names live in the list below, so nothing competes with the hub */
   .rai-label{display:none}
   .rai-mlist{display:grid}
