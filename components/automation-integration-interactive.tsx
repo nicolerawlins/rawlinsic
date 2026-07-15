@@ -137,134 +137,345 @@ function bObj(kind: string, accent: string): THREE.Group {
   return g;
 }
 
-const CV={navy:'#1D3759',slate:'#4D688C',lblue:'#C4D8F2',pblue:'#DCE6F2',gold:'#d99a2b',green:'#2e9e6a',red:'#d4696b'};
-function visualHTML(id: string, tone: string): string {
- const E=(c: string, st: string, inner?: string)=>'<span class="'+c+'" style="'+st+'">'+(inner||'')+'</span>';
- const D=(d: number)=>'animation-delay:'+d+'s;';
- let h='';
- if(id==='reporting'){
-  if(tone==='problem'){ // mismatched sheets, disconnected
-   [[8,14,-6],[38,44,5],[66,10,-3]].forEach((p,k)=>{h+=E('v-card v-jit','left:'+p[0]+'%;top:'+p[1]+'%;width:64px;height:78px;rotate:'+p[2]+'deg;'+D(k*.08)+'animation-delay:'+(k*.08)+'s,'+(k*.08+.4)+'s');});
-   ([[CV.slate,20,26],[CV.gold,50,56],[CV.green,78,22]] as [string,number,number][]).forEach((b,k)=>{h+=E('v-bar','left:'+b[1]+'%;top:'+(b[2]+14)+'%;width:34px;height:6px;background:'+b[0]+';'+D(.5+k*.08));});
-   h+=E('v-x','left:30%;top:42%;'+D(.7),'✕')+E('v-x','left:60%;top:26%;'+D(.85),'✕');
-  } else if(tone==='built'){ // sheets feed one dashboard
-   [12,42,72].forEach((y,k)=>{h+=E('v-card','left:5%;top:'+y+'%;width:46px;height:44px;'+D(k*.08));
-    h+=E('v-ln','left:20%;top:'+(y+9)+'%;--len:78px;background:'+CV.gold+';'+D(.3+k*.08));});
-   h+=E('v-panel','left:56%;top:20%;width:110px;height:130px;'+D(.6));
-   [0,1,2].forEach(k=>{h+=E('v-bar','left:'+(60+k*10)+'%;top:'+(60-k*6)+'%;width:14px;height:'+(30+k*14)+'px;background:'+CV.lblue+';'+D(.85+k*.1));});
-  } else { // live chart + drill-down
-   h+=E('v-panel','left:8%;top:14%;width:190px;height:150px;'+D(0));
-   [[.55,CV.lblue],[.8,CV.lblue],[1,CV.gold],[.65,CV.lblue]].forEach((b,k)=>{
-    h+=E('v-bar v-rise','left:'+(14+k*11)+'%;top:24%;width:18px;height:88px;background:'+b[1]+';--f:'+b[0]+';transform-origin:bottom;'+D(.25+k*.1));});
-   h+=E('v-card','left:52%;top:56%;width:104px;height:56px;'+D(.9));
-   h+=E('v-bar','left:56%;top:64%;width:44px;height:5px;background:'+CV.slate+';'+D(1.05));
-   h+=E('v-bar','left:56%;top:72%;width:30px;height:5px;background:'+CV.lblue+';'+D(1.15));
-   h+=E('v-tk','left:82%;top:60%;'+D(1.25),'✓');
+/* ──────────────────────────────────────────────────────────────
+   Popup story tableaux — real 3D, same visual language as the
+   node icons (white rounded bodies, navy structure, gold accents).
+   Palette is brand-only: navy / slate / light blue / gold, with
+   green reserved for the "result" step and red for problem states.
+   ────────────────────────────────────────────────────────────── */
+function storyScene(id: string, tone: string): THREE.Group {
+  const g = new THREE.Group();
+  const mk = (hex: number, m = 0.18, r = 0.44) => new THREE.MeshStandardMaterial({ color: hex, metalness: m, roughness: r });
+  const white = mk(0xf4f7fc, 0.1, 0.5), navy = mk(0x1d3759, 0.22, 0.44), slate = mk(0x4d688c, 0.2, 0.45),
+    lblue = mk(0xc4d8f2, 0.14, 0.46), gold = mk(0xc9a84c, 0.6, 0.24), green = mk(0x2e9e6a, 0.3, 0.36),
+    red = mk(0xd4696b, 0.25, 0.4);
+
+  const A = (geo: THREE.BufferGeometry, mat: THREE.Material, par: THREE.Object3D = g) => {
+    const m = new THREE.Mesh(geo, mat); m.castShadow = true; m.receiveShadow = true; par.add(m); return m; };
+  const card = (w: number, h: number, d = 0.07, mat: THREE.Material = white) => A(new RoundedBoxGeometry(w, h, d, 3, 0.03), mat);
+  /* a data row printed on the face of a card */
+  const row = (par: THREE.Object3D, w: number, y: number, mat: THREE.Material, x = 0) => {
+    const m = new THREE.Mesh(new THREE.BoxGeometry(w, 0.055, 0.014), mat); m.position.set(x, y, 0.045); m.castShadow = true; par.add(m); return m; };
+  const pipe = (len: number, mat: THREE.Material = gold, t = 0.05) => A(new THREE.BoxGeometry(len, t, t), mat);
+  const cyl = (r: number, h: number, mat: THREE.Material) => A(new THREE.CylinderGeometry(r, r, h, 40), mat);
+  const tick = (mat: THREE.Material = gold, s = 1) => {
+    const t = new THREE.Group(); g.add(t);
+    const a = new THREE.Mesh(new THREE.BoxGeometry(0.08 * s, 0.21 * s, 0.07 * s), mat); a.rotation.z = Math.PI / 4; a.position.set(-0.07 * s, -0.005 * s, 0); a.castShadow = true; t.add(a);
+    const b = new THREE.Mesh(new THREE.BoxGeometry(0.08 * s, 0.38 * s, 0.07 * s), mat); b.rotation.z = -0.58; b.position.set(0.095 * s, 0.105 * s, 0); b.castShadow = true; t.add(b);
+    return t; };
+  const cross = (mat: THREE.Material = red, s = 1) => {
+    const t = new THREE.Group(); g.add(t);
+    ([Math.PI / 4, -Math.PI / 4]).forEach((rz) => { const b = new THREE.Mesh(new THREE.BoxGeometry(0.075 * s, 0.36 * s, 0.075 * s), mat); b.rotation.z = rz; b.castShadow = true; t.add(b); });
+    return t; };
+  const arrow = (len: number, mat: THREE.Material = gold, t = 0.07) => {
+    const a = new THREE.Group(); g.add(a);
+    const sh = new THREE.Mesh(new THREE.BoxGeometry(len, t, t), mat); sh.position.x = len / 2; sh.castShadow = true; a.add(sh);
+    const hd = new THREE.Mesh(new THREE.ConeGeometry(t * 1.8, t * 3.2, 20), mat); hd.rotation.z = -Math.PI / 2; hd.position.x = len + t * 1.6; hd.castShadow = true; a.add(hd);
+    return a; };
+  /* a broken / unreliable connection */
+  const dashed = (len: number, mat: THREE.Material = red, n = 5) => {
+    const d = new THREE.Group(); g.add(d);
+    for (let i = 0; i < n; i++) { const b = new THREE.Mesh(new THREE.BoxGeometry(len / (n * 2), 0.055, 0.055), mat); b.position.x = (i + 0.5) * (len / n) - len / 2; b.castShadow = true; d.add(b); }
+    return d; };
+  /* Camera-facing structural label. Dark type on a white halo so it stays
+     readable wherever it lands over the tableau's own shadows. */
+  const label = (text: string, color = "#3d5580") => {
+    const fs = 44, pad = 18;
+    const probe = document.createElement("canvas").getContext("2d");
+    const font = '800 ' + fs + 'px ui-sans-serif, system-ui, -apple-system, sans-serif';
+    let w = 200; if (probe) { probe.font = font; w = Math.ceil(probe.measureText(text).width); }
+    const c = document.createElement("canvas"); c.width = w + pad * 2; c.height = fs + pad * 2;
+    const x = c.getContext("2d");
+    if (x) {
+      x.font = font; x.textBaseline = "middle"; x.textAlign = "center";
+      x.shadowColor = "rgba(255,255,255,.95)"; x.shadowBlur = 10;
+      x.fillStyle = "#fff"; for (let i = 0; i < 4; i++) x.fillText(text, c.width / 2, c.height / 2);
+      x.shadowBlur = 0; x.fillStyle = color; x.fillText(text, c.width / 2, c.height / 2);
+    }
+    const tex = new THREE.CanvasTexture(c); tex.anisotropy = 4;
+    /* toneMapped:false — ACES would otherwise wash the type out to near-invisible */
+    const sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, depthTest: false, toneMapped: false }));
+    const H = 0.22; sp.scale.set((c.width / c.height) * H, H, 1); g.add(sp);
+    return sp; };
+  /* a dashboard monitor — the reporting motif, reused */
+  const monitor = (w: number, h: number, barVals: number[], barMat: THREE.Material = lblue) => {
+    const m = new THREE.Group(); g.add(m);
+    const body = new THREE.Mesh(new RoundedBoxGeometry(w, h, 0.08, 3, 0.03), white); body.castShadow = true; body.receiveShadow = true; m.add(body);
+    const scr = new THREE.Mesh(new THREE.BoxGeometry(w - 0.16, h - 0.16, 0.02), navy); scr.position.z = 0.05; m.add(scr);
+    const bw = (w - 0.44) / barVals.length;
+    barVals.forEach((v, k) => { const bh = (h - 0.34) * v;
+      const b = new THREE.Mesh(new THREE.BoxGeometry(bw * 0.56, bh, 0.03), k === barVals.length - 1 ? gold : barMat);
+      b.position.set(-(w - 0.44) / 2 + bw * (k + 0.5), -(h - 0.16) / 2 + 0.09 + bh / 2, 0.075); b.castShadow = true; m.add(b); });
+    const st = new THREE.Mesh(new THREE.CylinderGeometry(0.05, 0.05, 0.18, 16), white); st.position.y = -h / 2 - 0.09; m.add(st);
+    const ft = new THREE.Mesh(new RoundedBoxGeometry(w * 0.42, 0.06, 0.24, 3, 0.02), white); ft.position.y = -h / 2 - 0.2; ft.castShadow = true; m.add(ft);
+    return m; };
+  /* a database cylinder — the single-source motif, reused */
+  const stack = (r: number, layers: number, ringMat: THREE.Material = gold) => {
+    const s = new THREE.Group(); g.add(s);
+    for (let i = 0; i < layers; i++) { const y = i * 0.26;
+      const c = new THREE.Mesh(new THREE.CylinderGeometry(r, r, 0.19, 40), white); c.position.y = y; c.castShadow = true; c.receiveShadow = true; s.add(c);
+      const rr = new THREE.Mesh(new THREE.TorusGeometry(r, 0.028, 12, 40), ringMat); rr.rotation.x = Math.PI / 2; rr.position.y = y + 0.095; rr.castShadow = true; s.add(rr); }
+    return s; };
+
+  if (id === "reporting") {
+    if (tone === "problem") {
+      /* four systems, four disconnected sheets, nothing lines up */
+      ([[-1.28, 0.78, -0.18, -0.2], [-0.42, 1.02, 0.08, 0.1], [0.45, 0.72, -0.12, 0.22], [1.3, 0.98, 0.06, -0.12]] as [number, number, number, number][])
+        .forEach(([x, y, z, rz], k) => { const c = card(0.66, 0.84); c.position.set(x, y, z); c.rotation.set(0.05, rz * 0.7, rz);
+          [0.26, 0.1, -0.06, -0.22].forEach((ry, i) => row(c, 0.4 - i * 0.06, ry, i === 0 ? navy : k % 2 ? slate : lblue, -0.04)); });
+      cross(red, 0.9).position.set(-0.86, 1.2, 0.34);
+      cross(red, 0.9).position.set(0.02, 0.62, 0.34);
+      cross(red, 0.9).position.set(0.9, 1.24, 0.34);
+    } else if (tone === "built") {
+      /* sources -> one reliable gold pipeline -> one dashboard */
+      ([1.42, 0.86, 0.3] as number[]).forEach((y, k) => {
+        const c = card(0.5, 0.42); c.position.set(-1.42, y, 0);
+        row(c, 0.3, 0.07, navy, -0.04); row(c, 0.22, -0.05, lblue, -0.08);
+        const p = pipe(0.62, gold, 0.045); p.position.set(-0.86, y, 0);
+        if (k !== 1) { const j = pipe(0.045, gold, 0.045); j.scale.y = Math.abs(y - 0.86) / 0.045; j.position.set(-0.55, (y + 0.86) / 2, 0); } });
+      const feed = arrow(0.42, gold, 0.06); feed.position.set(-0.5, 0.86, 0);
+      monitor(1.5, 1.05, [0.5, 0.72, 0.44, 0.9]).position.set(0.78, 0.98, 0);
+    } else {
+      /* live dashboard + a drill-down card pulled out in front */
+      monitor(1.66, 1.16, [0.46, 0.68, 0.5, 0.86]).position.set(-0.18, 1.16, -0.2);
+      const d = card(0.92, 0.62); d.position.set(0.92, 0.5, 0.62); d.rotation.set(0.06, -0.24, 0);
+      row(d, 0.5, 0.16, navy, -0.1); row(d, 0.36, 0.02, lblue, -0.17); row(d, 0.42, -0.12, lblue, -0.14);
+      tick(green, 0.9).position.set(1.3, 0.52, 0.72);
+    }
+  } else if (id === "capacity") {
+    if (tone === "problem") {
+      /* three lanes, bookings landing on top of each other */
+      ([0, 1, 2] as number[]).forEach((k) => { const y = 1.3 - k * 0.5;
+        const ln = A(new RoundedBoxGeometry(2.9, 0.05, 0.42, 3, 0.02), lblue); ln.position.set(0, y - 0.16, 0); });
+      ([[-0.72, 1.3, 1.1, slate], [0.32, 1.3, 0.86, red], [-0.5, 0.8, 1.24, slate], [0.62, 0.8, 0.7, red], [-0.86, 0.3, 0.8, slate], [0.1, 0.3, 1.0, red]] as [number, number, number, THREE.Material][])
+        .forEach(([x, y, w, m]) => { const b = A(new RoundedBoxGeometry(w, 0.26, 0.34, 3, 0.03), m); b.position.set(x, y, 0); });
+      cross(red, 0.8).position.set(-0.16, 1.3, 0.42);
+      cross(red, 0.8).position.set(0.14, 0.8, 0.42);
+      cross(red, 0.8).position.set(-0.3, 0.3, 0.42);
+    } else if (tone === "built") {
+      /* the same lanes, everything snapped into place, nothing overlapping */
+      ([0, 1, 2] as number[]).forEach((k) => { const y = 1.3 - k * 0.5;
+        const ln = A(new RoundedBoxGeometry(2.9, 0.05, 0.42, 3, 0.02), lblue); ln.position.set(0, y - 0.16, 0); });
+      ([[-0.92, 1.3, 0.9, slate], [0.28, 1.3, 1.02, navy], [-0.82, 0.8, 1.1, navy], [0.62, 0.8, 0.72, slate], [-1.0, 0.3, 0.74, slate], [0.16, 0.3, 1.3, navy]] as [number, number, number, THREE.Material][])
+        .forEach(([x, y, w, m]) => { const b = A(new RoundedBoxGeometry(w, 0.26, 0.34, 3, 0.03), m); b.position.set(x, y, 0); });
+      ([1.3, 0.8, 0.3] as number[]).forEach((y) => { const t = tick(gold, 0.62); t.position.set(1.42, y, 0.3); });
+    } else {
+      /* the speedometer reading inside a safe band — same motif as the node icon */
+      const disc = cyl(0.66, 0.16, white); disc.rotation.x = Math.PI / 2; disc.position.y = 0.78;
+      const track = A(new THREE.TorusGeometry(0.46, 0.06, 16, 60, Math.PI), lblue); track.position.set(0, 0.78, 0.09);
+      const band = A(new THREE.TorusGeometry(0.46, 0.072, 16, 22, Math.PI * 0.4), green); band.position.set(0, 0.78, 0.1); band.rotation.z = Math.PI * 0.6;
+      const nl = A(new THREE.BoxGeometry(0.042, 0.4, 0.035), navy); nl.rotation.z = -Math.PI / 3.4; nl.position.set(0.13, 0.95, 0.13);
+      const hub = cyl(0.082, 0.17, navy); hub.rotation.x = Math.PI / 2; hub.position.set(0, 0.78, 0.13);
+      ([0.16, 0.5, 0.84] as number[]).forEach((t) => { const a = Math.PI * (1 - t);
+        const p = A(new THREE.BoxGeometry(0.035, 0.1, 0.028), slate); p.position.set(Math.cos(a) * 0.58, 0.78 + Math.sin(a) * 0.58, 0.09); p.rotation.z = a - Math.PI / 2; });
+      tick(green, 0.8).position.set(0.78, 0.3, 0.3);
+    }
+  } else if (id === "single-source") {
+    if (tone === "problem") {
+      /* the same record living in three places, none of them agreeing */
+      ([-1.2, 0, 1.2] as number[]).forEach((x, k) => {
+        stack(0.44, 2, slate).position.set(x, 0.24, 0);
+        /* each silo's own copy of the record, and they disagree */
+        const c = card(0.66, 0.54); c.position.set(x, 1.24, 0.04); c.rotation.z = (k - 1) * 0.05;
+        row(c, 0.36, 0.12, navy, -0.07); row(c, 0.26, -0.04, k === 1 ? red : lblue, -0.12); });
+      dashed(0.7, red, 3).position.set(-0.6, 1.24, 0.1);
+      dashed(0.7, red, 3).position.set(0.6, 1.24, 0.1);
+      cross(red, 0.78).position.set(-0.6, 1.24, 0.34);
+      cross(red, 0.78).position.set(0.6, 1.24, 0.34);
+    } else if (tone === "built") {
+      /* silos merge down one gold spine into a single core */
+      ([[-1.36, 1.5], [-1.36, 0.62]] as [number, number][]).forEach(([x, y]) => {
+        const c = card(0.52, 0.46); c.position.set(x, y, 0);
+        row(c, 0.3, 0.08, navy, -0.05); row(c, 0.22, -0.06, lblue, -0.09);
+        const a = arrow(0.5, gold, 0.05); a.position.set(-1.02, y, 0); });
+      const spine = pipe(0.05, gold, 0.05); spine.scale.y = 18; spine.position.set(-0.46, 1.06, 0);
+      const join = arrow(0.4, gold, 0.06); join.position.set(-0.42, 1.06, 0);
+      stack(0.56, 3, gold).position.set(0.72, 0.62, 0);
+    } else {
+      /* one core record; every consumer reconciled against it */
+      stack(0.62, 3, gold).position.set(-0.86, 0.7, 0);
+      const c = card(1.3, 1.08); c.position.set(0.86, 1.06, 0.1);
+      ([0.34, 0.14, -0.06, -0.26] as number[]).forEach((y, k) => { row(c, 0.62 - k * 0.08, y, k === 0 ? navy : lblue, -0.22);
+        const t = tick(gold, 0.5); t.position.set(1.3, 1.06 + y, 0.2); });
+      const bridge = arrow(0.4, gold, 0.05); bridge.position.set(-0.2, 1.06, 0);
+      tick(green, 0.8).position.set(-0.86, 1.62, 0.2);
+    }
+  } else if (id === "sales-project") {
+    if (tone === "problem") {
+      /* a closed deal that can't reach delivery — the bridge is out */
+      const d = card(0.86, 0.78); d.position.set(-1.16, 1.0, 0); d.rotation.set(0.04, 0.16, 0);
+      row(d, 0.5, 0.22, navy, -0.1); row(d, 0.38, 0.06, lblue, -0.16); row(d, 0.44, -0.1, lblue, -0.13);
+      /* funnel sits on the deal card, opening down into it */
+      const fn = A(new THREE.ConeGeometry(0.2, 0.3, 28), navy); fn.rotation.x = Math.PI; fn.position.set(-1.16, 1.56, 0.02);
+      const nk = cyl(0.035, 0.14, navy); nk.position.set(-1.16, 1.44, 0.02);
+      const p = card(0.86, 0.78, 0.07, lblue); p.position.set(1.16, 1.0, 0); p.rotation.set(0.04, -0.16, 0);
+      dashed(1.24, red, 4).position.set(0, 1.0, 0);
+      cross(red, 1.0).position.set(0, 1.0, 0.34);
+      label("Deal won").position.set(-1.16, 0.42, 0.3);
+      label("Delivery").position.set(1.16, 0.42, 0.3);
+    } else if (tone === "built") {
+      /* required fields lock, then the record crosses a solid gold bridge */
+      const d = card(0.86, 0.78); d.position.set(-1.16, 1.0, 0);
+      ([0.22, 0.06, -0.1] as number[]).forEach((y, k) => { row(d, 0.44 - k * 0.06, y, k === 0 ? navy : lblue, -0.14);
+        const t = tick(gold, 0.42); t.position.set(-0.84, 1.0 + y, 0.1); });
+      /* one solid rail carrying the record across — no legs, it's a link not a table */
+      const bridge = pipe(1.5, gold, 0.06); bridge.position.set(0, 0.64, 0);
+      const moving = card(0.5, 0.44); moving.position.set(-0.06, 0.98, 0.22); moving.rotation.z = -0.06;
+      row(moving, 0.28, 0.06, navy, -0.05);
+      const a = arrow(0.34, gold, 0.055); a.position.set(0.28, 0.98, 0.22);
+      const p = card(0.86, 0.78); p.position.set(1.16, 1.0, 0);
+      row(p, 0.46, 0.22, navy, -0.12); row(p, 0.36, 0.06, lblue, -0.17);
+      label("Close-won").position.set(-1.16, 0.4, 0.3);
+      label("Project").position.set(1.16, 0.4, 0.3);
+    } else {
+      /* a kickoff-ready project record, billing-ready */
+      const c = card(1.5, 1.32); c.position.set(-0.34, 1.1, 0);
+      ([0.42, 0.2, -0.02, -0.24, -0.46] as number[]).forEach((y, k) => { row(c, 0.66 - k * 0.06, y, k === 0 ? navy : lblue, -0.2);
+        const t = tick(gold, 0.5); t.position.set(0.24, 1.1 + y, 0.1); });
+      const base = A(new RoundedBoxGeometry(1.7, 0.14, 0.5, 3, 0.05), green); base.position.set(-0.34, 0.36, 0);
+      const inv = card(0.68, 0.86); inv.position.set(0.98, 0.98, 0.34); inv.rotation.set(0.04, -0.3, 0.04);
+      row(inv, 0.36, 0.26, navy, -0.08); row(inv, 0.28, 0.12, lblue, -0.12); row(inv, 0.32, -0.02, lblue, -0.1);
+      tick(green, 0.8).position.set(1.24, 0.46, 0.5);
+    }
+  } else if (id === "field-reporting") {
+    if (tone === "problem") {
+      /* the visit happened — the record scattered and sank */
+      ([[-1.3, 1.32, -0.18, -0.24], [-0.34, 0.86, 0.14, 0.3], [0.62, 1.44, -0.1, 0.18], [1.34, 0.72, 0.1, -0.34]] as [number, number, number, number][])
+        .forEach(([x, y, z, rz], k) => { const c = card(0.6, 0.72); c.position.set(x, y, z); c.rotation.set(0.14 * k, rz * 0.8, rz);
+          row(c, 0.34, 0.18, navy, -0.06); row(c, 0.26, 0.04, lblue, -0.1); });
+      cross(red, 0.85).position.set(-0.82, 1.06, 0.34);
+      cross(red, 0.85).position.set(1.0, 1.02, 0.34);
+    } else if (tone === "built") {
+      /* form on site -> submitted -> auto-filed into the right folders */
+      const f = card(1.0, 0.86); f.position.set(0, 1.62, 0);
+      ([0.24, 0.06, -0.12] as number[]).forEach((y, k) => row(f, 0.56 - k * 0.08, y, k === 0 ? navy : lblue, -0.14));
+      const stem = pipe(0.05, gold, 0.05); stem.scale.y = 11; stem.position.set(0, 0.94, 0);
+      const rail = pipe(2.3, gold, 0.05); rail.position.set(0, 0.66, 0);
+      ([-1.1, 0, 1.1] as number[]).forEach((x) => { const drop = pipe(0.05, gold, 0.05); drop.scale.y = 4.4; drop.position.set(x, 0.55, 0);
+        const fold = card(0.66, 0.5); fold.position.set(x, 0.22, 0);
+        const tab = A(new RoundedBoxGeometry(0.26, 0.09, 0.06, 3, 0.02), lblue); tab.position.set(x - 0.18, 0.51, 0);
+        const t = tick(gold, 0.4); t.position.set(x + 0.2, 0.22, 0.08); });
+    } else {
+      /* a clean, findable record list with its attachments */
+      const c = card(1.62, 1.34); c.position.set(-0.28, 1.06, 0);
+      ([0.42, 0.16, -0.1, -0.36] as number[]).forEach((y, k) => {
+        const dot = A(new THREE.SphereGeometry(0.055, 20, 16), gold); dot.position.set(-0.94, 1.06 + y, 0.06);
+        row(c, 0.72 - k * 0.06, y, k === 0 ? navy : lblue, -0.06);
+        const t = tick(gold, 0.45); t.position.set(0.36, 1.06 + y, 0.08); });
+      ([[1.06, 1.4, 0.3], [1.18, 0.98, 0.42], [1.02, 0.56, 0.34]] as [number, number, number][])
+        .forEach(([x, y, z], k) => { const a = card(0.42, 0.5); a.position.set(x, y, z); a.rotation.set(0.05, -0.34, 0.06 * (k - 1)); });
+      tick(green, 0.8).position.set(-0.94, 1.86, 0.2);
+    }
+  } else {
+    /* service-handoff */
+    if (tone === "problem") {
+      /* install finished; service arrives with an empty record */
+      const t1 = A(new RoundedBoxGeometry(0.62, 0.62, 0.3, 4, 0.08), slate); t1.position.set(-1.3, 0.5, 0);
+      const t2 = A(new RoundedBoxGeometry(0.62, 0.62, 0.3, 4, 0.08), lblue); t2.position.set(1.3, 0.5, 0);
+      const done = card(0.62, 0.74); done.position.set(-1.3, 1.36, 0.06); done.rotation.z = -0.06;
+      row(done, 0.34, 0.2, navy, -0.06); row(done, 0.26, 0.06, lblue, -0.1); row(done, 0.3, -0.08, lblue, -0.08);
+      const blank = card(0.62, 0.74, 0.07, lblue); blank.position.set(1.3, 1.36, 0.06); blank.rotation.z = 0.06;
+      dashed(1.5, red, 5).position.set(0, 1.3, 0);
+      cross(red, 1.0).position.set(0, 1.3, 0.34);
+      label("Install").position.set(-1.3, 0.02, 0.3);
+      label("Service").position.set(1.3, 0.02, 0.3);
+    } else if (tone === "built") {
+      /* every visit logged onto one gold thread that links the two teams */
+      const t1 = A(new RoundedBoxGeometry(0.58, 0.58, 0.28, 4, 0.08), slate); t1.position.set(-1.36, 0.62, 0);
+      const t2 = A(new RoundedBoxGeometry(0.58, 0.58, 0.28, 4, 0.08), lblue); t2.position.set(1.36, 0.62, 0);
+      const rail = pipe(2.16, gold, 0.055); rail.position.set(0, 0.62, 0);
+      ([-0.66, 0, 0.66] as number[]).forEach((x) => {
+        const bead = A(new THREE.SphereGeometry(0.1, 22, 18), gold); bead.position.set(x, 0.62, 0);
+        const stem = pipe(0.04, gold, 0.04); stem.scale.y = 9; stem.position.set(x, 0.85, 0);
+        const v = card(0.5, 0.44); v.position.set(x, 1.3, 0);
+        row(v, 0.28, 0.06, navy, -0.05); row(v, 0.2, -0.06, lblue, -0.09); });
+      label("Install").position.set(-1.36, 0.1, 0.3);
+      label("Service").position.set(1.36, 0.1, 0.3);
+    } else {
+      /* the service tech opens the record and sees the whole history */
+      const c = card(2.0, 1.3); c.position.set(0, 1.16, 0);
+      const rail = pipe(1.44, gold, 0.05); rail.position.set(-0.06, 1.44, 0.06);
+      ([0, 1, 2, 3] as number[]).forEach((k) => { const x = -0.78 + k * 0.48;
+        const d = A(new THREE.SphereGeometry(0.08, 22, 18), k === 3 ? green : navy); d.position.set(x, 1.44, 0.08); });
+      ([1.1, 0.86] as number[]).forEach((y, k) => row(c, 1.1 - k * 0.34, y - 1.16, lblue, -0.36));
+      const t = tick(gold, 0.5); t.position.set(0.74, 0.94, 0.08);
+      const who = A(new RoundedBoxGeometry(0.5, 0.5, 0.24, 4, 0.07), lblue); who.position.set(-1.38, 0.3, 0.4);
+    }
   }
- } else if(id==='capacity'){
-  if(tone==='problem'){ // colliding time blocks
-   [18,45,72].forEach((y,k)=>{h+=E('v-lane','left:8%;top:'+y+'%;width:84%;height:34px;'+D(k*.07));});
-   h+=E('v-bar v-jit','left:12%;top:20%;width:110px;height:26px;background:'+CV.slate+';'+D(.3)+'animation-delay:.3s,.7s');
-   h+=E('v-bar v-jit','left:40%;top:20%;width:90px;height:26px;background:'+CV.red+';'+D(.38)+'animation-delay:.38s,.78s');
-   h+=E('v-bar v-jit','left:22%;top:47%;width:120px;height:26px;background:'+CV.slate+';'+D(.46)+'animation-delay:.46s,.86s');
-   h+=E('v-bar v-jit','left:55%;top:47%;width:70px;height:26px;background:'+CV.red+';'+D(.54)+'animation-delay:.54s,.94s');
-   h+=E('v-x','left:44%;top:18%;'+D(.9),'✕')+E('v-x','left:57%;top:45%;'+D(1),'✕');
-  } else if(tone==='built'){ // snap into clean lanes
-   [18,45,72].forEach((y,k)=>{h+=E('v-lane','left:8%;top:'+y+'%;width:84%;height:34px;'+D(k*.07));});
-   [[12,18,96],[44,18,74],[12,45,120],[60,45,58],[12,72,70],[42,72,96]].forEach((b,k)=>{
-    h+=E('v-bar','left:'+b[0]+'%;top:'+(b[1]+1.5)+'%;width:'+b[2]+'px;height:26px;background:'+(k%2?CV.lblue:CV.slate)+';'+D(.3+k*.08));});
-  } else { // gauge into safe zone
-   h+=E('v-gauge','left:50%;top:34%;width:150px;height:75px;margin-left:-75px;'+D(0));
-   h+=E('v-gauge','left:50%;top:34%;width:150px;height:75px;margin-left:-75px;border-color:'+CV.gold+';border-right-color:transparent;border-top-color:transparent;rotate:-30deg;'+D(.2));
-   h+=E('v-needle','left:50%;top:34%;width:5px;height:66px;margin-left:-2.5px;--a0:-70deg;--a1:22deg;'+D(.3));
-   h+=E('v-dot','left:50%;top:57%;width:16px;height:16px;margin-left:-8px;background:'+CV.navy+';'+D(.4));
-   h+=E('v-lbl','left:50%;top:80%;translate:-50% 0;color:'+CV.green+';'+D(1.4),'Safe capacity');
-   h+=E('v-tk','left:64%;top:78%;'+D(1.5),'✓');
-  }
- } else if(id==='single-source'){
-  if(tone==='problem'){ // duplicate conflicting records
-   [[10,18,-5],[34,34,4],[58,16,-3]].forEach((p,k)=>{h+=E('v-card v-jit','left:'+p[0]+'%;top:'+p[1]+'%;width:78px;height:88px;rotate:'+p[2]+'deg;animation-delay:'+(k*.08)+'s,'+(k*.08+.4)+'s');
-    h+=E('v-bar','left:'+(p[0]+2.5)+'%;top:'+(p[1]+12)+'%;width:44px;height:5px;background:'+CV.slate+';'+D(.4+k*.08));
-    h+=E('v-bar','left:'+(p[0]+2.5)+'%;top:'+(p[1]+22)+'%;width:32px;height:5px;background:'+CV.lblue+';'+D(.48+k*.08));});
-   h+=E('v-x','left:29%;top:34%;'+D(.8),'≠')+E('v-x','left:54%;top:30%;'+D(.92),'≠');
-  } else if(tone==='built'){ // merge into one
-   [[8,20],[8,54]].forEach((p,k)=>{h+=E('v-card','left:'+p[0]+'%;top:'+p[1]+'%;width:56px;height:52px;'+D(k*.1));
-    h+=E('v-ln','left:24%;top:'+(p[1]+9)+'%;--len:96px;background:'+CV.gold+';'+D(.35+k*.1));});
-   h+=E('v-card','left:58%;top:26%;width:96px;height:104px;'+D(.75));
-   [0,1,2].forEach(k=>{h+=E('v-bar','left:62%;top:'+(36+k*12)+'%;width:'+(60-k*10)+'px;height:6px;background:'+(k===0?CV.navy:CV.lblue)+';'+D(.95+k*.08));});
-  } else { // one record, synced ticks
-   h+=E('v-card','left:26%;top:18%;width:130px;height:132px;'+D(0));
-   [0,1,2].forEach(k=>{h+=E('v-bar','left:31%;top:'+(28+k*16)+'%;width:64px;height:7px;background:'+(k===0?CV.navy:CV.lblue)+';'+D(.2+k*.1));
-    h+=E('v-tk','left:64%;top:'+(25+k*16)+'%;'+D(.55+k*.12),'✓');});
-   h+=E('v-lbl','left:50%;top:74%;translate:-50% 0;color:'+CV.green+';'+D(1),'One source of truth');
-  }
- } else if(id==='sales-project'){
-  if(tone==='problem'){ // deal stuck at a gap
-   h+=E('v-card v-jit','left:8%;top:32%;width:76px;height:70px;animation-delay:0s,.4s');
-   h+=E('v-lbl','left:9%;top:22%;'+D(.2),'Deal won');
-   h+=E('v-ln','left:46%;top:20%;--len:0px;width:2px;height:120px;background:repeating-linear-gradient(180deg,'+CV.red+' 0 6px,transparent 6px 12px);animation:none;opacity:1');
-   h+=E('v-card','left:64%;top:32%;width:76px;height:70px;opacity:.45;'+D(.3));
-   h+=E('v-lbl','left:65%;top:22%;'+D(.4),'Delivery');
-   h+=E('v-x','left:44%;top:44%;'+D(.6),'✕');
-  } else if(tone==='built'){ // pipeline connects, card crosses
-   h+=E('v-card','left:64%;top:32%;width:76px;height:70px;'+D(.1));
-   h+=E('v-ln','left:24%;top:46%;--len:150px;background:'+CV.gold+';'+D(.25));
-   h+=E('v-card v-slide','left:8%;top:32%;width:76px;height:70px;--tx:150px;'+D(0));
-   h+=E('v-lbl','left:9%;top:22%;'+D(.2),'Deal won');
-   h+=E('v-lbl','left:65%;top:22%;'+D(.2),'Project');
-  } else { // project card + kickoff ticks
-   h+=E('v-card','left:24%;top:14%;width:136px;height:150px;'+D(0));
-   h+=E('v-lbl','left:29%;top:20%;'+D(.15),'Kickoff ready');
-   [0,1,2,3].forEach(k=>{h+=E('v-bar','left:36%;top:'+(32+k*13)+'%;width:'+(58-k*6)+'px;height:6px;background:'+CV.lblue+';'+D(.25+k*.09));
-    h+=E('v-tk','left:29%;top:'+(29+k*13)+'%;'+D(.4+k*.1),'✓');});
-   h+=E('v-lbl','left:50%;top:78%;translate:-50% 0;color:'+CV.green+';'+D(.95),'Billing-ready');
-  }
- } else if(id==='field-reporting'){
-  if(tone==='problem'){ // notes lost
-   [[10,12,-8],[36,30,6],[62,14,-4],[24,58,9]].forEach((p,k)=>{h+=E('v-card v-jit','left:'+p[0]+'%;top:'+p[1]+'%;width:56px;height:64px;rotate:'+p[2]+'deg;opacity:'+(1-k*.15)+';animation-delay:'+(k*.08)+'s,'+(k*.08+.4)+'s');});
-   h+=E('v-x','left:52%;top:56%;'+D(.7),'✕')+E('v-x','left:70%;top:44%;'+D(.85),'✕');
-   h+=E('v-lbl','left:50%;top:84%;translate:-50% 0;color:'+CV.red+';'+D(1),'Re-keyed days later');
-  } else if(tone==='built'){ // form -> auto-filed
-   h+=E('v-card','left:32%;top:8%;width:92px;height:74px;'+D(0));
-   [0,1].forEach(k=>{h+=E('v-bar','left:36%;top:'+(16+k*10)+'%;width:52px;height:5px;background:'+CV.lblue+';'+D(.2+k*.08));});
-   h+=E('v-ln','left:50%;top:38%;width:2px;--len:0;height:44px;background:'+CV.gold+';animation:none;opacity:1');
-   h+=E('v-dot','left:49%;top:44%;width:9px;height:9px;background:'+CV.gold+';'+D(.5));
-   [12,42,72].forEach((x,k)=>{h+=E('v-card','left:'+x+'%;top:66%;width:52px;height:46px;'+D(.7+k*.1));});
-   h+=E('v-lbl','left:50%;top:88%;translate:-50% 0;'+D(1),'Auto-filed');
-  } else { // tidy record list + attachments
-   h+=E('v-card','left:16%;top:14%;width:180px;height:150px;'+D(0));
-   [0,1,2].forEach(k=>{h+=E('v-bar','left:26%;top:'+(26+k*16)+'%;width:70px;height:6px;background:'+CV.lblue+';'+D(.2+k*.1));
-    h+=E('v-dot','left:21%;top:'+(25+k*16)+'%;width:9px;height:9px;background:'+CV.gold+';'+D(.3+k*.1));
-    h+=E('v-tk','left:64%;top:'+(23+k*16)+'%;'+D(.45+k*.1),'✓');});
-   h+=E('v-lbl','left:50%;top:76%;translate:-50% 0;color:'+CV.green+';'+D(.9),'Findable + reusable');
-  }
- } else { // service-handoff
-  if(tone==='problem'){ // two teams, knowledge gap
-   h+=E('v-dot','left:12%;top:36%;width:56px;height:56px;background:'+CV.slate+';'+D(0));
-   h+=E('v-dot','left:70%;top:36%;width:56px;height:56px;background:'+CV.lblue+';'+D(.12));
-   h+=E('v-lbl','left:12%;top:60%;'+D(.3),'Install');
-   h+=E('v-lbl','left:70%;top:60%;'+D(.3),'Service');
-   h+=E('v-ln','left:32%;top:46%;--len:0;width:2px;height:70px;background:repeating-linear-gradient(180deg,'+CV.red+' 0 6px,transparent 6px 12px);animation:none;opacity:1;left:49%;top:26%');
-   h+=E('v-x','left:46%;top:44%;'+D(.5),'✕');
-   h+=E('v-lbl','left:50%;top:80%;translate:-50% 0;color:'+CV.red+';'+D(.7),'History lost');
-  } else if(tone==='built'){ // history trail links them
-   h+=E('v-dot','left:8%;top:36%;width:52px;height:52px;background:'+CV.slate+';'+D(0));
-   h+=E('v-dot','left:74%;top:36%;width:52px;height:52px;background:'+CV.lblue+';'+D(.1));
-   h+=E('v-ln','left:22%;top:45%;--len:140px;background:'+CV.gold+';'+D(.3));
-   [30,44,58].forEach((x,k)=>{h+=E('v-dot','left:'+x+'%;top:43%;width:12px;height:12px;background:'+CV.gold+';'+D(.55+k*.12));});
-   h+=E('v-lbl','left:50%;top:66%;translate:-50% 0;'+D(1),'Every visit tracked');
-  } else { // 2nd team sees full timeline
-   h+=E('v-card','left:12%;top:14%;width:230px;height:152px;'+D(0));
-   h+=E('v-ln','left:18%;top:32%;--len:150px;background:'+CV.gold+';'+D(.2));
-   [0,1,2,3].forEach(k=>{h+=E('v-dot','left:'+(17+k*10)+'%;top:30%;width:12px;height:12px;background:'+(k===3?CV.green:CV.navy)+';'+D(.4+k*.1));});
-   [0,1].forEach(k=>{h+=E('v-bar','left:18%;top:'+(46+k*12)+'%;width:'+(96-k*26)+'px;height:6px;background:'+CV.lblue+';'+D(.7+k*.1));});
-   h+=E('v-tk','left:47%;top:44%;'+D(.95),'✓');
-   h+=E('v-lbl','left:35%;top:72%;translate:-50% 0;color:'+CV.green+';'+D(1),'Full history, from day one');
-  }
- }
- return h;
+  return g;
 }
 
+/* Renders one story tableau in its own WebGL view; rebuilds on step change. */
+function StoryScene3D({ sceneId, tone }: { sceneId: string; tone: string }) {
+  const host = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    const el = host.current; if (!el) return;
+    let renderer: THREE.WebGLRenderer;
+    try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); } catch { return; }
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+    renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.04;
+    renderer.domElement.style.cssText = "width:100%;height:100%;display:block";
+    el.appendChild(renderer.domElement);
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(32, 1, 0.1, 100);
+    scene.add(new THREE.HemisphereLight(0xffffff, 0xc3d2e8, 1.5));
+    const key = new THREE.DirectionalLight(0xffffff, 2.5); key.position.set(1.5, 6.6, 3.0);
+    key.castShadow = true; key.shadow.mapSize.set(1024, 1024);
+    key.shadow.camera.near = 0.5; key.shadow.camera.far = 20;
+    key.shadow.camera.left = -4; key.shadow.camera.right = 4; key.shadow.camera.top = 4; key.shadow.camera.bottom = -4;
+    key.shadow.bias = -0.0012; scene.add(key);
+    const fill = new THREE.DirectionalLight(0xdbe6f7, 0.85); fill.position.set(-3.4, 1.8, 2.4); scene.add(fill);
+
+    const rig = new THREE.Group(); scene.add(rig);
+    const tab = storyScene(sceneId, tone); rig.add(tab);
+
+    /* centre the tableau on the origin and sit it on a shadow-catching floor */
+    tab.updateMatrixWorld(true);
+    const bb = new THREE.Box3().setFromObject(tab);
+    const ctr = bb.getCenter(new THREE.Vector3()), size = bb.getSize(new THREE.Vector3());
+    tab.position.set(-ctr.x, -ctr.y, -ctr.z);
+    const floor = new THREE.Mesh(new THREE.PlaneGeometry(14, 14), new THREE.ShadowMaterial({ opacity: 0.13 }));
+    floor.rotation.x = -Math.PI / 2; floor.position.y = -size.y / 2 - 0.06; floor.receiveShadow = true; rig.add(floor);
+
+    /* frame it: fit the larger of width/height with a little breathing room */
+    const fitH = size.y * 1.34, fitW = (size.x * 1.14) / (16 / 9);
+    const dist = (Math.max(fitH, fitW) / 2) / Math.tan((camera.fov * Math.PI) / 360);
+    camera.position.set(0, size.y * 0.16, dist + size.z * 0.6);
+    camera.lookAt(0, 0, 0);
+
+    const ro = new ResizeObserver(() => {
+      const w = el.clientWidth || 1, h = el.clientHeight || 1;
+      renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+    });
+    ro.observe(el);
+
+    let raf = 0; const t0 = performance.now();
+    const tick = () => {
+      const t = (performance.now() - t0) / 1000;
+      rig.rotation.y = Math.sin(t * 0.42) * 0.24;
+      rig.rotation.x = Math.sin(t * 0.32) * 0.05 - 0.02;
+      rig.position.y = Math.sin(t * 0.9) * 0.035;
+      renderer.render(scene, camera); raf = requestAnimationFrame(tick);
+    };
+    tick();
+
+    return () => {
+      cancelAnimationFrame(raf); ro.disconnect();
+      scene.traverse((o) => {
+        const m = o as THREE.Mesh & { material?: THREE.Material | THREE.Material[]; map?: THREE.Texture };
+        if (m.geometry) m.geometry.dispose();
+        const mat = m.material;
+        if (Array.isArray(mat)) mat.forEach((x) => x.dispose());
+        else if (mat) { const sm = mat as THREE.SpriteMaterial; if (sm.map) sm.map.dispose(); mat.dispose(); }
+      });
+      renderer.dispose();
+      if (renderer.domElement.parentNode) renderer.domElement.parentNode.removeChild(renderer.domElement);
+    };
+  }, [sceneId, tone]);
+  return <div className="rai-vis" ref={host} />;
+}
 
 export default function AutomationIntegrationInteractive() {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
@@ -457,7 +668,7 @@ export default function AutomationIntegrationInteractive() {
               </div>
 
               <div className="rai-story" key={step}>
-                <div className="rai-vis" dangerouslySetInnerHTML={{ __html: visualHTML(active.id, STEPS[step].tone) }} />
+                <StoryScene3D sceneId={active.id} tone={STEPS[step].tone} />
                 <div className="rai-stage-text">
                   <div className="rai-kicker">Step {step + 1} of 3</div>
                   <h3 className="rai-step-title">{STEPS[step].k}</h3>
@@ -541,30 +752,9 @@ const CSS = `
    NOTE: base state is VISIBLE; animations use fill-mode 'backwards' so the
    art still renders if animations never run (hidden tab, throttling,
    reduced-motion). Never gate content behind an animation. */
-.rai-vis{position:relative;height:250px;border-radius:16px;overflow:hidden;border:1px solid #e6eaf1;background:linear-gradient(180deg,#fbfcfe,#eef2f8)}
-.v-card,.v-bar,.v-lane,.v-dot,.v-ln,.v-x,.v-tk,.v-lbl,.v-panel,.v-gauge,.v-needle{position:absolute}
-.v-card{border-radius:6px;background:#fff;border:1px solid #d9e2ee;box-shadow:0 7px 16px -6px rgba(29,55,89,.35);animation:rai-pop .45s ease backwards}
-.v-panel{border-radius:8px;background:#1D3759;box-shadow:0 10px 22px -8px rgba(29,55,89,.6);animation:rai-pop .45s ease backwards}
-.v-bar{border-radius:3px;animation:rai-pop .4s ease backwards}
-.v-lane{border-radius:7px;background:#eef2f8;border:1px dashed #cbd7e8;animation:rai-pop .35s ease backwards}
-.v-dot{border-radius:50%;animation:rai-pop .35s ease backwards}
-.v-ln{height:2px;transform-origin:0 50%;width:var(--len);animation:rai-grow .55s ease backwards}
-.v-x{color:#d4696b;font-weight:800;font-size:22px;animation:rai-pop .4s ease backwards}
-.v-tk{color:#2e9e6a;font-weight:800;font-size:17px;animation:rai-pop .4s ease backwards}
-.v-lbl{font-size:10.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:#8296b2;animation:rai-pop .4s ease backwards}
-.v-jit{animation:rai-pop .4s ease backwards, rai-jit 3.2s ease-in-out infinite .4s}
-.v-fill{transform-origin:left;transform:scaleX(var(--f,1));animation:rai-fill .85s cubic-bezier(.3,.8,.3,1) backwards}
-.v-rise{transform-origin:bottom;transform:scaleY(var(--f,1));animation:rai-rise .7s cubic-bezier(.3,.8,.3,1) backwards}
-.v-gauge{border-radius:999px 999px 0 0;border:12px solid #DCE6F2;border-bottom:none;animation:rai-pop .45s ease backwards}
-.v-needle{background:#1D3759;border-radius:2px;transform-origin:50% 100%;rotate:var(--a1);animation:rai-pop .3s ease backwards, rai-sweep 1.1s cubic-bezier(.3,.9,.3,1) backwards .3s}
-.v-slide{translate:var(--tx) 0;animation:rai-pop .4s ease backwards, rai-slide .9s cubic-bezier(.3,.8,.3,1) backwards .45s}
-@keyframes rai-pop{from{opacity:0;transform:scale(.55)}to{opacity:1;transform:scale(1)}}
-@keyframes rai-jit{0%,100%{translate:0 0}50%{translate:5px -6px}}
-@keyframes rai-grow{from{width:0}to{width:var(--len)}}
-@keyframes rai-fill{from{transform:scaleX(0)}to{transform:scaleX(var(--f,1))}}
-@keyframes rai-rise{from{transform:scaleY(0)}to{transform:scaleY(var(--f,1))}}
-@keyframes rai-sweep{from{rotate:var(--a0)}to{rotate:var(--a1)}}
-@keyframes rai-slide{from{translate:0 0}to{translate:var(--tx) 0}}
+.rai-vis{position:relative;height:250px;border-radius:16px;overflow:hidden;border:1px solid #e6eaf1;
+  background:radial-gradient(120% 100% at 50% 0%,#fbfcfe 0%,#eaeff7 60%,#dfe6f1 100%)}
+.rai-vis canvas{border-radius:16px}
 .rai-nav{display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:1px solid var(--line);padding-top:18px}
 .rai-dots{display:flex;gap:8px}
 .rai-dot{width:9px;height:9px;border-radius:50%;background:#d7dee9;transition:all .25s}
