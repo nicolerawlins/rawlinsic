@@ -417,13 +417,17 @@ function storyScene(id: string, tone: string): THREE.Group {
       label("Install").position.set(-1.44, 0.02, 0.3);
       label("Service").position.set(1.44, 0.02, 0.3);
     } else {
-      /* the service tech opens the record and sees the whole history */
-      const c = card(2.0, 1.3); c.position.set(0, 1.16, 0);
-      const rail = pipe(1.44, gold, 0.05); rail.position.set(-0.06, 1.44, 0.06);
-      ([0, 1, 2, 3] as number[]).forEach((k) => { const x = -0.78 + k * 0.48;
-        const d = A(new THREE.SphereGeometry(0.08, 22, 18), k === 3 ? green : navy); d.position.set(x, 1.44, 0.08); });
-      ([1.1, 0.86] as number[]).forEach((y, k) => row(c, 1.1 - k * 0.34, y - 1.16, lblue, -0.36));
-      const t = tick(gold, 0.5); t.position.set(0.74, 0.94, 0.08);
+      /* the service tech opens the record and sees every visit, newest last */
+      const c = card(2.0, 1.44); c.position.set(0, 1.16, 0);
+      row(c, 0.78, 0.5, navy, -0.55);
+      const rail = pipe(1.5, gold, 0.05); rail.position.set(-0.02, 1.34, 0.06);
+      ([0, 1, 2, 3] as number[]).forEach((k) => { const x = -0.74 + k * 0.48;
+        const d = A(new THREE.SphereGeometry(0.085, 22, 18), k === 3 ? green : navy); d.position.set(x, 1.34, 0.1);
+        /* the visit each stop stands for */
+        const s = card(0.34, 0.26); s.position.set(x, 0.86, 0.06);
+        row(s, 0.18, 0.04, k === 3 ? green : lblue, -0.03); });
+      ([0.62, 0.44] as number[]).forEach((y, k) => row(c, 1.0 - k * 0.3, y - 1.16, lblue, -0.44));
+      tick(gold, 0.55).position.set(0.74, 0.56, 0.1);
     }
   }
   return g;
@@ -455,7 +459,7 @@ function StoryScene3D({ sceneId, tone }: { sceneId: string; tone: string }) {
     const rig = new THREE.Group(); scene.add(rig);
     const tab = storyScene(sceneId, tone); rig.add(tab);
 
-    /* centre the tableau on the origin and sit it on a shadow-catching floor */
+    /* centre the tableau on the origin */
     tab.updateMatrixWorld(true);
     const bb = new THREE.Box3().setFromObject(tab);
     const ctr = bb.getCenter(new THREE.Vector3()), size = bb.getSize(new THREE.Vector3());
