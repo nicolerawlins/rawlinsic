@@ -580,7 +580,7 @@ export default function AutomationIntegrationInteractive() {
     ground.rotation.x = -Math.PI / 2; ground.position.y = -1.15; ground.receiveShadow = true; scene.add(ground);
 
     const rig = new THREE.Group(); scene.add(rig);
-    const R = narrow ? 2.5 : 4.6; const hitMeshes: THREE.Object3D[] = [];
+    const R = narrow ? 3.2 : 4.6; const hitMeshes: THREE.Object3D[] = [];
     const disposables: { dispose: () => void }[] = [];
 
     const center = new THREE.Group(); rig.add(center);
@@ -644,7 +644,7 @@ export default function AutomationIntegrationInteractive() {
       /* Pull back until the whole ring fits the narrow axis, holding the same
          viewing angle. A portrait phone has a very narrow horizontal FOV, so
          without this the hub runs off both edges. */
-      const need = R + (narrow ? 2.8 : 1.2);
+      const need = R + 1.1;
       const t = Math.tan((camera.fov * Math.PI) / 360);
       camZ = Math.min(Math.max(BASE_Z, need / (t * Math.max(camera.aspect, 0.01))), 30);
       camY = BASE_Y * (camZ / BASE_Z);
@@ -742,6 +742,18 @@ export default function AutomationIntegrationInteractive() {
       {/* sibling of the stage, not a child: the canvas is absolutely
           positioned, so a hint inside the stage lands at its top on mobile */}
       <div className="rai-hint"><span className="dot" />Click a capability to see a real example · drag to rotate</div>
+
+      {/* mobile only — the hub stays tappable, this just names the six */}
+      <ul className="rai-mlist">
+        {NODES.map((n, i) => (
+          <li key={n.id}>
+            <button type="button" className="rai-mcard" style={{ ["--acc" as string]: n.accent }} onClick={() => openRef.current?.(i)}>
+              <span className="t">{n.title}</span>
+              <span className="d">{n.desc}</span>
+            </button>
+          </li>
+        ))}
+      </ul>
 
 
       {active && (
@@ -892,25 +904,31 @@ const CSS = `
 .rai-stack-items{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:10px;margin-top:18px}
 .rai-chip{display:inline-flex;align-items:center;gap:8px;font-size:14.5px;font-weight:600;color:var(--navy);background:#fff;border:1px solid var(--line);border-radius:11px;padding:8px 14px;box-shadow:0 6px 16px -12px rgba(30,45,77,.35)}
 .rai-chip-dot{width:9px;height:9px;border-radius:50%}
+/* the tappable capability list — mobile only */
+.rai-mlist{display:none;list-style:none;margin:0;padding:0 14px 30px;gap:10px;grid-template-columns:1fr 1fr}
+.rai-mcard{display:flex;flex-direction:column;gap:5px;width:100%;height:100%;text-align:left;cursor:pointer;
+  padding:13px 14px;border-radius:14px;border:1px solid rgba(255,255,255,.14);
+  background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.04));
+  border-left:3px solid var(--acc)}
+.rai-mcard .t{font-family:var(--font-dm-sans),'DM Sans',sans-serif;
+  font-size:13px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#fff;line-height:1.2}
+.rai-mcard .d{font-size:12px;line-height:1.4;color:#b9c7de}
+
 @media (max-width:760px){
   .rai-story{grid-template-columns:1fr}
   .rai-ba{grid-template-columns:1fr}
   .rai-ba-arrow{transform:rotate(90deg)}
   .rai-cols{grid-template-columns:1fr}
-  /* hub fills the screen; the hint sits under it */
-  .rai-root{position:relative;inset:auto;min-height:100vh;display:flex;flex-direction:column;justify-content:center}
-  .rai-stage{position:relative;height:clamp(280px,40vh,350px);flex:0 0 auto}
-  /* name tiles beside each icon: title only, and tappable in their own right
-     since the icons themselves are small targets on a phone */
-  .rai-label{max-width:72px;pointer-events:auto;cursor:pointer;
-    padding:6px 7px;border-radius:10px;border:1px solid rgba(255,255,255,.16);
-    background:linear-gradient(180deg,rgba(16,28,52,.92),rgba(10,18,38,.92));
-    border-left:3px solid var(--acc)}
-  .rai-label .tab{font-size:9px;letter-spacing:.2px;line-height:1.25;text-shadow:none}
-  .rai-label .body{display:none}
-  .rai-hint{position:relative;left:auto;bottom:auto;transform:none;margin:10px auto 22px;
+  /* let the page scroll: hub on top, list underneath */
+  .rai-root{position:relative;inset:auto;min-height:100vh}
+  .rai-stage{position:relative;height:clamp(320px,44vh,420px)}
+  /* names live in the list below, so nothing competes with the hub */
+  .rai-label{display:none}
+  .rai-mlist{display:grid}
+  .rai-hint{position:relative;left:auto;bottom:auto;transform:none;margin:10px auto 18px;
     width:calc(100% - 28px);max-width:420px;justify-content:center;text-align:center;
     white-space:normal;font-size:11px;letter-spacing:.4px;line-height:1.35;border-radius:14px;padding:10px 14px}
   .rai-hint .dot{flex:0 0 auto}
 }
+@media (max-width:400px){.rai-mlist{grid-template-columns:1fr}}
 `;
