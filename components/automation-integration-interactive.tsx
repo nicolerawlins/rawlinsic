@@ -760,8 +760,8 @@ export default function AutomationIntegrationInteractive() {
           using .reveal, which starts at opacity:0 and needs the home page's
           scroll observer to ever become visible */}
       <header className="rai-intro">
-        <p className="section-label"><span className="gold-text">Real-world examples</span></p>
-        <h1 className="section-title">Smarter systems, <em>proven in practice</em></h1>
+        <p className="section-label"><span className="gold-text">Automation &amp; AI</span></p>
+        <h1 className="section-title">Real-World <em>Examples</em></h1>
         <button
           type="button"
           className={`intro-expand-btn${introOpen ? " expanded" : ""}`}
@@ -777,7 +777,7 @@ export default function AutomationIntegrationInteractive() {
           </span>
         </button>
         <div id="rai-intro-more" className={`intro-expandable${introOpen ? " expanded" : ""}`}>
-          <p className="section-text">Every example started the same way — disconnected tools, duplicated work, and information scattered across systems. We connected what each team already used, automated the manual steps, and brought the full picture into one clear view.</p>
+          <p className="section-text">Smarter systems, proven in practice. Every challenge started the same way — disconnected tools, duplicated work, and information scattered across systems. We connected what each team already used, automated the manual steps, and brought the full picture into one clear view.</p>
         </div>
       </header>
       <div className="rai-stage" ref={sceneRef}>
@@ -885,15 +885,18 @@ body:has(.rai-root) .footer a,body:has(.rai-root) .footer button{cursor:pointer}
   background:var(--rawlins-bg,#1a3251)}
 @media (max-width:1003px){.rai-root{padding-top:64px}}
 .rai-root *,.rai-overlay *{box-sizing:border-box}
-/* Left-aligned block matching the home page's "Why Rawlins": the site's own
+/* Centred block using the home page's "Why Rawlins" pattern: the site's own
    section-label / section-title / intro-expand-btn / intro-expandable classes
-   do the styling, this just places it. */
-.rai-intro{flex:0 0 auto;width:100%;max-width:1240px;margin:0 auto;padding:26px 60px 0;text-align:left}
-.rai-intro .section-title{margin:0;max-width:900px}
+   do the styling, this just centres and places it. */
+.rai-intro{flex:0 0 auto;width:100%;max-width:1240px;margin:0 auto;padding:54px 60px 0;text-align:center}
+.rai-intro .section-title{margin:0 auto;max-width:900px}
 .rai-intro .section-label{margin-bottom:14px}
+/* .section-text is left-aligned at 620px by default; centre it and let the
+   longer copy breathe */
+.rai-intro .section-text{max-width:780px;margin:0 auto}
 /* the site draws its own cursor and hides the native one; this page doesn't */
 body:has(.rai-root) .intro-expand-btn{cursor:pointer}
-@media (max-width:1003px){.rai-intro{padding:20px 24px 0}}
+@media (max-width:1003px){.rai-intro{padding:38px 24px 0}}
 /* takes whatever height the hero leaves */
 .rai-stage{position:relative;flex:1 1 auto;min-height:400px}
 .rai-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
@@ -1003,7 +1006,7 @@ body:has(.rai-root) .intro-expand-btn{cursor:pointer}
   .rai-cols{grid-template-columns:1fr}
   /* hero, hub, list, footer all stack — height comes from content */
   .rai-root{min-height:0}
-  .rai-intro{padding:14px 18px 0}
+  .rai-intro{padding:28px 18px 0}
   /* fixed-height hub here, so it must opt out of the desktop flex:1 */
   .rai-stage{flex:0 0 auto;min-height:0;height:clamp(300px,42vh,380px)}
   /* names live in the list below, so nothing competes with the hub */
