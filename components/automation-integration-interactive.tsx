@@ -580,7 +580,7 @@ export default function AutomationIntegrationInteractive() {
     ground.rotation.x = -Math.PI / 2; ground.position.y = -1.15; ground.receiveShadow = true; scene.add(ground);
 
     const rig = new THREE.Group(); scene.add(rig);
-    const R = narrow ? 3.2 : 4.6; const hitMeshes: THREE.Object3D[] = [];
+    const R = narrow ? 3.0 : 4.6; const hitMeshes: THREE.Object3D[] = [];
     const disposables: { dispose: () => void }[] = [];
 
     const center = new THREE.Group(); rig.add(center);
@@ -590,8 +590,14 @@ export default function AutomationIntegrationInteractive() {
 
     const pedGeo = new RoundedBoxGeometry(1.5, 0.4, 1.5, 4, 0.13); disposables.push(pedGeo);
     const nodeGroups: { g: THREE.Group; spin: THREE.Group; phase: number }[] = [];
+    /* Sample points the camera fit has to keep on screen. These are the nodes'
+       own footprints, NOT the hub's bounding box: the hub is a ring, so its box
+       corners jut out to ~1.4x the ring radius into empty space and fitting
+       them shrinks everything for nothing. */
+    const fitPts: THREE.Vector3[] = [];
     NODES.forEach((n, i) => {
       const a = (n.ang * Math.PI) / 180, px = Math.sin(a) * R, pz = Math.cos(a) * R;
+      for (let c = 0; c < 8; c++) fitPts.push(new THREE.Vector3(px + (c & 1 ? 0.78 : -0.78), c & 2 ? 1.9 : -0.3, pz + (c & 4 ? 0.78 : -0.78)));
       const g = new THREE.Group(); g.position.set(px, 0, pz); rig.add(g);
       const pedMat = new THREE.MeshStandardMaterial({ color: 0xeef2f8, metalness: 0.05, roughness: 0.55 }); disposables.push(pedMat);
       const ped = new THREE.Mesh(pedGeo, pedMat); ped.castShadow = true; ped.receiveShadow = true; ped.userData.i = i; g.add(ped); hitMeshes.push(ped);
@@ -646,17 +652,15 @@ export default function AutomationIntegrationInteractive() {
     /* Fit numerically: project the hub's corners and scale the distance until
        they just fit. Solving this in closed form is easy to get subtly wrong
        (it already was), and this self-corrects for tilt, aspect and fov. */
-    const fitBox = new THREE.Box3().setFromObject(rig);
-    const corners: THREE.Vector3[] = [];
-    for (let a = 0; a < 8; a++) corners.push(new THREE.Vector3(a & 1 ? fitBox.max.x : fitBox.min.x, a & 2 ? fitBox.max.y : fitBox.min.y, a & 4 ? fitBox.max.z : fitBox.min.z));
-    const FILL = 0.94; /* fraction of the view the hub should span */
+    const FILL = 0.96; /* fraction of the view the hub should span */
+    const q = new THREE.Vector3();
     const solveDistance = () => {
       let d = Math.max(D_MIN, 12);
       for (let it = 0; it < 24; it++) {
         camera.position.set(0, Math.sin(TILT) * d, Math.cos(TILT) * d);
         camera.lookAt(camTarget); camera.updateMatrixWorld(true);
         let m = 0;
-        for (const p of corners) { const q = p.clone().project(camera); m = Math.max(m, Math.abs(q.x), Math.abs(q.y)); }
+        for (const p of fitPts) { q.copy(p).project(camera); m = Math.max(m, Math.abs(q.x), Math.abs(q.y)); }
         const k = m / FILL;
         d *= k;
         if (Math.abs(k - 1) < 0.004) break;
@@ -943,7 +947,7 @@ const CSS = `
   .rai-cols{grid-template-columns:1fr}
   /* let the page scroll: hub on top, list underneath */
   .rai-root{position:relative;inset:auto;min-height:100vh}
-  .rai-stage{position:relative;height:clamp(250px,33vh,300px)}
+  .rai-stage{position:relative;height:clamp(300px,42vh,380px)}
   /* names live in the list below, so nothing competes with the hub */
   .rai-label{display:none}
   .rai-mlist{display:grid}
