@@ -637,25 +637,39 @@ export default function AutomationIntegrationInteractive() {
 
     const BASE_Z = 14.6, BASE_Y = narrow ? 11.0 : 7.8;
     const TILT = Math.atan(BASE_Y / BASE_Z);
+    /* Desktop keeps its hand-tuned framing as a floor; a phone may come as
+       close as it likes. Note this is the true eye-to-hub distance, not z —
+       the camera looks down from height, so z alone understates it. */
+    const D_MIN = narrow ? 5 : Math.hypot(BASE_Y, BASE_Z);
     let camZ = BASE_Z, camY = BASE_Y;
+
+    /* Fit numerically: project the hub's corners and scale the distance until
+       they just fit. Solving this in closed form is easy to get subtly wrong
+       (it already was), and this self-corrects for tilt, aspect and fov. */
+    const fitBox = new THREE.Box3().setFromObject(rig);
+    const corners: THREE.Vector3[] = [];
+    for (let a = 0; a < 8; a++) corners.push(new THREE.Vector3(a & 1 ? fitBox.max.x : fitBox.min.x, a & 2 ? fitBox.max.y : fitBox.min.y, a & 4 ? fitBox.max.z : fitBox.min.z));
+    const FILL = 0.94; /* fraction of the view the hub should span */
+    const solveDistance = () => {
+      let d = Math.max(D_MIN, 12);
+      for (let it = 0; it < 24; it++) {
+        camera.position.set(0, Math.sin(TILT) * d, Math.cos(TILT) * d);
+        camera.lookAt(camTarget); camera.updateMatrixWorld(true);
+        let m = 0;
+        for (const p of corners) { const q = p.clone().project(camera); m = Math.max(m, Math.abs(q.x), Math.abs(q.y)); }
+        const k = m / FILL;
+        d *= k;
+        if (Math.abs(k - 1) < 0.004) break;
+      }
+      return Math.min(Math.max(d, D_MIN), 40);
+    };
+
     const resize = () => {
       const w = stage.clientWidth || window.innerWidth, h = stage.clientHeight || window.innerHeight;
       if (!w || !h) return;
       renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
-      const t = Math.tan((camera.fov * Math.PI) / 360);
-      const asp = Math.max(camera.aspect, 0.01);
-      if (narrow) {
-        /* Fill the phone: solve both axes and use exactly that distance. The
-           desktop's 14.6 was acting as a floor here, holding the camera far
-           back when the fit only wanted ~9 — that is why the hub was tiny. */
-        const dH = (R + 0.9) / (t * asp);
-        const dV = (R * Math.sin(TILT) + 1.0) / t;
-        camZ = Math.min(Math.max(dH, dV), 30);
-      } else {
-        /* desktop keeps its designed framing; only ever pull back */
-        camZ = Math.min(Math.max(BASE_Z, (R + 1.2) / (t * asp)), 30);
-      }
-      camY = BASE_Y * (camZ / BASE_Z);
+      const d = solveDistance();
+      camZ = Math.cos(TILT) * d; camY = Math.sin(TILT) * d;
       /* label boxes are shrink-to-fit; cache widths for edge clamping */
       labelEls.current.forEach((el, i) => { labW.current[i] = el ? el.offsetWidth : 0; });
     };
