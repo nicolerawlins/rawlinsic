@@ -755,11 +755,10 @@ export default function AutomationIntegrationInteractive() {
     <>
     <div className="rai-root">
       <style>{CSS}</style>
-      {/* reuses the site's own hero classes so it reads like every other page */}
-      <header className="rai-hero">
-        <span className="hero-label"><span className="gold-text">Real-world examples</span></span>
-        <h1 className="hero-title">Smarter systems, proven in practice.</h1>
-        <p className="hero-sub">Every example started the same way — disconnected tools, duplicated work, and information scattered across systems. We connected what each team already used, automated the manual steps, and brought the full picture into one clear view.</p>
+      <header className="rai-intro">
+        <span className="eyebrow">Real-world examples</span>
+        <h1>Smarter systems, proven in practice.</h1>
+        <p>Every example started the same way — disconnected tools, duplicated work, and information scattered across systems. We connected what each team already used, automated the manual steps, and brought the full picture into one clear view.</p>
       </header>
       <div className="rai-stage" ref={sceneRef}>
         <canvas className="rai-canvas" ref={canvasRef} />
@@ -866,11 +865,15 @@ body:has(.rai-root) .footer a,body:has(.rai-root) .footer button{cursor:pointer}
   background:var(--rawlins-bg,#1a3251)}
 @media (max-width:1003px){.rai-root{padding-top:64px}}
 .rai-root *,.rai-overlay *{box-sizing:border-box}
-.rai-hero{flex:0 0 auto;width:100%;max-width:980px;margin:0 auto;padding:22px 24px 2px;text-align:center}
-.rai-hero .hero-title{margin-bottom:14px}
-/* wider than the site's 560px default: keeps the intro to 3 lines so the hub
-   below it keeps its height */
-.rai-hero .hero-sub{max-width:860px}
+/* Compact intro, not a hero: deliberately small so the hub keeps its height. */
+.rai-intro{flex:0 0 auto;width:100%;max-width:920px;margin:0 auto;padding:18px 24px 0;text-align:center}
+.rai-intro .eyebrow{display:block;font-family:var(--font-dm-sans),'DM Sans',sans-serif;
+  font-size:12px;font-weight:800;letter-spacing:3px;text-transform:uppercase;color:#c9a84c;
+  background:linear-gradient(145deg,#c9a84c,#e8d5a0,#d4b878);-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent}
+.rai-intro h1{font-family:var(--font-dm-sans),'DM Sans',sans-serif;
+  font-size:clamp(21px,2.3vw,31px);font-weight:700;line-height:1.2;letter-spacing:-.2px;color:#fff;margin:9px 0 8px}
+.rai-intro p{font-size:14.5px;line-height:1.6;color:#c3d0e4;max-width:820px;margin:0 auto}
 /* takes whatever height the hero leaves */
 .rai-stage{position:relative;flex:1 1 auto;min-height:400px}
 .rai-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
@@ -980,7 +983,8 @@ body:has(.rai-root) .footer a,body:has(.rai-root) .footer button{cursor:pointer}
   .rai-cols{grid-template-columns:1fr}
   /* hero, hub, list, footer all stack — height comes from content */
   .rai-root{min-height:0}
-  .rai-hero{padding:18px 18px 2px}
+  .rai-intro{padding:14px 18px 0}
+  .rai-intro p{font-size:13.5px}
   /* fixed-height hub here, so it must opt out of the desktop flex:1 */
   .rai-stage{flex:0 0 auto;min-height:0;height:clamp(300px,42vh,380px)}
   /* names live in the list below, so nothing competes with the hub */
