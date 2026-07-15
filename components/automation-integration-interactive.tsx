@@ -767,7 +767,7 @@ export default function AutomationIntegrationInteractive() {
       </div>
       {/* sibling of the stage, not a child: the canvas is absolutely
           positioned, so a hint inside the stage lands at its top on mobile */}
-      <div className="rai-hint"><span className="dot" />Click a capability to see a real example · drag to rotate</div>
+      <div className="rai-hint"><span className="dot" />Click an icon to see a real example · drag to rotate</div>
 
       {/* mobile only — the hub stays tappable, this just names the six */}
       <ul className="rai-mlist">
@@ -838,7 +838,8 @@ export default function AutomationIntegrationInteractive() {
 const CSS = `
 .rai-root{--navy:#1e2d4d;--gold:#d99a2b;--ink:#3a4661;--muted:#7b869b;--line:#e6eaf1;position:fixed;inset:0;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:#eaf0fb;
-  background:radial-gradient(1200px 820px at 50% 12%, #17264a 0%, #0d1730 52%, #080e1e 100%)}
+  /* same flat --rawlins-bg the rest of the site's pages use, not a bespoke gradient */
+  background:var(--rawlins-bg,#060c16)}
 .rai-root *{box-sizing:border-box}
 .rai-stage{position:absolute;inset:0}
 .rai-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
