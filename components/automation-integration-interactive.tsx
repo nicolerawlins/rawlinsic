@@ -888,9 +888,12 @@ body:has(.rai-root) .footer a,body:has(.rai-root) .footer button{cursor:pointer}
 /* Centred block using the home page's "Why Rawlins" pattern: the site's own
    section-label / section-title / intro-expand-btn / intro-expandable classes
    do the styling, this just centres and places it. */
-.rai-intro{flex:0 0 auto;width:100%;max-width:1240px;margin:0 auto;padding:54px 60px 0;text-align:center}
+.rai-intro{flex:0 0 auto;width:100%;max-width:1240px;margin:0 auto;padding:32px 60px 0;text-align:center}
 .rai-intro .section-title{margin:0 auto;max-width:900px}
-.rai-intro .section-label{margin-bottom:14px}
+.rai-intro .section-label{margin-bottom:8px}
+/* trimmed from the home page's 72px/28px: this sits above the hub rather than
+   in a full content section, and every px here comes off the hub */
+.rai-intro .intro-expand-btn{width:54px;height:54px;margin-top:14px;margin-bottom:2px}
 /* .section-text is left-aligned at 620px by default; centre it and let the
    longer copy breathe */
 .rai-intro .section-text{max-width:780px;margin:0 auto}
@@ -1006,7 +1009,7 @@ body:has(.rai-root) .intro-expand-btn{cursor:pointer}
   .rai-cols{grid-template-columns:1fr}
   /* hero, hub, list, footer all stack — height comes from content */
   .rai-root{min-height:0}
-  .rai-intro{padding:28px 18px 0}
+  .rai-intro{padding:22px 18px 0}
   /* fixed-height hub here, so it must opt out of the desktop flex:1 */
   .rai-stage{flex:0 0 auto;min-height:0;height:clamp(300px,42vh,380px)}
   /* names live in the list below, so nothing competes with the hub */
