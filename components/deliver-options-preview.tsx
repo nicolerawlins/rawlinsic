@@ -195,9 +195,9 @@ export default function DeliverOptionsPreview() {
     <>
       <style>{CSS}</style>
       <div className="dlv-intro">
-        <p className="section-label"><span className="gold-text">Draft — pick one</span></p>
-        <h1 className="section-title">Three ways to do <em>What we deliver</em></h1>
-        <p className="section-text">Same five deliverables, same words. Only the presentation changes.</p>
+        <p className="section-label"><span className="gold-text">First round</span></p>
+        <h2 className="section-title">Earlier, <em>non-infographic</em> takes</h2>
+        <p className="section-text">Kept for reference.</p>
       </div>
       <OptionVerbIndex />
       <div className="section-divider"><div className="gold-line" /></div>
@@ -209,7 +209,7 @@ export default function DeliverOptionsPreview() {
 }
 
 const CSS = `
-.dlv-intro{max-width:1240px;margin:0 auto;padding:120px 60px 10px;text-align:center}
+.dlv-intro{max-width:1240px;margin:0 auto;padding:40px 60px 10px;text-align:center}
 .dlv-intro .section-text{margin:14px auto 0}
 .dlv-sec{padding-top:56px;padding-bottom:56px}
 .dlv-tag-wrap{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:26px}
@@ -271,7 +271,7 @@ const CSS = `
 .dlv-c-text{font-size:16px;line-height:1.7;color:#fff}
 
 @media (max-width:1003px){
-  .dlv-intro{padding:96px 24px 6px}
+  .dlv-intro{padding:30px 24px 6px}
 }
 @media (max-width:900px){
   .dlv-c{grid-template-columns:1fr;gap:26px}

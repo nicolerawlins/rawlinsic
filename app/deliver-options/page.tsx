@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import SiteNav from "@/components/site-nav";
 import SiteFooter from "@/components/site-footer";
+import DeliverInfographicOptions from "@/components/deliver-infographic-options";
 import DeliverOptionsPreview from "@/components/deliver-options-preview";
 
 /* DRAFT BRANCH ONLY — a scratch page for comparing three treatments of the
@@ -15,6 +16,8 @@ export default function Page() {
   return (
     <>
       <SiteNav />
+      <DeliverInfographicOptions />
+      {/* the first round, kept below for reference */}
       <DeliverOptionsPreview />
       <SiteFooter />
     </>
