@@ -219,7 +219,8 @@ function Pyramid() {
               className={`py-l ink-${s.ink}${i === a ? " on" : ""}`}
               style={{
                 background: `linear-gradient(100deg, ${s.from} 0%, ${s.to} 100%)`,
-                width: i === a ? "100%" : `${100 - (4 - i) * 11}%`,
+                /* column-reverse: item 0 renders at the base, so it is the widest */
+                width: i === a ? "100%" : `${100 - i * 11}%`,
               }}
               onMouseEnter={() => setA(i)}
               onFocus={() => setA(i)}
