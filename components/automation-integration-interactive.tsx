@@ -1070,8 +1070,11 @@ body:has(.rai-root) .intro-expand-btn{cursor:pointer}
   /* hero, hub, list, footer all stack — height comes from content */
   .rai-root{min-height:0}
   .rai-intro{padding:22px 18px 0}
-  /* fixed-height hub here, so it must opt out of the desktop flex:1 */
-  .rai-stage{flex:0 0 auto;min-height:0;height:clamp(300px,42vh,380px);margin-bottom:0}
+  /* Fixed-height hub here, so it must opt out of the desktop flex:1. The hub is
+     width-bound on a phone and draws ~0.67x as tall as it is wide, so 75vw keeps
+     the canvas hugging it instead of padding it with dead space above and below.
+     The clamp still caps it on wider phones, where height is what binds. */
+  .rai-stage{flex:0 0 auto;min-height:0;height:min(clamp(300px,42vh,380px),75vw);margin-bottom:0}
   /* names live in the list below, so nothing competes with the hub */
   .rai-label{display:none}
   .rai-mlist{display:grid}
