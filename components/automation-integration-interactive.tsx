@@ -826,7 +826,7 @@ export default function AutomationIntegrationInteractive({ embedded = false, eye
           {intro ?? <p className="section-text">Smarter systems, proven in practice. Every challenge started the same way — disconnected tools, duplicated work, and information scattered across systems. We connected what each team already used, automated the manual steps, and brought the full picture into one clear view.</p>}
         </div>
       </header>
-      <div className="rai-hint"><span className="dot" /><span>Our applied solutions &bull; click to explore &bull; drag to rotate</span></div>
+      <div className="rai-hint"><span className="dot" /><span>Applied solutions &bull; click to explore &bull; drag to rotate</span></div>
       <div className="rai-stage" ref={sceneRef}>
         <canvas className="rai-canvas" ref={canvasRef} />
         {NODES.map((n, i) => (
@@ -969,8 +969,12 @@ body:has(.rai-root) .intro-expand-btn{cursor:pointer}
   font-size:14.5px;line-height:1.45;color:#c3d0e4;
   text-shadow:0 2px 12px rgba(4,9,20,1),0 0 26px rgba(4,9,20,.95),0 0 3px rgba(4,9,20,.9)}
 .rai-label .body span{display:block}
-/* Sits above the hub in normal flow, evenly spaced between the arrow and the
-   image. Light #DCE6F2 pill with black text, on every size. */
+/* Light #DCE6F2 pill with black text on every size. Order puts it under the
+   image on desktop and above it on mobile, without moving the markup. */
+.rai-intro{order:1}
+.rai-stage{order:2}
+.rai-hint{order:3}
+.rai-mlist{order:4}
 .rai-hint{position:relative;align-self:center;margin:16px auto 16px;font-size:13px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#0D0D0D;display:flex;align-items:center;gap:9px;background:rgba(220,230,242,.92);border:1px solid rgba(220,230,242,.55);border-radius:999px;padding:9px 18px;pointer-events:none;opacity:1}
 .rai-hint .dot{width:8px;height:8px;border-radius:50%;background:#1D3759;animation:rai-ping 2s ease-out infinite}
 @keyframes rai-ping{0%{box-shadow:0 0 0 0 rgba(29,55,89,.5)}70%,100%{box-shadow:0 0 0 8px rgba(29,55,89,0)}}
@@ -1071,9 +1075,10 @@ body:has(.rai-root) .intro-expand-btn{cursor:pointer}
   /* names live in the list below, so nothing competes with the hub */
   .rai-label{display:none}
   .rai-mlist{display:grid}
-  /* same pill, sized for the phone; evenly spaced between arrow and image */
-  .rai-hint{margin:12px auto 12px;max-width:calc(100% - 28px);
+  /* above the image here; tighter under it so the pill sits close to the hub */
+  .rai-hint{order:2;margin:12px auto 2px;max-width:calc(100% - 28px);
     font-size:11px;letter-spacing:.2px;line-height:1.35;border-radius:14px;padding:8px 13px;gap:7px}
+  .rai-stage{order:3}
   .rai-hint .dot{flex:0 0 auto;width:7px;height:7px}
 }
 @media (max-width:400px){.rai-mlist{grid-template-columns:1fr}}
