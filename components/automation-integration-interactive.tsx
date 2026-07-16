@@ -1075,6 +1075,9 @@ body:has(.rai-root) .intro-expand-btn{cursor:pointer}
      the canvas hugging it instead of padding it with dead space above and below.
      The clamp still caps it on wider phones, where height is what binds. */
   .rai-stage{flex:0 0 auto;min-height:0;height:min(clamp(300px,42vh,380px),70vw);margin-bottom:0}
+  /* embedded on a real page, the same: its taller desktop stage would otherwise
+     outrank the rule above and reopen the gap under the pill */
+  .rai-root.rai-embed .rai-stage{height:min(clamp(300px,42vh,380px),70vw)}
   /* names live in the list below, so nothing competes with the hub */
   .rai-label{display:none}
   .rai-mlist{display:grid}
