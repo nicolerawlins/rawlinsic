@@ -64,7 +64,7 @@ function SectionHead() {
    underneath. Hover/focus raises the row. */
 function OptionVerbIndex() {
   return (
-    <section className="aam-section dlv-sec">
+    <section className="aam-section dlv-sec" id="a" style={{ scrollMarginTop: "80px" }}>
       <div className="aam-container">
         <Header tag="Option A — Verb index" note="Editorial. Hover a row. No new copy, no images." />
         <SectionHead />
@@ -127,7 +127,7 @@ function OptionSpine() {
   }, []);
 
   return (
-    <section className="aam-section dlv-sec">
+    <section className="aam-section dlv-sec" id="b" style={{ scrollMarginTop: "80px" }}>
       <div className="aam-container">
         <Header tag="Option B — Scroll-fill spine" note="Scroll it. Nothing to click. No new copy, no images." />
         <SectionHead />
@@ -154,7 +154,7 @@ function OptionSpine() {
 function OptionPhotoRail() {
   const [active, setActive] = useState(0);
   return (
-    <section className="aam-section dlv-sec">
+    <section className="aam-section dlv-sec" id="c" style={{ scrollMarginTop: "80px" }}>
       <div className="aam-container">
         <Header tag="Option C — Photo-swap rail" note="Hover a line — the photo follows. Uses 5 existing images." />
         <SectionHead />
