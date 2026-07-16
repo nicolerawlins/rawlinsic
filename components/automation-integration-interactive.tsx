@@ -1081,10 +1081,10 @@ body:has(.rai-root) .intro-expand-btn{cursor:pointer}
   /* names live in the list below, so nothing competes with the hub */
   .rai-label{display:none}
   .rai-mlist{display:grid}
-  /* above the image here; tighter under it so the pill sits close to the hub */
-  .rai-hint{order:2;margin:12px auto 2px;max-width:calc(100% - 28px);
+  /* under the image here too, so it keeps the base order; the margins give the
+     hub and the tiles below it room to breathe either side of the pill */
+  .rai-hint{margin:12px auto 18px;max-width:calc(100% - 28px);
     font-size:11px;letter-spacing:.2px;line-height:1.35;border-radius:14px;padding:8px 13px;gap:7px}
-  .rai-stage{order:3}
   .rai-hint .dot{flex:0 0 auto;width:7px;height:7px}
 }
 @media (max-width:400px){.rai-mlist{grid-template-columns:1fr}}
