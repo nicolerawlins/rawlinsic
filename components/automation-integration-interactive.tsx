@@ -570,6 +570,13 @@ export default function AutomationIntegrationInteractive({ embedded = false }: {
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(38, 1, 0.1, 100); camera.position.set(0, narrow ? 11.0 : 7.8, 14.6);
     const camTarget = new THREE.Vector3(0, 0.05, 0);
+    /* A node's visible silhouette in its own space: the platform (wide but low)
+       plus the icon (tall but narrow). Used for label placement — a plain box
+       would include corners at icon height where nothing is drawn. */
+    const NODE_SIL: THREE.Vector3[] = [];
+    for (let c = 0; c < 4; c++) NODE_SIL.push(new THREE.Vector3(c & 1 ? 0.78 : -0.78, 0.3, c & 2 ? 0.78 : -0.78));
+    NODE_SIL.push(new THREE.Vector3(0, 1.75, 0), new THREE.Vector3(-0.5, 1.55, 0), new THREE.Vector3(0.5, 1.55, 0));
+    const cv = new THREE.Vector3();
     scene.add(new THREE.HemisphereLight(0x6f92c8, 0x0a1224, 0.75));
     const key = new THREE.DirectionalLight(0xffffff, 1.9); key.position.set(6, 11, 7); key.castShadow = true;
     key.shadow.mapSize.set(2048, 2048); key.shadow.camera.near = 1; key.shadow.camera.far = 40;
@@ -731,12 +738,13 @@ export default function AutomationIntegrationInteractive({ embedded = false }: {
       const items = nodeGroups.map((nd, i) => {
         const world = new THREE.Vector3(); nd.g.getWorldPosition(world); world.y += 0.8;
         const p = world.clone().project(camera); const sx = (p.x * 0.5 + 0.5) * w;
-        /* measure how wide this node actually is on screen, so the label can sit
-           just outside it rather than at a fixed guess of a distance */
+        /* Measure the node's real silhouette so the label sits just outside what
+           you can actually see. A box around the node put corners at icon height
+           near the camera, which project wider than any real geometry — that's
+           what was holding the labels out at arm's length. */
         let nMin = Infinity, nMax = -Infinity;
-        for (let a = 0; a < 8; a++) {
-          const cv = new THREE.Vector3(a & 1 ? 0.78 : -0.78, a & 2 ? 1.7 : 0, a & 4 ? 0.78 : -0.78);
-          cv.applyMatrix4(nd.g.matrixWorld).project(camera);
+        for (const lp of NODE_SIL) {
+          cv.copy(lp).applyMatrix4(nd.g.matrixWorld).project(camera);
           const cvx = (cv.x * 0.5 + 0.5) * w; nMin = Math.min(nMin, cvx); nMax = Math.max(nMax, cvx);
         }
         return { i, sx, sy: (-p.y * 0.5 + 0.5) * h + (NODES[i].labDy || 0) * (narrow ? 0.4 : 1), vis: p.z < 1 && p.z > -1, left: sx < csx, nMin, nMax };
@@ -920,7 +928,10 @@ body:has(.rai-root) .footer a,body:has(.rai-root) .footer button{cursor:pointer}
 /* Embedded in another page: it's a section, not the page. No nav offset, height
    from content, and no full-viewport minimum. */
 .rai-root.rai-embed{min-height:0;padding-top:0}
-.rai-root.rai-embed .rai-stage{flex:0 0 auto;height:clamp(420px,58vh,640px);min-height:0}
+.rai-root.rai-embed .rai-stage{flex:0 0 auto;height:clamp(420px,58vh,640px);min-height:0;margin-bottom:0}
+/* embedded: the hint flows under the hub instead of floating over its bottom
+   (absolute + bottom:22px belongs to a full-page root, not a section) */
+.rai-root.rai-embed .rai-hint{position:relative;left:auto;bottom:auto;transform:none;margin:4px auto 0}
 /* touch-action:none on the canvas would trap the page scroll on a phone when
    this sits mid-page; pan-y keeps vertical scrolling while horizontal drag
    still rotates the hub */
