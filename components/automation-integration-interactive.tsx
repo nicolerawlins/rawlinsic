@@ -610,10 +610,16 @@ export default function AutomationIntegrationInteractive({ embedded = false, eye
       /* Follow the node's real silhouette, not a box around it. A box puts a
          corner at icon-top height where nothing exists, so the fit reserved a
          band of empty air above the hub. The platform is wide but low; only the
-         icon's middle is tall. */
-      for (let c = 0; c < 4; c++) fitPts.push(new THREE.Vector3(px + (c & 1 ? 0.78 : -0.78), 0.3, pz + (c & 2 ? 0.78 : -0.78)));
-      fitPts.push(new THREE.Vector3(px, 1.75, pz));
-      fitPts.push(new THREE.Vector3(px - 0.5, 1.55, pz), new THREE.Vector3(px + 0.5, 1.55, pz));
+         icon's middle is tall.
+         Sampled across a 60deg sweep as well: the hub is 6-fold symmetric, so
+         that covers every angle you can drag it to. Fitting only the rest pose
+         let nodes swing outside the frame and clip once you started rotating. */
+      for (let s = 0; s < 6; s++) {
+        const th = (s * 10 * Math.PI) / 180, sx = Math.sin(a + th) * R, sz = Math.cos(a + th) * R;
+        for (let c = 0; c < 4; c++) fitPts.push(new THREE.Vector3(sx + (c & 1 ? 0.78 : -0.78), 0.3, sz + (c & 2 ? 0.78 : -0.78)));
+        fitPts.push(new THREE.Vector3(sx, 1.75, sz));
+        fitPts.push(new THREE.Vector3(sx - 0.5, 1.55, sz), new THREE.Vector3(sx + 0.5, 1.55, sz));
+      }
       const g = new THREE.Group(); g.position.set(px, 0, pz); rig.add(g);
       const pedMat = new THREE.MeshStandardMaterial({ color: 0xeef2f8, metalness: 0.05, roughness: 0.55 }); disposables.push(pedMat);
       const ped = new THREE.Mesh(pedGeo, pedMat); ped.castShadow = true; ped.receiveShadow = true; ped.userData.i = i; g.add(ped); hitMeshes.push(ped);
@@ -820,6 +826,7 @@ export default function AutomationIntegrationInteractive({ embedded = false, eye
           {intro ?? <p className="section-text">Smarter systems, proven in practice. Every challenge started the same way — disconnected tools, duplicated work, and information scattered across systems. We connected what each team already used, automated the manual steps, and brought the full picture into one clear view.</p>}
         </div>
       </header>
+      <div className="rai-hint"><span className="dot" /><span>Our applied solutions &bull; click to explore &bull; drag to rotate</span></div>
       <div className="rai-stage" ref={sceneRef}>
         <canvas className="rai-canvas" ref={canvasRef} />
         {NODES.map((n, i) => (
@@ -831,10 +838,6 @@ export default function AutomationIntegrationInteractive({ embedded = false, eye
           </div>
         ))}
       </div>
-      {/* sibling of the stage, not a child: the canvas is absolutely
-          positioned, so a hint inside the stage lands at its top on mobile */}
-      <div className="rai-hint"><span className="dot" /><span>Our applied solutions &bull; click to explore &bull; drag to rotate</span></div>
-
       {/* mobile only — the hub stays tappable, this just names the six */}
       <ul className="rai-mlist">
         {NODES.map((n, i) => (
@@ -930,7 +933,6 @@ body:has(.rai-root) .footer a,body:has(.rai-root) .footer button{cursor:pointer}
    from content, and no full-viewport minimum. */
 .rai-root.rai-embed{min-height:0;padding-top:0}
 .rai-root.rai-embed .rai-stage{flex:0 0 auto;height:clamp(420px,58vh,640px);min-height:0;margin-bottom:0}
-.rai-root.rai-embed .rai-hint{margin:4px auto 0}
 /* touch-action:none on the canvas would trap the page scroll on a phone when
    this sits mid-page; pan-y keeps vertical scrolling while horizontal drag
    still rotates the hub */
@@ -948,6 +950,7 @@ body:has(.rai-root) .footer a,body:has(.rai-root) .footer button{cursor:pointer}
    longer copy breathe */
 .rai-intro .section-text{max-width:780px;margin:0 auto}
 .rai-intro .intro-expandable{padding-bottom:14px}
+.rai-intro .intro-expand-btn{margin-bottom:0}
 /* the site draws its own cursor and hides the native one; this page doesn't */
 body:has(.rai-root) .intro-expand-btn{cursor:pointer}
 @media (max-width:1003px){.rai-intro{padding:38px 24px 0}}
@@ -966,11 +969,11 @@ body:has(.rai-root) .intro-expand-btn{cursor:pointer}
   font-size:14.5px;line-height:1.45;color:#c3d0e4;
   text-shadow:0 2px 12px rgba(4,9,20,1),0 0 26px rgba(4,9,20,.95),0 0 3px rgba(4,9,20,.9)}
 .rai-label .body span{display:block}
-/* sits under the hub in normal flow (not floated over its bottom), so the
-   image can never run over it — same on the full page and embedded */
-.rai-hint{position:relative;align-self:center;margin:0 auto 20px;font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#c4cee0;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:8px 16px;pointer-events:none;opacity:.9}
-.rai-hint .dot{width:8px;height:8px;border-radius:50%;background:linear-gradient(145deg,#c9a84c,#e8d5a0,#d4b878);animation:rai-ping 2s ease-out infinite}
-@keyframes rai-ping{0%{box-shadow:0 0 0 0 rgba(201,168,76,.5)}70%,100%{box-shadow:0 0 0 8px rgba(201,168,76,0)}}
+/* Sits above the hub in normal flow, evenly spaced between the arrow and the
+   image. Light #DCE6F2 pill with black text, on every size. */
+.rai-hint{position:relative;align-self:center;margin:16px auto 16px;font-size:13px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:#0D0D0D;display:flex;align-items:center;gap:9px;background:rgba(220,230,242,.92);border:1px solid rgba(220,230,242,.55);border-radius:999px;padding:9px 18px;pointer-events:none;opacity:1}
+.rai-hint .dot{width:8px;height:8px;border-radius:50%;background:#1D3759;animation:rai-ping 2s ease-out infinite}
+@keyframes rai-ping{0%{box-shadow:0 0 0 0 rgba(29,55,89,.5)}70%,100%{box-shadow:0 0 0 8px rgba(29,55,89,0)}}
 /* above the site nav (z-index 1000) so the popup isn't cut by the header */
 .rai-overlay{position:fixed;inset:0;z-index:1200;background:rgba(6,12,26,.68);display:flex;align-items:flex-start;justify-content:center;padding:32px 18px;overflow-y:auto;cursor:default}
 .rai-overlay *{cursor:default}
@@ -1068,13 +1071,10 @@ body:has(.rai-root) .intro-expand-btn{cursor:pointer}
   /* names live in the list below, so nothing competes with the hub */
   .rai-label{display:none}
   .rai-mlist{display:grid}
-  /* left aligned, tight enough for one line, light #DCE6F2 with black text */
-  .rai-hint{position:relative;left:auto;bottom:auto;transform:none;margin:10px auto 18px;
-    width:calc(100% - 28px);max-width:none;justify-content:flex-start;text-align:left;
-    white-space:nowrap;font-size:9.5px;letter-spacing:.2px;line-height:1.3;border-radius:12px;
-    padding:9px 12px;gap:6px;
-    background:rgba(220,230,242,.92);border:1px solid rgba(220,230,242,.55);color:#0D0D0D}
-  .rai-hint .dot{flex:0 0 auto;width:6px;height:6px;animation:none;box-shadow:none}
+  /* same pill, sized for the phone; evenly spaced between arrow and image */
+  .rai-hint{margin:12px auto 12px;max-width:calc(100% - 28px);
+    font-size:11px;letter-spacing:.2px;line-height:1.35;border-radius:14px;padding:8px 13px;gap:7px}
+  .rai-hint .dot{flex:0 0 auto;width:7px;height:7px}
 }
 @media (max-width:400px){.rai-mlist{grid-template-columns:1fr}}
 `;
