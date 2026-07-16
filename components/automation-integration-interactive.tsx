@@ -512,7 +512,8 @@ function StoryScene3D({ sceneId, tone }: { sceneId: string; tone: string }) {
   return <div className="rai-vis" ref={host} />;
 }
 
-export default function AutomationIntegrationInteractive({ embedded = false }: { embedded?: boolean } = {}) {
+type HubProps = { embedded?: boolean; eyebrow?: React.ReactNode; title?: React.ReactNode; intro?: React.ReactNode };
+export default function AutomationIntegrationInteractive({ embedded = false, eyebrow, title, intro }: HubProps = {}) {
   const [openIdx, setOpenIdx] = useState<number | null>(null);
   const [step, setStep] = useState(0);
   const [introOpen, setIntroOpen] = useState(false);
@@ -799,8 +800,8 @@ export default function AutomationIntegrationInteractive({ embedded = false }: {
           using .reveal, which starts at opacity:0 and needs the home page's
           scroll observer to ever become visible */}
       <header className="rai-intro">
-        <p className="section-label"><span className="gold-text">Automation &amp; AI</span></p>
-        <h1 className="section-title">Applied <em>Solutions</em></h1>
+        <p className="section-label"><span className="gold-text">{eyebrow ?? "Automation & AI"}</span></p>
+        <h1 className="section-title">{title ?? <>Applied <em>Solutions</em></>}</h1>
         <button
           type="button"
           className={`intro-expand-btn${introOpen ? " expanded" : ""}`}
@@ -816,7 +817,7 @@ export default function AutomationIntegrationInteractive({ embedded = false }: {
           </span>
         </button>
         <div id="rai-intro-more" className={`intro-expandable${introOpen ? " expanded" : ""}`}>
-          <p className="section-text">Smarter systems, proven in practice. Every challenge started the same way — disconnected tools, duplicated work, and information scattered across systems. We connected what each team already used, automated the manual steps, and brought the full picture into one clear view.</p>
+          {intro ?? <p className="section-text">Smarter systems, proven in practice. Every challenge started the same way — disconnected tools, duplicated work, and information scattered across systems. We connected what each team already used, automated the manual steps, and brought the full picture into one clear view.</p>}
         </div>
       </header>
       <div className="rai-stage" ref={sceneRef}>
@@ -832,7 +833,7 @@ export default function AutomationIntegrationInteractive({ embedded = false }: {
       </div>
       {/* sibling of the stage, not a child: the canvas is absolutely
           positioned, so a hint inside the stage lands at its top on mobile */}
-      <div className="rai-hint"><span>Click icons to view applied solutions</span><span className="dot" /><span>drag to rotate</span></div>
+      <div className="rai-hint"><span className="dot" /><span>Our applied solutions &bull; click to explore &bull; drag to rotate</span></div>
 
       {/* mobile only — the hub stays tappable, this just names the six */}
       <ul className="rai-mlist">
@@ -946,6 +947,7 @@ body:has(.rai-root) .footer a,body:has(.rai-root) .footer button{cursor:pointer}
 /* .section-text is left-aligned at 620px by default; centre it and let the
    longer copy breathe */
 .rai-intro .section-text{max-width:780px;margin:0 auto}
+.rai-intro .intro-expandable{padding-bottom:14px}
 /* the site draws its own cursor and hides the native one; this page doesn't */
 body:has(.rai-root) .intro-expand-btn{cursor:pointer}
 @media (max-width:1003px){.rai-intro{padding:38px 24px 0}}
