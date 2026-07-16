@@ -929,9 +929,7 @@ body:has(.rai-root) .footer a,body:has(.rai-root) .footer button{cursor:pointer}
    from content, and no full-viewport minimum. */
 .rai-root.rai-embed{min-height:0;padding-top:0}
 .rai-root.rai-embed .rai-stage{flex:0 0 auto;height:clamp(420px,58vh,640px);min-height:0;margin-bottom:0}
-/* embedded: the hint flows under the hub instead of floating over its bottom
-   (absolute + bottom:22px belongs to a full-page root, not a section) */
-.rai-root.rai-embed .rai-hint{position:relative;left:auto;bottom:auto;transform:none;margin:4px auto 0}
+.rai-root.rai-embed .rai-hint{margin:4px auto 0}
 /* touch-action:none on the canvas would trap the page scroll on a phone when
    this sits mid-page; pan-y keeps vertical scrolling while horizontal drag
    still rotates the hub */
@@ -952,7 +950,7 @@ body:has(.rai-root) .footer a,body:has(.rai-root) .footer button{cursor:pointer}
 body:has(.rai-root) .intro-expand-btn{cursor:pointer}
 @media (max-width:1003px){.rai-intro{padding:38px 24px 0}}
 /* takes whatever height the hero leaves */
-.rai-stage{position:relative;flex:1 1 auto;min-height:400px;margin-bottom:56px}
+.rai-stage{position:relative;flex:1 1 auto;min-height:400px}
 .rai-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
 /* width:max-content so the box hugs its text — a fixed width padded short
    lines with dead space and pushed the label away from its icon */
@@ -966,7 +964,9 @@ body:has(.rai-root) .intro-expand-btn{cursor:pointer}
   font-size:14.5px;line-height:1.45;color:#c3d0e4;
   text-shadow:0 2px 12px rgba(4,9,20,1),0 0 26px rgba(4,9,20,.95),0 0 3px rgba(4,9,20,.9)}
 .rai-label .body span{display:block}
-.rai-hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#c4cee0;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:8px 16px;pointer-events:none;opacity:.9}
+/* sits under the hub in normal flow (not floated over its bottom), so the
+   image can never run over it — same on the full page and embedded */
+.rai-hint{position:relative;align-self:center;margin:0 auto 20px;font-size:12px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:#c4cee0;display:flex;align-items:center;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:8px 16px;pointer-events:none;opacity:.9}
 .rai-hint .dot{width:8px;height:8px;border-radius:50%;background:linear-gradient(145deg,#c9a84c,#e8d5a0,#d4b878);animation:rai-ping 2s ease-out infinite}
 @keyframes rai-ping{0%{box-shadow:0 0 0 0 rgba(201,168,76,.5)}70%,100%{box-shadow:0 0 0 8px rgba(201,168,76,0)}}
 /* above the site nav (z-index 1000) so the popup isn't cut by the header */
