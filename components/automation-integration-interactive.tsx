@@ -668,7 +668,7 @@ export default function AutomationIntegrationInteractive({ embedded = false }: {
     /* Width and height are budgeted separately. Desktop keeps the hub off the
        side labels (0.70 => ~200px clear each side at 1360); a phone has no side
        labels so it can use the full width. */
-    const FILL_X = narrow ? 0.98 : 0.66, FILL_Y = narrow ? 0.96 : 0.90;
+    const FILL_X = narrow ? 0.98 : 0.63, FILL_Y = narrow ? 0.96 : 0.86;
     const q = new THREE.Vector3();
     const solveFit = () => {
       let d = Math.max(D_MIN, 12), ty = 0;
@@ -824,7 +824,7 @@ export default function AutomationIntegrationInteractive({ embedded = false }: {
       </div>
       {/* sibling of the stage, not a child: the canvas is absolutely
           positioned, so a hint inside the stage lands at its top on mobile */}
-      <div className="rai-hint"><span className="dot" />Click an icon to view applied solutions · drag to rotate</div>
+      <div className="rai-hint"><span>Click icons to view applied solutions</span><span className="dot" /><span>drag to rotate</span></div>
 
       {/* mobile only — the hub stays tappable, this just names the six */}
       <ul className="rai-mlist">
@@ -1055,10 +1055,13 @@ body:has(.rai-root) .intro-expand-btn{cursor:pointer}
   /* names live in the list below, so nothing competes with the hub */
   .rai-label{display:none}
   .rai-mlist{display:grid}
+  /* left aligned, tight enough for one line, light #DCE6F2 with black text */
   .rai-hint{position:relative;left:auto;bottom:auto;transform:none;margin:10px auto 18px;
-    width:calc(100% - 28px);max-width:420px;justify-content:center;text-align:center;
-    white-space:normal;font-size:11px;letter-spacing:.4px;line-height:1.35;border-radius:14px;padding:10px 14px}
-  .rai-hint .dot{flex:0 0 auto}
+    width:calc(100% - 28px);max-width:none;justify-content:flex-start;text-align:left;
+    white-space:nowrap;font-size:9.5px;letter-spacing:.2px;line-height:1.3;border-radius:12px;
+    padding:9px 12px;gap:6px;
+    background:rgba(220,230,242,.92);border:1px solid rgba(220,230,242,.55);color:#0D0D0D}
+  .rai-hint .dot{flex:0 0 auto;width:6px;height:6px;animation:none;box-shadow:none}
 }
 @media (max-width:400px){.rai-mlist{grid-template-columns:1fr}}
 `;
