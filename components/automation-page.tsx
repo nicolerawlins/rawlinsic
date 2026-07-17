@@ -7,6 +7,7 @@ import SiteNav from "@/components/site-nav";
 import SiteFooter from "@/components/site-footer";
 import AutomationIntegrationInteractive from "@/components/automation-integration-interactive";
 import AutomationEcosystemBars from "@/components/automation-ecosystem-bars";
+import WhatWeDeliverPyramid from "@/components/what-we-deliver-pyramid";
 
 const DATA_IMG = "/images/pages/auto-data.webp";
 const WORKFLOW_IMG = "/images/pages/auto-workflow.webp";
@@ -290,42 +291,8 @@ export default function AutomationPage() {
 
       <div className="section-divider"><div className="gold-line" /></div>
 
-      {/* ── 5. What We Deliver ── */}
-      <section className="aam-section">
-        <div className="aam-container">
-          <div className="aam-section-header reveal">
-            <p className="section-label"><span className="gold-text">Driving Transformation</span></p>
-            <h2 className="section-title">What we <em>deliver</em></h2>
-          </div>
-          <div className="auto-deliver-grid" style={{ display: "grid", gap: "60px", marginTop: "60px", alignItems: "center" }}>
-            <div className="reveal">
-              <div style={{ position: "relative", borderRadius: "12px", overflow: "hidden", aspectRatio: "4/3" }}>
-                <Image src="/images/pages/auto-collab.webp" alt="Team collaborating on digital transformation" fill sizes="(max-width: 768px) 100vw, 50vw" style={{ objectFit: "cover" }} />
-                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(19, 36, 58, 0.15), rgba(19, 36, 58, 0.45))" }} />
-              </div>
-            </div>
-            <div className="reveal">
-              <ul style={{ listStyle: "none", display: "flex", flexDirection: "column", gap: "36px" }}>
-                <li style={{ paddingLeft: "24px", borderLeft: "2px solid", borderImage: "linear-gradient(180deg, #c9a84c, #e8d5a0) 1", fontSize: "17px", color: "#fff", lineHeight: 1.8 }}>
-                  We establish effective <Link href="/capabilities#data-governance" className="gold-text" style={{ textDecoration: "underline", textUnderlineOffset: "4px" }}>data governance</Link> practices.
-                </li>
-                <li style={{ paddingLeft: "24px", borderLeft: "2px solid", borderImage: "linear-gradient(180deg, #c9a84c, #e8d5a0) 1", fontSize: "17px", color: "#fff", lineHeight: 1.8 }}>
-                  We design and implement digital solutions that help people work smarter and more creatively.
-                </li>
-                <li style={{ paddingLeft: "24px", borderLeft: "2px solid", borderImage: "linear-gradient(180deg, #c9a84c, #e8d5a0) 1", fontSize: "17px", color: "#fff", lineHeight: 1.8 }}>
-                  We streamline and connect workflows to reduce manual effort and improve efficiency.
-                </li>
-                <li style={{ paddingLeft: "24px", borderLeft: "2px solid", borderImage: "linear-gradient(180deg, #c9a84c, #e8d5a0) 1", fontSize: "17px", color: "#fff", lineHeight: 1.8 }}>
-                  We develop high-value AI use cases and a roadmap for adoption and scaling.
-                </li>
-                <li style={{ paddingLeft: "24px", borderLeft: "2px solid", borderImage: "linear-gradient(180deg, #c9a84c, #e8d5a0) 1", fontSize: "17px", color: "#fff", lineHeight: 1.8 }}>
-                  We guide <Link href="/capabilities#organizational-change-management" className="gold-text" style={{ textDecoration: "underline", textUnderlineOffset: "4px" }}>organizational change</Link> by cultivating the culture required for new ways of working.
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* ── 5. What We Deliver — expanding pyramid ── */}
+      <WhatWeDeliverPyramid />
 
       <div className="section-divider"><div className="gold-line" /></div>
 
