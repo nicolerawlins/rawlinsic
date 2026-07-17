@@ -5,8 +5,9 @@ import Image from "next/image";
 import Link from "next/link";
 import SiteNav from "@/components/site-nav";
 import SiteFooter from "@/components/site-footer";
+import AutomationIntegrationInteractive from "@/components/automation-integration-interactive";
+import AutomationEcosystemBars from "@/components/automation-ecosystem-bars";
 
-const HERO_IMG = "/images/pages/auto-hero.webp";
 const DATA_IMG = "/images/pages/auto-data.webp";
 const WORKFLOW_IMG = "/images/pages/auto-workflow.webp";
 const AI_IMG = "/images/pages/auto-ai.webp";
@@ -58,13 +59,6 @@ const orgValues = [
   { num: "06", label: "Foster Human Talent", body: "Free people to focus on high-value work that requires human judgment.", img: "/images/pages/auto-human.webp" },
 ];
 
-const pipeline = [
-  { step: "01", label: "Data Governance", desc: "People bring trust to data through data governance." },
-  { step: "02", label: "Automation", desc: "Automation transforms workflows using clean, structured data." },
-  { step: "03", label: "AI", desc: "AI recognizes patterns, makes predictions, evaluates alternatives, picks the best option, and updates its internal model, adapting outputs over time." },
-  { step: "04", label: "Human Verification", desc: "People validate AI results by applying context and judgment, then turn AI outputs into actionable insights." },
-];
-
 const challenges = [
   { title: "Disconnected Tools", solution: "We enable your systems to work together efficiently.", img: CONNECT_IMG, videoUrl: "/videos/disconnected-tools-video.mp4" },
   { title: "Duplicated Work", solution: "We design and implement platforms that streamline processes, eliminate manual mistakes in routine workflows, and move data where people need it.", img: DASHBOARD_IMG, videoUrl: "/videos/duplicated-work-video.mp4" },
@@ -81,8 +75,6 @@ export default function AutomationPage() {
   const ringY = useRef(0);
   const valuesTrackRef = useRef<HTMLDivElement>(null);
   const [valuesProgress, setValuesProgress] = useState(0);
-  const ecoTrackRef = useRef<HTMLDivElement>(null);
-  const [ecoProgress, setEcoProgress] = useState(0);
   const [activeValue, setActiveValue] = useState<number | null>(null);
   const [openBenefits, setOpenBenefits] = useState<Set<number>>(new Set());
   const [activeVideo, setActiveVideo] = useState<number | null>(null);
@@ -159,13 +151,6 @@ export default function AutomationPage() {
     track.scrollBy({ left: w, behavior: "smooth" });
   };
 
-  const onEcoScroll = () => {
-    const el = ecoTrackRef.current;
-    if (!el) return;
-    const max = el.scrollWidth - el.clientWidth;
-    setEcoProgress(max > 0 ? el.scrollLeft / max : 0);
-  };
-
   const toggleBenefit = (idx: number) => {
     setOpenBenefits((prev) => {
       const next = new Set(prev);
@@ -186,57 +171,20 @@ export default function AutomationPage() {
 
       <SiteNav />
 
-      {/* ── Hero ── */}
-      <section className="aam-hero aam-parallax-fixed" style={{ backgroundImage: `url(${HERO_IMG})` }}>
-        <Image src={HERO_IMG} alt="" fill priority sizes="100vw" className="aam-hero-img" />
-        <div className="aam-hero-overlay" style={{ background: "linear-gradient(180deg, rgba(29, 55, 89, 0.45) 0%, rgba(19, 36, 58, 0.65) 60%, rgba(19, 36, 58, 0.80) 100%)" }} />
-        <div className="aam-hero-content">
-          <span className="hero-label"><span className="gold-text"><span className="hero-label-segment">Smarter Systems &bull;</span> <span className="hero-label-segment">Empowered Teams</span></span></span>
-          <h1 className="hero-title">Data Governance,<br /><em>Automation</em> &amp; AI</h1>
-          <p className="hero-sub">
-            Partnering to reshape the way people work
-          </p>
-          <a href="#benefits" className="auto-hero-btn">
-            <span>Explore Our Capabilities</span>
-          </a>
-        </div>
-        <div className="hero-scroll"><span style={{ background: "linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", fontSize: "0.6rem", letterSpacing: "3px", textTransform: "uppercase" as const }}>Scroll</span><div className="scroll-line" /></div>
-      </section>
-
-      <div className="section-divider"><div className="gold-line" /></div>
-
-      {/* ── 1. The Ecosystem ── */}
-      <section className="aam-section auto-benefits-section" id="benefits" style={{ scrollMarginTop: "80px" }}>
-        <div className="aam-container">
-          <div className="aam-section-header reveal">
-            <p className="section-label"><span className="gold-text">The Ecosystem</span></p>
-            <h2 className="section-title">How data governance, automation, and <em>AI</em> work together</h2>
-          </div>
-          <div className="story-scroll-controls auto-eco-mobile-controls" style={{ marginTop: "40px" }}>
-            <div className="story-scroll-progress-bar">
-              <div className="story-scroll-progress-fill" style={{ width: `${ecoProgress * 100}%` }} />
-            </div>
-            <div className="story-scroll-arrows">
-              <button className="story-arrow-btn" onClick={() => { const t = ecoTrackRef.current; if (t) { const c = t.querySelector('.auto-eco-tile') as HTMLElement; t.scrollBy({ left: -(c ? c.offsetWidth + 16 : 320), behavior: 'smooth' }); } }} aria-label="Previous">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
-              </button>
-              <button className="story-arrow-btn" onClick={() => { const t = ecoTrackRef.current; if (t) { const c = t.querySelector('.auto-eco-tile') as HTMLElement; t.scrollBy({ left: (c ? c.offsetWidth + 16 : 320), behavior: 'smooth' }); } }} aria-label="Next">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
-              </button>
-            </div>
-          </div>
-          <div className="auto-ecosystem-scroll" ref={ecoTrackRef} onScroll={onEcoScroll}>
-            <div className="auto-ecosystem-grid">
-              {pipeline.map((p, i) => (
-                <div key={i} className="reveal auto-eco-tile">
-                  <span className="auto-eco-num">{p.step}</span>
-                  <h3 className="auto-eco-title">{p.label}</h3>
-                  <p className="auto-eco-desc">{p.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
+      {/* ── DRAFT: interactive hub, now the top of the page ── */}
+      {/* clears the fixed nav, which used to overlay the hero */}
+      <style>{`.auto-hub-draft{padding-top:80px}
+        @media (max-width:1003px){.auto-hub-draft{padding-top:64px}}`}</style>
+      <section className="auto-hub-draft">
+        <AutomationIntegrationInteractive
+          embedded
+          eyebrow="Smarter systems, proven in practice"
+          title={<>Data Governance, <em>Automation</em> &amp; AI</>}
+          intro={<>
+            <p className="section-text">Many challenges start the same way: disconnected tools, duplicated work, and information scattered across systems. We connect the tools you already use, automate the busywork, and implement AI &mdash; so your people can make better decisions, work more efficiently, and achieve better outcomes.</p>
+            <p className="section-text" style={{ marginTop: "16px" }}>The graphic below showcases Rawlins&rsquo; applied solutions in practice. Tap an icon to see the challenge, what we built, and the result.</p>
+          </>}
+        />
       </section>
 
       {/* ── 2. Parallax Quote ── */}
@@ -248,6 +196,9 @@ export default function AutomationPage() {
       </div>
 
       <div className="section-divider"><div className="gold-line" /></div>
+
+      {/* ── 1. The Ecosystem ── */}
+      <AutomationEcosystemBars />
 
       {/* ── 3. Human-Centered Automation ── */}
       <section className="aam-section">
