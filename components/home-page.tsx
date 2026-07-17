@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import SiteNav from "@/components/site-nav";
 import SiteFooter from "@/components/site-footer";
+import { useScrollCapture } from "@/components/use-scroll-capture";
 
 
 
@@ -176,6 +177,8 @@ export default function HomePage() {
 
   // Story horizontal scroll
   const storyTrackRef = useRef<HTMLDivElement>(null);
+  // The Journey cards overflow on desktop — auto-advance them, then release.
+  useScrollCapture(storyTrackRef);
   const storyDragging = useRef(false);
   const storyDragStart = useRef(0);
   const storyScrollStart = useRef(0);
@@ -213,6 +216,8 @@ export default function HomePage() {
 
   // Pillars horizontal scroll
   const pillarsTrackRef = useRef<HTMLDivElement>(null);
+  // Vertical scroll drives the pillars sideways, then releases (desktop only).
+  useScrollCapture(pillarsTrackRef);
   const pillarsDragging = useRef(false);
   const pillarsDragStart = useRef(0);
   const pillarsScrollStart = useRef(0);
