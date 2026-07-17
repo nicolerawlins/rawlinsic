@@ -408,7 +408,7 @@ export default function CapabilitiesPage() {
         <div style={{ maxWidth: "900px", margin: "0 auto", position: "relative", zIndex: 10, textAlign: "center" }}>
           <p className="section-label"><span className="gold-text">Take the Next Step</span></p>
           <h2 className="section-title cap-cta-title" style={{ marginBottom: "20px", textAlign: "center" }}>
-            Ready to <em style={{ fontStyle: "italic", background: "linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878)", WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>rethink</em> how your organization works?
+            Ready to <em style={{ fontStyle: "italic", background: "linear-gradient(145deg, #9aa6b4, #e7ecf1, #c3cdd8)", WebkitBackgroundClip: "text", backgroundClip: "text", WebkitTextFillColor: "transparent" }}>rethink</em> how your organization works?
           </h2>
           <p className="hero-sub" style={{ opacity: 1, transform: "none", animation: "none", textAlign: "center" }}>
             Let&rsquo;s discuss how our integrated capabilities can address your unique challenges.

@@ -176,9 +176,9 @@ export default function PodcastPage() {
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
                 <defs>
                   <linearGradient id="iconGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#c9a84c" />
-                    <stop offset="50%" stopColor="#e8d5a0" />
-                    <stop offset="100%" stopColor="#d4b878" />
+                    <stop offset="0%" stopColor="#9aa6b4" />
+                    <stop offset="50%" stopColor="#e7ecf1" />
+                    <stop offset="100%" stopColor="#c3cdd8" />
                   </linearGradient>
                   <linearGradient id="iconGoldFill" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="rgba(201,168,76,0.25)" />

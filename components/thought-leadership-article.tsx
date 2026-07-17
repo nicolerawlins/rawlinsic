@@ -80,7 +80,7 @@ export default function ThoughtLeadershipArticlePage({ article }: Props) {
             className="tla-cta-gold"
             style={{
               fontStyle: "italic",
-              background: "linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878)",
+              background: "linear-gradient(145deg, #9aa6b4, #e7ecf1, #c3cdd8)",
               WebkitBackgroundClip: "text",
               backgroundClip: "text",
               WebkitTextFillColor: "transparent",

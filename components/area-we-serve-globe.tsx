@@ -649,7 +649,7 @@ export default function AreaWeServeGlobe() {
           font-weight: 900;
           letter-spacing: 5px;
           text-transform: uppercase;
-          background: linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878);
+          background: linear-gradient(145deg, #9aa6b4, #e7ecf1, #c3cdd8);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
@@ -667,7 +667,7 @@ export default function AreaWeServeGlobe() {
         }
         .globe-heading em {
           font-style: italic;
-          background: linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878);
+          background: linear-gradient(145deg, #9aa6b4, #e7ecf1, #c3cdd8);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
@@ -695,11 +695,11 @@ export default function AreaWeServeGlobe() {
         .globe-legend-item { display: flex; align-items: center; gap: 10px; }
         .globe-legend-dot { width: 10px; height: 10px; border-radius: 50%; }
         .globe-legend-dot.current {
-          background: linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878);
+          background: linear-gradient(145deg, #9aa6b4, #e7ecf1, #c3cdd8);
           box-shadow: 0 0 12px rgba(201,168,76,0.8);
         }
         .globe-legend-dot.expansion {
-          background: transparent; border: 2px solid #c9a84c;
+          background: transparent; border: 2px solid #9aa6b4;
           box-shadow: 0 0 10px rgba(201,168,76,0.5), inset 0 0 4px rgba(201,168,76,0.2);
           animation: expansionPulse 2.5s ease-in-out infinite;
         }
@@ -738,7 +738,7 @@ export default function AreaWeServeGlobe() {
         }
         .globe-tooltip .tooltip-close:hover { opacity: 1; }
         .globe-tooltip.active-location .tooltip-close { color: #0a1628; }
-        .globe-tooltip.expansion-location .tooltip-close { color: #e8d5a0; }
+        .globe-tooltip.expansion-location .tooltip-close { color: #e7ecf1; }
         .globe-tooltip .tooltip-link {
           display: block; margin-top: 10px; padding: 10px 0 2px;
           border-top: 1px solid rgba(19, 36, 58, 0.2);
@@ -747,7 +747,7 @@ export default function AreaWeServeGlobe() {
         }
         .globe-tooltip .tooltip-link:hover { text-decoration: underline; text-underline-offset: 4px; }
         .globe-tooltip.active-location {
-          background: linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878); color: #0a1628;
+          background: linear-gradient(145deg, #9aa6b4, #e7ecf1, #c3cdd8); color: #0a1628;
           box-shadow: 0 4px 20px rgba(184,154,62,0.4);
         }
         .globe-tooltip.past-location {

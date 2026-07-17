@@ -74,14 +74,14 @@ const frameworkCards = [
   {
     title: "Define the Program",
     tagline: "Vision & Planning",
-    accent: "linear-gradient(90deg, #c9a84c, #e8d5a0)",
+    accent: "linear-gradient(90deg, #9aa6b4, #e7ecf1)",
     bullets: ["Community needs assessment", "Vision & mission definition", "Use case & infrastructure evaluation", "Program goals & timeline", "Stakeholder identification", "Grant opportunities", "Legislative support"],
     img: DEFINE_NEW_IMG,
   },
   {
     title: "Enable the System",
     tagline: "Policy & Program Support",
-    accent: "linear-gradient(90deg, #d4b878, #c9a84c)",
+    accent: "linear-gradient(90deg, #c3cdd8, #9aa6b4)",
     bullets: ["Policy development", "Program framework", "Stakeholder engagement", "Infrastructure planning", "Regulatory compliance"],
     img: ENABLE_NEW_IMG,
     imgPos: "center 60%",
@@ -89,7 +89,7 @@ const frameworkCards = [
   {
     title: "Deliver Operations",
     tagline: "Operations & Scale",
-    accent: "linear-gradient(90deg, #e8d5a0, #c9a84c)",
+    accent: "linear-gradient(90deg, #e7ecf1, #9aa6b4)",
     bullets: ["Operational deployment", "Safety & compliance monitoring", "Performance optimization", "Continuous improvement"],
     img: DELIVER_NEW_IMG,
   },
@@ -130,11 +130,11 @@ const landscapeNodes = [
 
 const landscapePaths = [
   // Yellow — Urban Air Taxi routes (big sweeping arcs)
-  { from: 'urban-air-taxi', to: 'residential', color: '#c9a84c', type: 'air-taxi' },
-  { from: 'urban-air-taxi', to: 'rural', color: '#c9a84c', type: 'air-taxi' },
-  { from: 'residential', to: 'rural', color: '#c9a84c', type: 'air-taxi' },
-  { from: 'residential', to: 'city-center', color: '#c9a84c', type: 'air-taxi' },
-  { from: 'urban-air-taxi', to: 'city-center', color: '#c9a84c', type: 'air-taxi' },
+  { from: 'urban-air-taxi', to: 'residential', color: '#9aa6b4', type: 'air-taxi' },
+  { from: 'urban-air-taxi', to: 'rural', color: '#9aa6b4', type: 'air-taxi' },
+  { from: 'residential', to: 'rural', color: '#9aa6b4', type: 'air-taxi' },
+  { from: 'residential', to: 'city-center', color: '#9aa6b4', type: 'air-taxi' },
+  { from: 'urban-air-taxi', to: 'city-center', color: '#9aa6b4', type: 'air-taxi' },
   // Brown — Package Delivery routes
   { from: 'package-delivery', to: 'residential', color: '#8b6f47', type: 'delivery' },
   { from: 'package-delivery', to: 'medical', color: '#8b6f47', type: 'delivery' },
@@ -391,17 +391,17 @@ const AAMPage = () => {
                 <svg viewBox="0 0 1000 660" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block', width: '110%', height: 'auto', marginLeft: '-5%' }}>
                   <defs>
                     <linearGradient id="lsGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#c9a84c" />
-                      <stop offset="50%" stopColor="#e8d5a0" />
-                      <stop offset="100%" stopColor="#c9a84c" />
+                      <stop offset="0%" stopColor="#9aa6b4" />
+                      <stop offset="50%" stopColor="#e7ecf1" />
+                      <stop offset="100%" stopColor="#9aa6b4" />
                     </linearGradient>
                     <radialGradient id="lsNodeGlow" cx="50%" cy="50%" r="50%">
-                      <stop offset="0%" stopColor="#c9a84c" stopOpacity="0.4" />
-                      <stop offset="100%" stopColor="#c9a84c" stopOpacity="0" />
+                      <stop offset="0%" stopColor="#9aa6b4" stopOpacity="0.4" />
+                      <stop offset="100%" stopColor="#9aa6b4" stopOpacity="0" />
                     </radialGradient>
                     <filter id="lsGlow" x="-50%" y="-50%" width="200%" height="200%">
                       <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="blur" />
-                      <feFlood floodColor="#c9a84c" floodOpacity="0.5" result="color" />
+                      <feFlood floodColor="#9aa6b4" floodOpacity="0.5" result="color" />
                       <feComposite in="color" in2="blur" operator="in" result="shadow" />
                       <feMerge><feMergeNode in="shadow" /><feMergeNode in="SourceGraphic" /></feMerge>
                     </filter>
@@ -428,8 +428,8 @@ const AAMPage = () => {
                   <g opacity="0.04">
                     {Array.from({ length: 21 }, (_, i) => (
                       <React.Fragment key={`lsg-${i}`}>
-                        <line x1={i * 50} y1="0" x2={i * 50} y2="600" stroke="#c9a84c" strokeWidth="0.5" />
-                        <line x1="0" y1={i * 30} x2="1000" y2={i * 30} stroke="#c9a84c" strokeWidth="0.5" />
+                        <line x1={i * 50} y1="0" x2={i * 50} y2="600" stroke="#9aa6b4" strokeWidth="0.5" />
+                        <line x1="0" y1={i * 30} x2="1000" y2={i * 30} stroke="#9aa6b4" strokeWidth="0.5" />
                       </React.Fragment>
                     ))}
                   </g>
@@ -447,7 +447,7 @@ const AAMPage = () => {
                       <line x1="-12" y1="11" x2="-16" y2="17" stroke="#aaa6a0" strokeWidth="1.5" />
                       <line x1="12" y1="11" x2="16" y2="17" stroke="#aaa6a0" strokeWidth="1.5" />
                       <line x1="-20" y1="17" x2="20" y2="17" stroke="#9e9a94" strokeWidth="1.5" />
-                      <circle cx="0" cy="-7" r="4" fill="#c9a84c" />
+                      <circle cx="0" cy="-7" r="4" fill="#9aa6b4" />
                       <path d="M-6 9 L-4 0 L4 0 L6 9Z" fill="rgba(201,168,76,0.8)" />
                     </g>
                     <path d="M79.04 309.94 Q79.04 270 169.04 258 Q259.04 270 259.04 309.94 L259.04 339.94 L79.04 339.94Z" fill="#b8b4ae" stroke="#ccc8c2" strokeWidth="1" />
@@ -488,8 +488,8 @@ const AAMPage = () => {
                       <ellipse cx="30" cy="-9" rx="12" ry="3.5" fill="none" stroke="#aaa6a0" strokeWidth="1.2" />
                       <line x1="-9" y1="7" x2="-14" y2="16" stroke="#aaa6a0" strokeWidth="1.5" />
                       <line x1="9" y1="7" x2="14" y2="16" stroke="#aaa6a0" strokeWidth="1.5" />
-                      <line x1="0" y1="7" x2="0" y2="18" stroke="#c9a84c" strokeWidth="1" />
-                      <rect x="-9" y="18" width="18" height="16" rx="2" fill="#c9a84c" stroke="#dab84c" strokeWidth="1" />
+                      <line x1="0" y1="7" x2="0" y2="18" stroke="#9aa6b4" strokeWidth="1" />
+                      <rect x="-9" y="18" width="18" height="16" rx="2" fill="#9aa6b4" stroke="#dab84c" strokeWidth="1" />
                       <line x1="0" y1="18" x2="0" y2="34" stroke="rgba(201,168,76,0.5)" strokeWidth="0.8" />
                       <line x1="-9" y1="26" x2="9" y2="26" stroke="rgba(201,168,76,0.5)" strokeWidth="0.8" />
                     </g>
@@ -524,9 +524,9 @@ const AAMPage = () => {
                     <rect x="809.49" y="380.09" width="38" height="160" fill="#c0bcb6" />
                     <rect x="852.49" y="420.09" width="24" height="120" fill="#aca8a2" />
                     <rect x="881.49" y="450.09" width="20" height="90" fill="#9e9a94" />
-                    <rect x="717.49" y="430.09" width="6" height="6" fill="#c9a84c" />
-                    <rect x="725.49" y="430.09" width="6" height="6" fill="#c9a84c" />
-                    <rect x="717.49" y="442.09" width="6" height="6" fill="#c9a84c" />
+                    <rect x="717.49" y="430.09" width="6" height="6" fill="#9aa6b4" />
+                    <rect x="725.49" y="430.09" width="6" height="6" fill="#9aa6b4" />
+                    <rect x="717.49" y="442.09" width="6" height="6" fill="#9aa6b4" />
                     <rect x="814.49" y="390.09" width="7" height="7" fill="rgba(201,168,76,0.6)" />
                     <rect x="825.49" y="390.09" width="7" height="7" fill="rgba(201,168,76,0.6)" />
                     <rect x="814.49" y="406.09" width="7" height="7" fill="rgba(201,168,76,0.6)" />
@@ -639,7 +639,7 @@ const AAMPage = () => {
                     const isConnected = hoveredNode === fp.from || hoveredNode === fp.to;
                     const hl = isSourceHighlighted || isConnected;
                     const cls = fp.type === 'medical' ? 'ls-flight-path-med' : (i % 2 === 0 ? 'ls-flight-path' : 'ls-flight-path-reverse');
-                    const hlColor = hl ? (fp.type === 'air-taxi' ? '#e8d5a0' : fp.type === 'medical' ? '#e8585a' : '#b8976a') : fp.color;
+                    const hlColor = hl ? (fp.type === 'air-taxi' ? '#e7ecf1' : fp.type === 'medical' ? '#e8585a' : '#b8976a') : fp.color;
                     return (
                       <React.Fragment key={`lsp-${i}`}>
                         <path d={d} fill="none" stroke={hlColor} strokeWidth={hl ? 2.5 : 1.2} opacity={hl ? 0.85 : 0.35} className={cls} />
@@ -657,7 +657,7 @@ const AAMPage = () => {
                   {[0, 1, 5, 7, 10].map(idx => {
                     const fp = landscapePaths[idx];
                     if (!fp) return null;
-                    const c = fp.type === 'medical' ? '#d4443b' : fp.type === 'delivery' ? '#8b6f47' : '#c9a84c';
+                    const c = fp.type === 'medical' ? '#d4443b' : fp.type === 'delivery' ? '#8b6f47' : '#9aa6b4';
                     return (
                       <g key={`drone-${idx}`} opacity="0.8">
                         <g>
@@ -679,7 +679,7 @@ const AAMPage = () => {
                     const ny = node.y;
                     const hl = hoveredLs === node.id;
                     const isMed = node.id === 'medical';
-                    const sc = isMed && hl ? '#d4443b' : hl ? '#e8d5a0' : 'rgba(201,168,76,0.4)';
+                    const sc = isMed && hl ? '#d4443b' : hl ? '#e7ecf1' : 'rgba(201,168,76,0.4)';
                     const flt = hl ? (isMed ? 'url(#lsGlowMed)' : 'url(#lsGlow)') : 'none';
                     return (
                       <g
@@ -689,7 +689,7 @@ const AAMPage = () => {
                         onMouseLeave={() => setHoveredLs(null)}
                       >
                         {/* Pulse ring */}
-                        <circle cx={nx} cy={ny} r={32} fill="none" stroke={isMed ? '#d4443b' : '#c9a84c'} strokeWidth="0.8" className="ls-node-pulse" style={{ animationDelay: `${ni * 0.5}s` }} />
+                        <circle cx={nx} cy={ny} r={32} fill="none" stroke={isMed ? '#d4443b' : '#9aa6b4'} strokeWidth="0.8" className="ls-node-pulse" style={{ animationDelay: `${ni * 0.5}s` }} />
                         {/* Glow */}
                         <circle cx={nx} cy={ny} r={hl ? 48 : 36} fill="url(#lsNodeGlow)" opacity={hl ? 1 : 0.6} />
                         {/* Circle bg */}
@@ -839,30 +839,30 @@ const AAMPage = () => {
                   <defs>
                     <filter id="goldGlow" x="-50%" y="-50%" width="200%" height="200%">
                       <feGaussianBlur in="SourceAlpha" stdDeviation="6" result="blur" />
-                      <feFlood floodColor="#c9a84c" floodOpacity="0.4" result="color" />
+                      <feFlood floodColor="#9aa6b4" floodOpacity="0.4" result="color" />
                       <feComposite in="color" in2="blur" operator="in" result="shadow" />
                       <feMerge><feMergeNode in="shadow" /><feMergeNode in="SourceGraphic" /></feMerge>
                     </filter>
                     <filter id="goldGlowStrong" x="-50%" y="-50%" width="200%" height="200%">
                       <feGaussianBlur in="SourceAlpha" stdDeviation="12" result="blur" />
-                      <feFlood floodColor="#c9a84c" floodOpacity="0.6" result="color" />
+                      <feFlood floodColor="#9aa6b4" floodOpacity="0.6" result="color" />
                       <feComposite in="color" in2="blur" operator="in" result="shadow" />
                       <feMerge><feMergeNode in="shadow" /><feMergeNode in="SourceGraphic" /></feMerge>
                     </filter>
                     <linearGradient id="lineGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#c9a84c" stopOpacity="0.1" />
-                      <stop offset="50%" stopColor="#c9a84c" stopOpacity="0.5" />
-                      <stop offset="100%" stopColor="#c9a84c" stopOpacity="0.1" />
+                      <stop offset="0%" stopColor="#9aa6b4" stopOpacity="0.1" />
+                      <stop offset="50%" stopColor="#9aa6b4" stopOpacity="0.5" />
+                      <stop offset="100%" stopColor="#9aa6b4" stopOpacity="0.1" />
                     </linearGradient>
                     <radialGradient id="centerGrad" cx="50%" cy="50%" r="50%">
-                      <stop offset="0%" stopColor="#c9a84c" stopOpacity="0.25" />
-                      <stop offset="60%" stopColor="#c9a84c" stopOpacity="0.08" />
-                      <stop offset="100%" stopColor="#c9a84c" stopOpacity="0" />
+                      <stop offset="0%" stopColor="#9aa6b4" stopOpacity="0.25" />
+                      <stop offset="60%" stopColor="#9aa6b4" stopOpacity="0.08" />
+                      <stop offset="100%" stopColor="#9aa6b4" stopOpacity="0" />
                     </radialGradient>
                     <linearGradient id="titleGoldGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#c9a84c" />
-                      <stop offset="50%" stopColor="#e8d5a0" />
-                      <stop offset="100%" stopColor="#c9a84c" />
+                      <stop offset="0%" stopColor="#9aa6b4" />
+                      <stop offset="50%" stopColor="#e7ecf1" />
+                      <stop offset="100%" stopColor="#9aa6b4" />
                     </linearGradient>
                     <style>{`
                       .eco-connection { stroke-dasharray: 6 8; animation: ecoDash 25s linear infinite; }
@@ -885,16 +885,16 @@ const AAMPage = () => {
                   <g opacity="0.04">
                     {Array.from({ length: 17 }, (_, i) => (
                       <React.Fragment key={`grid-${i}`}>
-                        <line x1={i * 50} y1="0" x2={i * 50} y2="800" stroke="#c9a84c" strokeWidth="0.5" />
-                        <line x1="0" y1={i * 50} x2="800" y2={i * 50} stroke="#c9a84c" strokeWidth="0.5" />
+                        <line x1={i * 50} y1="0" x2={i * 50} y2="800" stroke="#9aa6b4" strokeWidth="0.5" />
+                        <line x1="0" y1={i * 50} x2="800" y2={i * 50} stroke="#9aa6b4" strokeWidth="0.5" />
                       </React.Fragment>
                     ))}
                   </g>
 
                   {/* Orbital rings */}
-                  <circle cx="400" cy="400" r="200" fill="none" stroke="#c9a84c" strokeWidth="0.5" className="eco-orbit-ring" />
-                  <circle cx="400" cy="400" r="270" fill="none" stroke="#c9a84c" strokeWidth="0.5" className="eco-orbit-ring-2" />
-                  <circle cx="400" cy="400" r="340" fill="none" stroke="#c9a84c" strokeWidth="0.3" className="eco-orbit-ring-3" />
+                  <circle cx="400" cy="400" r="200" fill="none" stroke="#9aa6b4" strokeWidth="0.5" className="eco-orbit-ring" />
+                  <circle cx="400" cy="400" r="270" fill="none" stroke="#9aa6b4" strokeWidth="0.5" className="eco-orbit-ring-2" />
+                  <circle cx="400" cy="400" r="340" fill="none" stroke="#9aa6b4" strokeWidth="0.3" className="eco-orbit-ring-3" />
 
                   {/* Connection lines */}
                   {ecosystemNodes.map((node) => {
@@ -903,7 +903,7 @@ const AAMPage = () => {
                     const ny = 400 + Math.sin(rad) * 280;
                     const isActive = activeNode === node.id || hoveredNode === node.id;
                     return (
-                      <line key={`line-${node.id}`} x1="400" y1="400" x2={nx} y2={ny} stroke="#c9a84c" strokeWidth={isActive ? 2 : 1} className={isActive ? "eco-connection-active" : "eco-connection"} opacity={isActive ? 0.8 : 0.2} />
+                      <line key={`line-${node.id}`} x1="400" y1="400" x2={nx} y2={ny} stroke="#9aa6b4" strokeWidth={isActive ? 2 : 1} className={isActive ? "eco-connection-active" : "eco-connection"} opacity={isActive ? 0.8 : 0.2} />
                     );
                   })}
 
@@ -913,13 +913,13 @@ const AAMPage = () => {
                     const rad1 = (node.angle * Math.PI) / 180;
                     const rad2 = (next.angle * Math.PI) / 180;
                     return (
-                      <line key={`cross-${i}`} x1={400 + Math.cos(rad1) * 280} y1={400 + Math.sin(rad1) * 280} x2={400 + Math.cos(rad2) * 280} y2={400 + Math.sin(rad2) * 280} stroke="#c9a84c" strokeWidth="0.5" className="eco-connection" opacity="0.08" />
+                      <line key={`cross-${i}`} x1={400 + Math.cos(rad1) * 280} y1={400 + Math.sin(rad1) * 280} x2={400 + Math.cos(rad2) * 280} y2={400 + Math.sin(rad2) * 280} stroke="#9aa6b4" strokeWidth="0.5" className="eco-connection" opacity="0.08" />
                     );
                   })}
 
                   {/* Center glow */}
                   <circle cx="400" cy="400" r="100" fill="url(#centerGrad)" />
-                  <circle cx="400" cy="400" r="68" fill="none" stroke="#c9a84c" strokeWidth="0.8" className="eco-center-pulse" opacity="0.2" />
+                  <circle cx="400" cy="400" r="68" fill="none" stroke="#9aa6b4" strokeWidth="0.8" className="eco-center-pulse" opacity="0.2" />
 
                   {/* Center hub — light-blue palette (#C4D8F2) with
                       dark navy stroke + black text. */}
@@ -957,13 +957,13 @@ const AAMPage = () => {
 
                   {/* Particles — outbound */}
                   {ecosystemNodes.map((node, i) => (
-                    <circle key={`particle-out-${i}`} r="2" fill="#c9a84c" className="eco-data-particle" style={{ animationDelay: `${i * 0.5}s` }}>
+                    <circle key={`particle-out-${i}`} r="2" fill="#9aa6b4" className="eco-data-particle" style={{ animationDelay: `${i * 0.5}s` }}>
                       <animateMotion dur={`${3 + i * 0.3}s`} repeatCount="indefinite"><mpath href={`#path-out-${i}`} /></animateMotion>
                     </circle>
                   ))}
                   {/* Particles — inbound */}
                   {ecosystemNodes.map((node, i) => (
-                    <circle key={`particle-in-${i}`} r="2" fill="#c9a84c" className="eco-data-particle" style={{ animationDelay: `${i * 0.5 + 1.5}s` }}>
+                    <circle key={`particle-in-${i}`} r="2" fill="#9aa6b4" className="eco-data-particle" style={{ animationDelay: `${i * 0.5 + 1.5}s` }}>
                       <animateMotion dur={`${3 + i * 0.3}s`} repeatCount="indefinite"><mpath href={`#path-in-${i}`} /></animateMotion>
                     </circle>
                   ))}

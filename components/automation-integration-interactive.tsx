@@ -84,7 +84,7 @@ function toolDot(name: string): string {
   if (n.includes("looker")) return "#4d9fff";
   if (n.includes("google")) return "#4285f4";
   if (n.includes("sharepoint") || n.includes("teams") || n.includes("outlook")) return "#2f6fb5";
-  return "#d99a2b";
+  return "#8f9ba9";
 }
 const XMark = ({ color }: { color: string }) => (<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke={color} strokeWidth="2.4" strokeLinecap="round"><path d="M7 7l10 10M17 7L7 17" /></svg>);
 const CheckMark = ({ color }: { color: string }) => (<svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke={color} strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12.5l4.5 4.5L19 7" /></svg>);
@@ -856,7 +856,7 @@ export default function AutomationIntegrationInteractive({ embedded = false, eye
         z-index there and the nav (z-index 1000) painted over the popup. */}
       {active && (
         <div className="rai-overlay" onMouseDown={(e) => { if (e.target === e.currentTarget) close(); }}>
-          <div className="rai-modal" role="dialog" aria-modal="true" aria-labelledby="rai-modal-title" style={{ ["--acc" as string]: "#d99a2b" }}>
+          <div className="rai-modal" role="dialog" aria-modal="true" aria-labelledby="rai-modal-title" style={{ ["--acc" as string]: "#8f9ba9" }}>
             <button ref={closeBtnRef} className="rai-close" onClick={close} aria-label="Close"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"><path d="M6 6l12 12M18 6L6 18" /></svg></button>
             <div className="rai-modal-scroll">
               <div className="rai-modal-head">
@@ -876,7 +876,7 @@ export default function AutomationIntegrationInteractive({ embedded = false, eye
                       <li key={k} style={{ animationDelay: `${0.12 + k * 0.09}s` }}>
                         {STEPS[step].tone === "problem"
                           ? <XMark color="#e05656" />
-                          : <CheckMark color="#c9a84c" />}
+                          : <CheckMark color="#9aa6b4" />}
                         <span>{tx}</span>
                       </li>
                     ))}
@@ -918,7 +918,7 @@ body:has(.rai-root) .mobile-menu a,body:has(.rai-root) .mobile-menu button,
 body:has(.rai-root) .footer a,body:has(.rai-root) .footer button{cursor:pointer}
 /* Tokens + font live on BOTH: the overlay is a sibling of .rai-root (see the
    stacking-context note in the JSX), so it can't inherit them from it. */
-.rai-root,.rai-overlay{--navy:#1e2d4d;--gold:#d99a2b;--ink:#3a4661;--muted:#7b869b;--line:#e6eaf1;
+.rai-root,.rai-overlay{--navy:#1e2d4d;--gold:#8f9ba9;--ink:#3a4661;--muted:#7b869b;--line:#e6eaf1;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
 /* Flex column rather than position:fixed, so the hero and hub share the
    viewport and the footer has somewhere to go below. Padding clears the fixed
@@ -993,7 +993,7 @@ body:has(.rai-root) .intro-expand-btn{cursor:pointer}
 .rai-modal-subtitle{font-size:17px;color:var(--muted);font-style:italic;margin:0}
 /* ---- story player ---- */
 .rai-story{display:grid;grid-template-columns:1.05fr 1fr;gap:26px;align-items:center;margin:26px 0 20px;min-height:250px}
-.rai-kicker{font-size:13px;font-weight:800;letter-spacing:2px;text-transform:uppercase;background:linear-gradient(145deg,#c9a84c,#e8d5a0,#d4b878);-webkit-background-clip:text;background-clip:text;color:transparent}
+.rai-kicker{font-size:13px;font-weight:800;letter-spacing:2px;text-transform:uppercase;background:linear-gradient(145deg,#9aa6b4,#e7ecf1,#c3cdd8);-webkit-background-clip:text;background-clip:text;color:transparent}
 .rai-step-title{font-family:var(--font-dm-sans),'DM Sans',sans-serif;font-size:30px;font-weight:800;color:var(--navy);margin:8px 0 16px;letter-spacing:-.2px}
 .rai-step-cap{font-size:17px;font-weight:700;color:var(--navy);margin:0 0 14px}
 .rai-step-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
@@ -1010,16 +1010,16 @@ body:has(.rai-root) .intro-expand-btn{cursor:pointer}
 .rai-nav{display:flex;align-items:center;justify-content:space-between;gap:16px;border-top:1px solid var(--line);padding-top:18px}
 .rai-dots{display:flex;gap:8px}
 .rai-dot{width:9px;height:9px;border-radius:50%;background:#d7dee9;transition:all .25s}
-.rai-dot.on{background:linear-gradient(135deg,#c9a84c 0%,#e8d5a0 50%,#c9a84c 100%);width:26px;border-radius:6px}
+.rai-dot.on{background:linear-gradient(135deg,#9aa6b4 0%,#e7ecf1 50%,#9aa6b4 100%);width:26px;border-radius:6px}
 .rai-btn{font:inherit;font-size:15px;font-weight:700;padding:11px 20px;border-radius:10px;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--navy);transition:background .15s,opacity .15s}
 .rai-btn:hover{background:#f2f5fa}
 .rai-btn[disabled]{opacity:.35;cursor:default}
 /* matches .auto-hero-btn on the live rawlinsic.com site */
-.rai-btn-primary{background:linear-gradient(135deg,#c9a84c 0%,#e8d5a0 50%,#c9a84c 100%);
+.rai-btn-primary{background:linear-gradient(135deg,#9aa6b4 0%,#e7ecf1 50%,#9aa6b4 100%);
   color:#060c16;border:1px solid transparent;text-shadow:none;
   font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:14px 30px}
 /* re-state the gradient: .rai-btn:hover's background shorthand would blank it */
-.rai-btn-primary:hover{background:linear-gradient(135deg,#c9a84c 0%,#e8d5a0 50%,#c9a84c 100%);filter:brightness(1.04)}
+.rai-btn-primary:hover{background:linear-gradient(135deg,#9aa6b4 0%,#e7ecf1 50%,#9aa6b4 100%);filter:brightness(1.04)}
 .rai-final{margin-top:22px}
 .rai-ba{display:grid;grid-template-columns:1fr auto 1fr;gap:14px;align-items:stretch;margin-bottom:24px}
 .rai-ba-card{border-radius:16px;padding:16px 16px 18px;border:1px solid var(--line)}
@@ -1034,7 +1034,7 @@ body:has(.rai-root) .intro-expand-btn{cursor:pointer}
 .rai-note.n1{left:10px;top:12px;background:#f6c9c9;transform:rotate(-8deg)}.rai-note.n2{left:50px;top:22px;background:#fbe4a6;transform:rotate(5deg)}.rai-note.n3{left:94px;top:10px;background:#bcd8f2;transform:rotate(-4deg)}.rai-note.n4{left:136px;top:24px;background:#c9e9d3;transform:rotate(7deg)}.rai-note.n5{left:74px;top:54px;background:#f6c9c9;transform:rotate(3deg)}
 .rai-art-clean{background:#fff;border:1px solid #dcecdf;display:flex;flex-direction:column;justify-content:center;gap:9px;padding:0 14px}
 .rai-gantt{height:10px;border-radius:6px}
-.rai-gantt.g1{width:60%;background:#2f6fb5;margin-left:6%}.rai-gantt.g2{width:44%;background:#d99a2b;margin-left:26%}.rai-gantt.g3{width:52%;background:#2e9e6a;margin-left:14%}.rai-gantt.g4{width:38%;background:#3a4d7a;margin-left:40%}
+.rai-gantt.g1{width:60%;background:#2f6fb5;margin-left:6%}.rai-gantt.g2{width:44%;background:#8f9ba9;margin-left:26%}.rai-gantt.g3{width:52%;background:#2e9e6a;margin-left:14%}.rai-gantt.g4{width:38%;background:#3a4d7a;margin-left:40%}
 .rai-ba-arrow{align-self:center;color:var(--acc);font-size:26px;font-weight:700}
 .rai-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}
 .rai-col{border-radius:16px;padding:18px 17px}

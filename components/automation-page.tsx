@@ -26,28 +26,28 @@ const benefits = [
     tagline: "",
     desc: "Make better decisions with up-to-date information in one place.",
     img: DATA_IMG,
-    accent: "linear-gradient(90deg, #c9a84c, #e8d5a0)",
+    accent: "linear-gradient(90deg, #9aa6b4, #e7ecf1)",
   },
   {
     title: "Efficiency",
     tagline: "",
     desc: "Achieve goals in less time.",
     img: WORKFLOW_IMG,
-    accent: "linear-gradient(90deg, #d4b878, #c9a84c)",
+    accent: "linear-gradient(90deg, #c3cdd8, #9aa6b4)",
   },
   {
     title: "Prioritization",
     tagline: "",
     desc: "Prioritize problem-solving, decision-making, and creativity rather than repetitive work.",
     img: AI_IMG,
-    accent: "linear-gradient(90deg, #e8d5a0, #c9a84c)",
+    accent: "linear-gradient(90deg, #e7ecf1, #9aa6b4)",
   },
   {
     title: "Innovation",
     tagline: "",
     desc: "Accelerate the pace of innovation.",
     img: CAPABILITY_IMG,
-    accent: "linear-gradient(90deg, #c9a84c, #d4b878)",
+    accent: "linear-gradient(90deg, #9aa6b4, #c3cdd8)",
   },
 ];
 

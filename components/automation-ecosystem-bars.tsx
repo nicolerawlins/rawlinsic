@@ -128,15 +128,15 @@ const CSS = `
   border:1px solid var(--eco-edge);
   transition:flex .6s cubic-bezier(.2,.7,.2,1),box-shadow .4s,border-color .4s}
 .eco-bar.active{flex:4 1 0;box-shadow:0 18px 50px rgba(0,0,0,.35)}
-.eco-bar:focus-visible{outline:2px solid #E6CD86;outline-offset:3px}
+.eco-bar:focus-visible{outline:2px solid #dfe5ec;outline-offset:3px}
 
 /* one token set per ink, so nothing downstream has to know which bar it is */
 .eco-bar.ink-black{--eco-fg:#0D0D0D;--eco-body:#16233a;--eco-accent:#1D3759;
   --eco-num:rgba(29,55,89,.5);--eco-num-on:#1D3759;--eco-art:rgba(29,55,89,.22);
   --eco-pip:rgba(29,55,89,.28);--eco-pip-on:#1D3759;--eco-edge:rgba(29,55,89,.22)}
-.eco-bar.ink-white{--eco-fg:#fff;--eco-body:#e6edf6;--eco-accent:#c9a84c;
-  --eco-num:rgba(230,205,134,.55);--eco-num-on:#E6CD86;--eco-art:rgba(255,255,255,.18);
-  --eco-pip:rgba(255,255,255,.3);--eco-pip-on:#E6CD86;--eco-edge:rgba(196,216,242,.18)}
+.eco-bar.ink-white{--eco-fg:#fff;--eco-body:#e6edf6;--eco-accent:#9aa6b4;
+  --eco-num:rgba(230,205,134,.55);--eco-num-on:#dfe5ec;--eco-art:rgba(255,255,255,.18);
+  --eco-pip:rgba(255,255,255,.3);--eco-pip-on:#dfe5ec;--eco-edge:rgba(196,216,242,.18)}
 .eco-bar.active.ink-black{border-color:rgba(29,55,89,.45)}
 .eco-bar.active.ink-white{border-color:rgba(200,162,76,.55)}
 
