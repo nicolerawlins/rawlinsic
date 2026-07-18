@@ -80,8 +80,8 @@ export default function WhatWeDeliverPyramid() {
               className={`wwd-l ink-${s.ink}${i === open ? " on" : ""}`}
               style={{
                 background: `linear-gradient(100deg, ${s.from} 0%, ${s.to} 100%)`,
-                /* 01 is first (top) and widest; each layer below is narrower */
-                width: i === open ? "100%" : `${100 - i * 11}%`,
+                /* 01 at the top and smallest, widening down to 05 (small → big) */
+                width: `${56 + i * 11}%`,
               }}
               onMouseEnter={() => setOpen(i)}
               onFocus={() => setOpen(i)}
@@ -105,7 +105,9 @@ export default function WhatWeDeliverPyramid() {
 const CSS = `
 .wwd-sec .ink-black{--w-fg:#0D0D0D;--w-body:#16233a;--w-soft:rgba(29,55,89,.55);--w-edge:rgba(29,55,89,.28)}
 .wwd-sec .ink-white{--w-fg:#fff;--w-body:#e6edf6;--w-soft:rgba(255,255,255,.6);--w-edge:rgba(196,216,242,.22)}
-.wwd-link{color:#e8d5a0;text-decoration:underline;text-underline-offset:4px}
+.wwd-link{text-decoration:underline;text-underline-offset:4px}
+.wwd-l.ink-black .wwd-link{color:#0D0D0D}
+.wwd-l.ink-white .wwd-link{color:#fff}
 
 .wwd{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:48px}
 .wwd-l{border:1px solid var(--w-edge);border-radius:10px;cursor:pointer;font:inherit;text-align:left;
