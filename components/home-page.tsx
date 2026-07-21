@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import SiteNav from "@/components/site-nav";
 import SiteFooter from "@/components/site-footer";
+import { usePinnedScroll } from "@/components/use-pinned-scroll";
 
 
 
@@ -211,38 +212,8 @@ export default function HomePage() {
     window.scrollBy({ top: step, behavior: "smooth" });
   };
 
-  // Evolving Impact — sticky pin. Vertical scroll through a tall wrapper drives
-  // the tiles sideways via transform (native scroll, so it never traps). Desktop
-  // only; on a phone the viewport keeps native horizontal swipe.
-  useEffect(() => {
-    const pin = eiPinRef.current, track = storyTrackRef.current, vp = eiViewportRef.current;
-    if (!pin || !track || !vp) return;
-    let overflowPx = 0;
-    const onScroll = () => {
-      const total = pin.offsetHeight - window.innerHeight;
-      const p = total > 0 ? Math.min(1, Math.max(0, -pin.getBoundingClientRect().top / total)) : 0;
-      track.style.transform = `translateX(${-p * overflowPx}px)`;
-      setStoryProgress(p);
-    };
-    const layout = () => {
-      // End exactly when the last tile is fully in view, with a right inset that
-      // matches the track's own left padding (60px desktop, 24px mobile).
-      track.style.transform = "none";
-      const cards = track.querySelectorAll<HTMLElement>(".story-card");
-      const last = cards[cards.length - 1];
-      const inset = parseFloat(getComputedStyle(track).paddingLeft) || 0;
-      overflowPx = last
-        ? Math.max(0, (last.getBoundingClientRect().right - track.getBoundingClientRect().left) + inset - vp.clientWidth)
-        : 0;
-      pin.style.height = window.innerHeight + overflowPx + "px";
-      onScroll();
-    };
-    layout();
-    const settle = setTimeout(layout, 400); // let card images/fonts settle first
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", layout);
-    return () => { clearTimeout(settle); window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", layout); };
-  }, []);
+  // Evolving Impact — sticky-pin horizontal scroll (desktop + touch).
+  usePinnedScroll(eiPinRef, eiViewportRef, storyTrackRef, setStoryProgress);
 
   // Pillars horizontal scroll
   const pillarsTrackRef = useRef<HTMLDivElement>(null);

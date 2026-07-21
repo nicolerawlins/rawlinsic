@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import SiteNav from '@/components/site-nav';
 import SiteFooter from '@/components/site-footer';
+import { usePinnedScroll } from "@/components/use-pinned-scroll";
 
 const DRONE_IMG = "/images/pages/aam-hero.webp";
 const CITY_AERIAL_IMG = "/images/pages/aam-city-aerial.webp";
@@ -202,25 +203,20 @@ const AAMPage = () => {
 
   // Phases horizontal scroll
   const [phasesProgress, setPhasesProgress] = useState(0);
+  const phasesPinRef = useRef<HTMLDivElement>(null);
+  const phasesViewportRef = useRef<HTMLDivElement>(null);
   const phasesTrackRef = useRef<HTMLDivElement>(null);
+  usePinnedScroll(phasesPinRef, phasesViewportRef, phasesTrackRef, setPhasesProgress);
 
-  const onPhasesScroll = () => {
-    const el = phasesTrackRef.current;
-    if (!el) return;
-    const max = el.scrollWidth - el.clientWidth;
-    setPhasesProgress(max > 0 ? el.scrollLeft / max : 0);
-  };
   const phasesScrollPrev = () => {
-    const track = phasesTrackRef.current; if (!track) return;
-    const card = track.querySelector('.aam-alt-card') as HTMLElement;
-    const w = card ? card.offsetWidth + 24 : 420;
-    track.scrollBy({ left: -w, behavior: "smooth" });
+    const pin = phasesPinRef.current; if (!pin) return;
+    const step = (pin.offsetHeight - window.innerHeight) / Math.max(1, phaseData.length - 1);
+    window.scrollBy({ top: -step, behavior: "smooth" });
   };
   const phasesScrollNext = () => {
-    const track = phasesTrackRef.current; if (!track) return;
-    const card = track.querySelector('.aam-alt-card') as HTMLElement;
-    const w = card ? card.offsetWidth + 24 : 420;
-    track.scrollBy({ left: w, behavior: "smooth" });
+    const pin = phasesPinRef.current; if (!pin) return;
+    const step = (pin.offsetHeight - window.innerHeight) / Math.max(1, phaseData.length - 1);
+    window.scrollBy({ top: step, behavior: "smooth" });
   };
 
   const toggleSet = (setter: React.Dispatch<React.SetStateAction<Set<number>>>, idx: number) => {
@@ -1080,46 +1076,35 @@ const AAMPage = () => {
 
       <div className="section-divider"><div className="gold-line" /></div>
 
-      {/* ── How we serve: Horizontal Scroll Cards ── */}
+      {/* ── How we serve: pinned horizontal scroll ── */}
       <section className="aam-section aam-phases-alt-section" id="phases-alt">
-        <div className="aam-container">
-          <div className="aam-section-header reveal">
-            <p className="section-label"><span className="gold-text">how we serve our clients</span></p>
-            <h2 className="section-title">We support the full program <em>lifecycle</em></h2>
-            <p className="section-text" style={{ marginTop: "20px" }}>
-              Our team brings together regulatory guidance, operational expertise, and program strategy to deliver real-world results. We support AAM and UAS initiatives throughout the program lifecycle.
-            </p>
-          </div>
-        </div>
-
-        {/* Progress bar + arrow controls */}
-        <div className="story-scroll-controls">
-          <div className="story-scroll-progress-bar">
-            <div
-              className="story-scroll-progress-fill"
-              style={{ width: `${phasesProgress * 100}%` }}
-            />
-          </div>
-          <div className="story-scroll-arrows">
-            <button className="story-arrow-btn" onClick={phasesScrollPrev} aria-label="Previous phase">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M15 18l-6-6 6-6" />
-              </svg>
-            </button>
-            <button className="story-arrow-btn" onClick={phasesScrollNext} aria-label="Next phase">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M9 18l6-6-6-6" />
-              </svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Full-width scroll area */}
-        <div className="aam-alt-scroll-outer" ref={phasesTrackRef} onScroll={onPhasesScroll}>
-          <div
-            className="aam-alt-scroll-track"
-          >
-            {phaseData.map((phase, i) => (
+        <div className="ei-pin" ref={phasesPinRef}>
+          <div className="ei-sticky">
+            <div className="aam-container">
+              <div className="aam-section-header reveal">
+                <p className="section-label"><span className="gold-text">how we serve our clients</span></p>
+                <h2 className="section-title">We support the full program <em>lifecycle</em></h2>
+                <p className="section-text" style={{ marginTop: "20px" }}>
+                  Our team brings together regulatory guidance, operational expertise, and program strategy to deliver real-world results. We support AAM and UAS initiatives throughout the program lifecycle.
+                </p>
+              </div>
+            </div>
+            <div className="story-scroll-controls">
+              <div className="story-scroll-progress-bar">
+                <div className="story-scroll-progress-fill" style={{ width: `${phasesProgress * 100}%` }} />
+              </div>
+              <div className="story-scroll-arrows">
+                <button className="story-arrow-btn" onClick={phasesScrollPrev} aria-label="Previous phase">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+                </button>
+                <button className="story-arrow-btn" onClick={phasesScrollNext} aria-label="Next phase">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+                </button>
+              </div>
+            </div>
+            <div className="aam-alt-scroll-outer ei-viewport" ref={phasesViewportRef}>
+              <div className="aam-alt-scroll-track" ref={phasesTrackRef}>
+                {phaseData.map((phase, i) => (
               <div className={`aam-alt-card${activePhase === i ? " active" : ""}`} key={phase.num} onClick={() => setActivePhase(prev => (prev === i ? null : i))}>
                 <Image src={phase.img} alt={phase.label} fill sizes="(max-width: 768px) 80vw, 400px" className="aam-alt-card-bg" />
                 <div className="aam-alt-card-overlay" />
@@ -1130,6 +1115,8 @@ const AAMPage = () => {
                 <p className="aam-alt-card-body">{phase.body}</p>
               </div>
             ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>

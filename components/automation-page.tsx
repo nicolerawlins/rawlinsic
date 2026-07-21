@@ -8,6 +8,7 @@ import SiteFooter from "@/components/site-footer";
 import AutomationIntegrationInteractive from "@/components/automation-integration-interactive";
 import AutomationEcosystemBars from "@/components/automation-ecosystem-bars";
 import WhatWeDeliverPyramid from "@/components/what-we-deliver-pyramid";
+import { usePinnedScroll } from "@/components/use-pinned-scroll";
 
 const DATA_IMG = "/images/pages/auto-data.webp";
 const WORKFLOW_IMG = "/images/pages/auto-workflow.webp";
@@ -74,8 +75,11 @@ export default function AutomationPage() {
   const mouseY = useRef(0);
   const ringX = useRef(0);
   const ringY = useRef(0);
+  const valuesPinRef = useRef<HTMLDivElement>(null);
+  const valuesViewportRef = useRef<HTMLDivElement>(null);
   const valuesTrackRef = useRef<HTMLDivElement>(null);
   const [valuesProgress, setValuesProgress] = useState(0);
+  usePinnedScroll(valuesPinRef, valuesViewportRef, valuesTrackRef, setValuesProgress);
   const [activeValue, setActiveValue] = useState<number | null>(null);
   const [openBenefits, setOpenBenefits] = useState<Set<number>>(new Set());
   const [activeVideo, setActiveVideo] = useState<number | null>(null);
@@ -131,25 +135,15 @@ export default function AutomationPage() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  const onValuesScroll = () => {
-    const el = valuesTrackRef.current;
-    if (!el) return;
-    const max = el.scrollWidth - el.clientWidth;
-    setValuesProgress(max > 0 ? el.scrollLeft / max : 0);
-  };
   const valuesScrollPrev = () => {
-    const track = valuesTrackRef.current; if (!track) return;
-    if (track.scrollLeft <= 0) return;
-    const card = track.querySelector(".aam-alt-card") as HTMLElement;
-    const w = card ? card.offsetWidth + 24 : 420;
-    track.scrollBy({ left: -w, behavior: "smooth" });
+    const pin = valuesPinRef.current; if (!pin) return;
+    const step = (pin.offsetHeight - window.innerHeight) / Math.max(1, orgValues.length - 1);
+    window.scrollBy({ top: -step, behavior: "smooth" });
   };
   const valuesScrollNext = () => {
-    const track = valuesTrackRef.current; if (!track) return;
-    if (track.scrollLeft >= track.scrollWidth - track.clientWidth - 1) return;
-    const card = track.querySelector(".aam-alt-card") as HTMLElement;
-    const w = card ? card.offsetWidth + 24 : 420;
-    track.scrollBy({ left: w, behavior: "smooth" });
+    const pin = valuesPinRef.current; if (!pin) return;
+    const step = (pin.offsetHeight - window.innerHeight) / Math.max(1, orgValues.length - 1);
+    window.scrollBy({ top: step, behavior: "smooth" });
   };
 
   const toggleBenefit = (idx: number) => {
@@ -235,34 +229,32 @@ export default function AutomationPage() {
 
       <div className="section-divider"><div className="gold-line" /></div>
 
-      {/* ── 4. Organizational Value ── */}
+      {/* ── 4. Organizational Value — pinned horizontal scroll ── */}
       <section className="aam-section aam-phases-alt-section" style={{ padding: "100px 0" }}>
-        <div className="aam-container" style={{ padding: "0 48px" }}>
-          <div className="aam-section-header reveal">
-            <p className="section-label"><span className="gold-text">Organizational Impact</span></p>
-            <h2 className="section-title">How <em>automation</em> delivers organizational <em>value</em></h2>
-          </div>
-        </div>
-
-        {/* Progress bar + arrow controls */}
-        <div className="story-scroll-controls" style={{ padding: "0 48px", marginTop: "40px" }}>
-          <div className="story-scroll-progress-bar">
-            <div className="story-scroll-progress-fill" style={{ width: `${valuesProgress * 100}%` }} />
-          </div>
-          <div className="story-scroll-arrows">
-            <button className="story-arrow-btn" onClick={valuesScrollPrev} aria-label="Previous">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
-            </button>
-            <button className="story-arrow-btn" onClick={valuesScrollNext} aria-label="Next">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
-            </button>
-          </div>
-        </div>
-
-        {/* Scroll cards */}
-        <div className="aam-alt-scroll-outer" ref={valuesTrackRef} onScroll={onValuesScroll}>
-          <div className="aam-alt-scroll-track">
-            {orgValues.map((v, i) => (
+        <div className="ei-pin" ref={valuesPinRef}>
+          <div className="ei-sticky">
+            <div className="aam-container" style={{ padding: "0 48px" }}>
+              <div className="aam-section-header reveal">
+                <p className="section-label"><span className="gold-text">Organizational Impact</span></p>
+                <h2 className="section-title">How <em>automation</em> delivers organizational <em>value</em></h2>
+              </div>
+            </div>
+            <div className="story-scroll-controls" style={{ padding: "0 48px", marginTop: "40px" }}>
+              <div className="story-scroll-progress-bar">
+                <div className="story-scroll-progress-fill" style={{ width: `${valuesProgress * 100}%` }} />
+              </div>
+              <div className="story-scroll-arrows">
+                <button className="story-arrow-btn" onClick={valuesScrollPrev} aria-label="Previous">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+                </button>
+                <button className="story-arrow-btn" onClick={valuesScrollNext} aria-label="Next">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+                </button>
+              </div>
+            </div>
+            <div className="aam-alt-scroll-outer ei-viewport" ref={valuesViewportRef}>
+              <div className="aam-alt-scroll-track" ref={valuesTrackRef}>
+                {orgValues.map((v, i) => (
               <div className={`aam-alt-card${activeValue === i ? " active" : ""}`} key={v.num} onClick={() => setActiveValue(prev => (prev === i ? null : i))}>
                 <Image src={v.img} alt={v.label} fill sizes="(max-width: 768px) 80vw, 400px" className="aam-alt-card-bg" />
                 <div className="aam-alt-card-overlay" />
@@ -277,6 +269,8 @@ export default function AutomationPage() {
                 <p className="aam-alt-card-body">{v.body}</p>
               </div>
             ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>
