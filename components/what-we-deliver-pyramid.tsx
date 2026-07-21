@@ -72,6 +72,7 @@ export default function WhatWeDeliverPyramid() {
           <p className="section-label"><span className="gold-text">Driving Transformation</span></p>
           <h2 className="section-title">What we <em>deliver</em></h2>
         </div>
+        <p className="wwd-hint">Hover or tap a panel to learn more</p>
         <div className="wwd">
           {LAYERS.map((s, i) => (
             <button
@@ -109,7 +110,8 @@ const CSS = `
 .wwd-l.ink-black .wwd-link{color:#0D0D0D}
 .wwd-l.ink-white .wwd-link{color:#fff}
 
-.wwd{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:48px}
+.wwd-hint{margin-top:8px;text-align:left;font-size:13px;letter-spacing:.6px;text-transform:uppercase;font-weight:600;color:#fff}
+.wwd{display:flex;flex-direction:column;align-items:center;gap:8px;margin-top:34px}
 .wwd-l{border:1px solid var(--w-edge);border-radius:10px;cursor:pointer;font:inherit;text-align:left;
   color:var(--w-fg);padding:0;overflow:hidden;min-height:70px;
   transition:width .45s cubic-bezier(.2,.7,.2,1),min-height .45s,filter .35s,box-shadow .35s;

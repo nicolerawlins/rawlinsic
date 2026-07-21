@@ -73,7 +73,7 @@ export default function AutomationEcosystemBars() {
           <h2 className="section-title">How data governance, automation, and <em>AI</em> work together</h2>
         </div>
 
-        <p className="eco-hint">Hover or tap a panel to open it</p>
+        <p className="eco-hint">Hover or tap a panel to learn more</p>
 
         <div className="eco-bars">
           {STAGES.map((s, i) => (
