@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import SiteNav from "@/components/site-nav";
 import SiteFooter from "@/components/site-footer";
+import { useScrollCapture } from "@/components/use-scroll-capture";
 
 
 
@@ -176,6 +177,8 @@ export default function HomePage() {
 
   // Story horizontal scroll
   const storyTrackRef = useRef<HTMLDivElement>(null);
+  // Evolving Impact: vertical scroll drives the tiles sideways, then releases.
+  useScrollCapture(storyTrackRef);
   const storyDragging = useRef(false);
   const storyDragStart = useRef(0);
   const storyScrollStart = useRef(0);
