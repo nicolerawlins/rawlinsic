@@ -6885,11 +6885,11 @@ color: #fff;
 .cap-tab.active::after { width: 60%; left: 20%; }
 .cap-tab-bar:hover .cap-tab.active { background: none; -webkit-background-clip: unset; background-clip: unset; color: #000; }
 .cap-tab-bar:hover .cap-tab.active::after { width: 0; left: 50%; }
-.cap-tab-bar:hover .cap-tab.active:hover { background: linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.cap-tab-bar:hover .cap-tab.active:hover { background: none; -webkit-background-clip: unset; background-clip: unset; color: #000; }
 .cap-tab-bar:hover .cap-tab.active:hover::after { width: 100%; left: 0; }
 .cap-tab.active {
-  background: linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878);
-  -webkit-background-clip: text; background-clip: text; color: transparent;
+  /* active tab reads black (like the others); the underline marks it active */
+  color: #000;
 }
 .cap-tab-num {
   font-family: var(--font-cormorant), 'Cormorant Garamond', serif;
