@@ -176,12 +176,14 @@ export default function HomePage() {
 
   // Story horizontal scroll
   const storyTrackRef = useRef<HTMLDivElement>(null);
+  const eiPinRef = useRef<HTMLDivElement>(null);
+  const eiViewportRef = useRef<HTMLDivElement>(null);
   const storyDragging = useRef(false);
   const storyDragStart = useRef(0);
   const storyScrollStart = useRef(0);
 
   const onStoryScroll = () => {
-    const el = storyTrackRef.current;
+    const el = eiViewportRef.current;
     if (!el) return;
     const max = el.scrollWidth - el.clientWidth;
     setStoryProgress(max > 0 ? el.scrollLeft / max : 0);
@@ -199,17 +201,48 @@ export default function HomePage() {
   };
   const onStoryMouseUp = () => { storyDragging.current = false; };
   const storyScrollPrev = () => {
-    const track = storyTrackRef.current; if (!track) return;
-    const card = track.querySelector('.story-card') as HTMLElement;
-    const w = card ? card.offsetWidth + 20 : 420;
-    track.scrollBy({ left: -w, behavior: "smooth" });
+    const pin = eiPinRef.current; if (!pin) return;
+    const step = (pin.offsetHeight - window.innerHeight) / Math.max(1, journey.length - 1);
+    window.scrollBy({ top: -step, behavior: "smooth" });
   };
   const storyScrollNext = () => {
-    const track = storyTrackRef.current; if (!track) return;
-    const card = track.querySelector('.story-card') as HTMLElement;
-    const w = card ? card.offsetWidth + 20 : 420;
-    track.scrollBy({ left: w, behavior: "smooth" });
+    const pin = eiPinRef.current; if (!pin) return;
+    const step = (pin.offsetHeight - window.innerHeight) / Math.max(1, journey.length - 1);
+    window.scrollBy({ top: step, behavior: "smooth" });
   };
+
+  // Evolving Impact — sticky pin. Vertical scroll through a tall wrapper drives
+  // the tiles sideways via transform (native scroll, so it never traps). Desktop
+  // only; on a phone the viewport keeps native horizontal swipe.
+  useEffect(() => {
+    const pin = eiPinRef.current, track = storyTrackRef.current, vp = eiViewportRef.current;
+    if (!pin || !track || !vp) return;
+    let overflowPx = 0;
+    const onScroll = () => {
+      const total = pin.offsetHeight - window.innerHeight;
+      const p = total > 0 ? Math.min(1, Math.max(0, -pin.getBoundingClientRect().top / total)) : 0;
+      track.style.transform = `translateX(${-p * overflowPx}px)`;
+      setStoryProgress(p);
+    };
+    const layout = () => {
+      // End exactly when the last tile is fully in view, with a right inset that
+      // matches the track's own left padding (60px desktop, 24px mobile).
+      track.style.transform = "none";
+      const cards = track.querySelectorAll<HTMLElement>(".story-card");
+      const last = cards[cards.length - 1];
+      const inset = parseFloat(getComputedStyle(track).paddingLeft) || 0;
+      overflowPx = last
+        ? Math.max(0, (last.getBoundingClientRect().right - track.getBoundingClientRect().left) + inset - vp.clientWidth)
+        : 0;
+      pin.style.height = window.innerHeight + overflowPx + "px";
+      onScroll();
+    };
+    layout();
+    const settle = setTimeout(layout, 400); // let card images/fonts settle first
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", layout);
+    return () => { clearTimeout(settle); window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", layout); };
+  }, []);
 
   // Pillars horizontal scroll
   const pillarsTrackRef = useRef<HTMLDivElement>(null);
@@ -614,51 +647,37 @@ export default function HomePage() {
       </div>
 
 
-      {/* ── Our Journey ── */}
+      {/* ── Our Journey (Evolving Impact) — pinned horizontal scroll ── */}
       <section className="section-story" id="story">
-        <div className="story-header reveal">
-          <p className="section-label">
-            <span className="gold-text">from our story to yours</span>
-          </p>
-          <h2 className="section-title">
-            <em>Evolving</em> Impact
-          </h2>
-          <p className="section-text" style={{ marginTop: "20px" }}>
-            Anchored by a vision to serve as a trusted advisor to transportation agencies across the United States, our firm has continued to evolve since 2017 into a global consultancy.
-          </p>
-        </div>
-            {/* Progress bar + arrow controls */}
-          <div className="story-scroll-controls">
-            <div className="story-scroll-progress-bar">
-              <div
-                className="story-scroll-progress-fill"
-                style={{ width: `${storyProgress * 100}%` }}
-              />
+        <div className="ei-pin" ref={eiPinRef}>
+          <div className="ei-sticky">
+            <div className="story-header reveal">
+              <p className="section-label">
+                <span className="gold-text">from our story to yours</span>
+              </p>
+              <h2 className="section-title">
+                <em>Evolving</em> Impact
+              </h2>
+              <p className="section-text" style={{ marginTop: "20px" }}>
+                Anchored by a vision to serve as a trusted advisor to transportation agencies across the United States, our firm has continued to evolve since 2017 into a global consultancy.
+              </p>
             </div>
-            <div className="story-scroll-arrows">
-              <button className="story-arrow-btn" onClick={storyScrollPrev} aria-label="Previous">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M15 18l-6-6 6-6" />
-                </svg>
-              </button>
-              <button className="story-arrow-btn" onClick={storyScrollNext} aria-label="Next">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M9 18l6-6-6-6" />
-                </svg>
-              </button>
+            <div className="story-scroll-controls">
+              <div className="story-scroll-progress-bar">
+                <div className="story-scroll-progress-fill" style={{ width: `${storyProgress * 100}%` }} />
+              </div>
+              <div className="story-scroll-arrows">
+                <button className="story-arrow-btn" onClick={storyScrollPrev} aria-label="Previous">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
+                </button>
+                <button className="story-arrow-btn" onClick={storyScrollNext} aria-label="Next">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
+                </button>
+              </div>
             </div>
-          </div>
-        <div className="story-scroll-outer">
-          <div
-            className="story-scroll-track"
-            ref={storyTrackRef}
-            onScroll={onStoryScroll}
-            onMouseDown={onStoryMouseDown}
-            onMouseMove={onStoryMouseMove}
-            onMouseUp={onStoryMouseUp}
-            onMouseLeave={onStoryMouseUp}
-          >
-            {journey.map((item, i) => (
+            <div className="ei-viewport" ref={eiViewportRef} onScroll={onStoryScroll}>
+              <div className="story-scroll-track" ref={storyTrackRef}>
+                {journey.map((item, i) => (
               <div className={`story-card${activeStory === i ? " active" : ""}`} key={item.phase}>
                 <Image src={item.bg} alt={item.phase} fill sizes="(max-width: 768px) 80vw, 400px" className="story-card-bg" />
                 <div className="story-card-overlay" />
@@ -676,8 +695,9 @@ export default function HomePage() {
                 </div>
               </div>
             ))}
+              </div>
+            </div>
           </div>
-      
         </div>
       </section>
 
