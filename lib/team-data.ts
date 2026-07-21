@@ -807,24 +807,6 @@ Prior to her public sector leadership, Joey served as a consultant providing tec
     categories: ['operations'],
   },
   {
-    id: 53,
-    name: `Alexandra Chrispin`,
-    photo: `/images/team/alexandra.webp`,
-    role: `AI & Automation Specialist`,
-    location: `Florida`,
-    phone: `+1 (305) 721-0792`,
-    email: `alexandra@rawlinsic.com`,
-    background: `Alexandra Chrispin is an AI & Automation Specialist focused on designing intelligent workflows, optimizing data processes, and building scalable systems that improve how organizations operate. With over five years of experience in digital transformation, she helps businesses reduce manual effort, increase efficiency, and create more connected, data-driven environments.
-
-Her work centers on leveraging automation tools, AI-assisted workflows, and system integrations to streamline operations across complex platforms. Alexandra is known for quickly identifying inefficiencies and translating them into practical, scalable solutions that enhance performance and decision-making. She has supported enterprise-level environments where accuracy, speed, and adaptability are critical.
-
-Alexandra's approach emphasizes simplicity, clarity, and impact—ensuring that every solution is not only functional but sustainable. She believes that technology should remove friction, empower teams, and create space for higher-value work.`,
-    achievements: `Alexandra has built a strong reputation for delivering automation solutions that improve operational efficiency and data reliability. She has developed and optimized workflows that reduce manual workload, enhance reporting accuracy, and support faster, more informed decision-making. Her ability to combine technical execution with strategic thinking allows her to deliver solutions that scale across teams and systems.
-
-She continues to expand her expertise in AI and automation, consistently adopting new tools and approaches to improve outcomes. Alexandra is recognized for her adaptability, problem-solving mindset, and ability to turn complex challenges into streamlined, efficient processes.`,
-    categories: ['technology'],
-  },
-  {
     id: 54,
     name: `Ian Cain`,
     photo: `/images/team/ian.webp`,
