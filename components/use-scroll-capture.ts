@@ -4,14 +4,15 @@ import { useEffect, type RefObject } from "react";
 
 /**
  * Turns a horizontal-scroll carousel into a "pinned" one: while the section is
- * centered in the viewport, a vertical wheel/trackpad gesture scrolls the track
- * sideways instead of moving the page. Once the track reaches either end, the
- * page resumes scrolling vertically — so the reader is never trapped.
+ * across the middle of the viewport, a vertical wheel/trackpad gesture scrolls
+ * the track sideways instead of moving the page. Once the track reaches either
+ * end, the page resumes scrolling vertically — so the reader is never trapped.
  *
  * It drives the element's own scrollLeft, so the existing arrows, drag, and
- * progress bar keep working untouched. It engages only on pointer devices with
- * motion allowed: touch (native swipe is better there) and reduced-motion users
- * keep the plain manual scroll.
+ * progress bar keep working. The listener is on the window (not the section), so
+ * it fires no matter where the cursor is. It steps aside on touch devices, where
+ * native swipe is better. It deliberately does NOT opt out for reduced-motion —
+ * this is scroll-linked navigation the user asked for, not decorative animation.
  *
  * @param trackRef  the horizontally-scrolling element (overflow-x: auto)
  * @param enabled   opt-out switch (defaults on)
@@ -25,31 +26,23 @@ export function useScrollCapture(
     const track = trackRef.current;
     if (!track) return;
 
-    // Native swipe wins on touch; honour reduced-motion.
-    if (
-      window.matchMedia("(hover: none)").matches ||
-      window.matchMedia("(pointer: coarse)").matches ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    ) {
-      return;
-    }
+    // Touch devices keep their native swipe — wheel-capture is a pointer thing.
+    if (window.matchMedia("(pointer: coarse)").matches) return;
 
-    // Bind to the enclosing section so we only capture while the pointer is
-    // over this block, never elsewhere on the page.
-    const zone: HTMLElement = track.closest("section") ?? track;
+    const section: HTMLElement = track.closest("section") ?? track;
 
     const onWheel = (e: WheelEvent) => {
       const max = track.scrollWidth - track.clientWidth;
-      if (max <= 1) return; // nothing to scroll sideways
+      if (max <= 1) return; // nothing to scroll sideways (e.g. cards already fit)
 
-      // Only engage once the block is roughly filling the viewport, so the
-      // hijack starts when the reader has actually arrived at it.
-      const r = zone.getBoundingClientRect();
+      // Engage while the section straddles the middle of the viewport, so the
+      // hijack begins once the reader has arrived at it and lets go before it
+      // leaves. A generous band means a quick flick still catches it.
+      const r = section.getBoundingClientRect();
       const vh = window.innerHeight;
-      const centered = r.top < vh * 0.5 && r.bottom > vh * 0.5;
-      if (!centered) return;
+      if (!(r.top < vh * 0.6 && r.bottom > vh * 0.4)) return;
 
-      // Prefer the dominant axis so a genuinely horizontal gesture still works.
+      // Use the dominant axis so a real horizontal gesture still works.
       const delta =
         Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
       if (delta === 0) return;
@@ -57,7 +50,7 @@ export function useScrollCapture(
       const atStart = track.scrollLeft <= 0;
       const atEnd = track.scrollLeft >= max - 1;
 
-      // Release at the ends: scrolling up at the start, or down at the end,
+      // Release at the ends — scrolling up at the start, or down at the end,
       // falls through to the page so vertical scrolling continues.
       if ((delta < 0 && atStart) || (delta > 0 && atEnd)) return;
 
@@ -65,7 +58,8 @@ export function useScrollCapture(
       track.scrollLeft += delta;
     };
 
-    zone.addEventListener("wheel", onWheel, { passive: false });
-    return () => zone.removeEventListener("wheel", onWheel);
+    // On the window so it fires regardless of cursor position.
+    window.addEventListener("wheel", onWheel, { passive: false });
+    return () => window.removeEventListener("wheel", onWheel);
   }, [trackRef, enabled]);
 }
