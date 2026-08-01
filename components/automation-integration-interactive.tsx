@@ -849,31 +849,6 @@ export default function AutomationIntegrationInteractive({ embedded = false, eye
           </li>
         ))}
       </ul>
-
-      {embedded && (
-        <section className="rai-cases" aria-label="Automation and AI examples in detail">
-          <h3 className="rai-cases-h">Real examples, in detail</h3>
-          {NODES.map((n) => (
-            <details className="rai-case" key={n.id}>
-              <summary className="rai-case-sum">
-                <span className="rai-case-ex">{n.example}</span>
-                <span className="rai-case-t">{n.popupTitle}</span>
-                <span className="rai-case-sub">{n.popupSubtitle} &bull; {n.before} &rarr; {n.after}</span>
-              </summary>
-              <div className="rai-case-body">
-                <h4>The Problem</h4>
-                <ul>{n.problem.map((x) => <li key={x}>{x}</li>)}</ul>
-                <h4>What We Built</h4>
-                <ul>{n.built.map((x) => <li key={x}>{x}</li>)}</ul>
-                <h4>The Result</h4>
-                <ul>{n.result.map((x) => <li key={x}>{x}</li>)}</ul>
-                <p className="rai-case-stack"><strong>Stack:</strong> {n.stack.join(", ")}</p>
-                <blockquote className="rai-case-q">{n.quote}</blockquote>
-              </div>
-            </details>
-          ))}
-        </section>
-      )}
     </div>
 
     {/* Sibling of .rai-root, not a child: .rai-root is position:fixed, which
@@ -1114,20 +1089,4 @@ body:has(.rai-root) .intro-expand-btn{cursor:pointer}
 }
 @media (max-width:400px){.rai-mlist{grid-template-columns:1fr}}
 
-/* Crawlable case-study detail (automation page): real, accessible content so the
-   examples count for SEO; <details> stays indexable even when collapsed. */
-.rai-cases{width:100%;max-width:1000px;margin:36px auto 8px;padding:0 24px}
-.rai-cases-h{font-family:var(--font-cormorant),'Cormorant Garamond',Georgia,serif;font-weight:300;font-size:clamp(1.8rem,3vw,2.4rem);color:#fff;text-align:center;margin:0 0 22px}
-.rai-case{border:1px solid rgba(196,216,242,.16);border-radius:12px;margin-bottom:12px;background:rgba(255,255,255,.02);overflow:hidden}
-.rai-case[open]{border-color:rgba(200,168,76,.4);background:rgba(255,255,255,.04)}
-.rai-case-sum{list-style:none;cursor:pointer;padding:18px 22px;display:flex;flex-direction:column;gap:4px}
-.rai-case-sum::-webkit-details-marker{display:none}
-.rai-case-ex{font-size:12px;letter-spacing:.6px;text-transform:uppercase;font-weight:700;color:#e8d5a0}
-.rai-case-t{font-family:var(--font-cormorant),'Cormorant Garamond',Georgia,serif;font-size:22px;line-height:1.15;color:#fff}
-.rai-case-sub{font-size:14px;color:#9fb1c8}
-.rai-case-body{padding:0 22px 22px;color:#e6edf6}
-.rai-case-body h4{font-size:12px;letter-spacing:.5px;text-transform:uppercase;color:#c4d8f2;margin:16px 0 8px}
-.rai-case-body ul{margin:0;padding-left:20px;line-height:1.7;font-size:15px}
-.rai-case-stack{font-size:14px;color:#9fb1c8;margin-top:16px}
-.rai-case-q{margin:16px 0 0;padding-left:16px;border-left:2px solid rgba(200,168,76,.5);font-style:italic;line-height:1.6;color:#eaf0fb}
 `;
