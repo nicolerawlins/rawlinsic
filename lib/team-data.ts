@@ -202,7 +202,7 @@ Ron brings enormous experience and ability with him in many facets of Right of W
     id: 10,
     name: `Ben Rawlins, P.E.`,
     photo: `/images/team/ben.webp`,
-    role: `Chief A&I Strategy Officer`,
+    role: `Chief AI Strategy Officer`,
     location: `Nevada`,
     phone: `+1 775-741-1382`,
     email: `ben@rawlinsic.com`,
