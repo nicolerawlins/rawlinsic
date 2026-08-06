@@ -334,25 +334,6 @@ He was MDOT's voting member for both the AASHTO Committee on Transportation Syst
     categories: ['communication-brand-design'],
   },
   {
-    id: 9,
-    name: `Barbara Davis, AICP`,
-    photo: `/images/team/barbara.webp`,
-    role: `Planning & Policy Advisor`,
-    location: `Florida`,
-    phone: `+1 407-760-3624`,
-    email: `barbara@rawlinsic.com`,
-    linkedin: `https://www.linkedin.com/in/barbara-davis-aicp-69606b30/`,
-    background: `Barbara has over 34 years of transportation planning experience working at the MPO, State, and local levels of government. She has worked on all modes of transportation projects including pedestrian, bicycle, transit, highways, and toll facilities.
-
-She began her career working as an entry-level transportation planner for a Metropolitan Planning Organization (MPO). In this role, she was responsible for development of comprehensive plans for pedestrian and bicycle modes of transportation. She was subsequently promoted to Transportation Division Manager and became responsible for overseeing the development of all the MPO's major programs and initiatives including the Long-Range Transportation Plan, the Transportation Improvement Program, and the Unified Planning Work Program, as well as many other special projects. As the MPO's Executive Director, she reported directly to a board of 19 local elected officials and represented the MPO on the statewide MPO Advisory Council.`,
-    achievements: `Barbara has nearly 15 years of experience at the Florida Department of Transportation (FDOT). During her time at FDOT, she was elevated to roles with increasingly higher responsibility within the Planning Department at Florida's Turnpike Enterprise. As Administrator of Planning Operations, she oversaw the development of the Traffic Engineering and Travel Demand Modeling activities.
-
-She also coordinated the Planning Concept Study process with the Design department and managed the Turnpike's interchange review process. As Traffic and Revenue Studies Program Manager she oversaw the expansion of the traffic and revenue study process to become an agency-wide program that evaluated toll projects for Florida's Turnpike Enterprise, and the FDOT Districts and Central Office.
-
-As Toll Studies and Forecasting Administrator, she reported directly to the Director of Transportation Development and supported statewide efforts to implement tolled express lanes and other tolled facilities. This included policy development, project coordination among the phases of project development, and on-going innovations in the development of toll choice forecasting tools.`,
-    categories: ['operations'],
-  },
-  {
     id: 22,
     name: `Jenica Keller, P.E.`,
     photo: `/images/team/jenica.webp`,
