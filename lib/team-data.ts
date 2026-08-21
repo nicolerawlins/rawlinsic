@@ -624,13 +624,15 @@ Her achievements reflect a deep commitment to innovation, collaboration, and pur
     phone2: `+971 54-463-6822`,
     email: `andy@rawlinsic.com`,
     linkedin: `https://www.linkedin.com/in/transportgooru/`,
-    background: `Andy Palanisamy is a seasoned technologist and public‑policy professional with more than twenty‑five years' experience in both the public and private sectors, delivering complex projects in mobility innovation and smart‑city technologies. As a board advisor, he counsels leadership teams and clients on emerging technologies in smart cities, infrastructure and urban mobility, and he is currently developing cutting‑edge artificial‑intelligence products and services for the education sector worldwide.
+    background: `Andy Palanisamy is a seasoned technologist and public policy professional with over twenty-five years of public and private sector experience, delivering complex projects in mobility innovations and smart city technologies.
 
-Until recently Andy led the Smart Cities and Innovation practice at Parsons in Dubai, where he managed a variety of advanced technology and smart‑city projects across the Middle East and Africa. Earlier he served as Ford Motor Company's Head of Mobility Engagements for the U.S. Midwest and Canada and was the business owner of the City Insights data platform, overseeing the development and delivery of this analytics platform for cities.
+Andy serves as a Board Advisor for global companies, advising leadership and clients on a variety of emerging technologies, particularly in the smart cities, infrastructure and urban mobility space. He is also currently building and launching cutting-edge AI products and services for global markets in the education sector.
 
-Before joining Ford, Andy spent nearly fifteen years supporting federal initiatives at the U.S. Department of Transportation and NASA's Jet Propulsion Laboratory.
+Until recently, he served as the Head of Practice for Smart Cities and Innovation at Parsons in Dubai and managed a variety of advanced technology and smart city projects across the Middle East/Africa region. Prior to this role, he served as Ford Motor Company's Head of Mobility Engagements (U.S. Midwest & Canada) and as Business Owner for the City Insights data platform, overseeing the development and delivery of this innovative analytics and data solutions platform to cities.
 
-Andy holds a Master's degree in Public Administration from Harvard Kennedy School and a Bachelor of Civil Engineering.`,
+Before joining Ford, Andy spent nearly fifteen years supporting various federal initiatives at the U.S. Department of Transportation (USDOT) and the NASA Jet Propulsion Laboratory.
+
+Andy holds a Master in Public Administration from Harvard Kennedy School and a Bachelor in Civil Engineering.`,
     achievements: `As an industry thought leader, Andy is recognized for his contributions to the USDOT's pioneering Intelligent Transportation Systems program and to the Federal Highway Administration's Connected Automated Vehicle research program at the Turner‑Fairbank Highway Research Center.`,
     categories: ['strategy', 'technology'],
   },
