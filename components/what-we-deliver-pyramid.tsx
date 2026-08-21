@@ -117,7 +117,7 @@ const CSS = `
   transition:width .45s cubic-bezier(.2,.7,.2,1),min-height .45s,filter .35s,box-shadow .35s;
   filter:saturate(.85) brightness(.93)}
 .wwd-l.on{min-height:134px;filter:none;box-shadow:0 14px 40px rgba(0,0,0,.3)}
-.wwd-l:focus-visible{outline:2px solid #E6CD86;outline-offset:3px}
+.wwd-l:focus-visible{outline:2px solid #e2d6b2;outline-offset:3px}
 .wwd-head{display:flex;align-items:center;gap:18px;padding:22px 28px 0}
 .wwd-ic{width:28px;height:28px;flex:0 0 auto;color:var(--w-fg);opacity:.8}
 .wwd-ic svg{width:100%;height:100%}

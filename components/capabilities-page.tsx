@@ -155,7 +155,7 @@ export default function CapabilitiesPage() {
         if (d.y < 0) d.y = c.height; if (d.y > c.height) d.y = 0;
         ctx.beginPath();
         ctx.arc(d.x, d.y, d.r, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(201,168,76,0.25)";
+        ctx.fillStyle = "rgba(201, 183, 140,0.25)";
         ctx.fill();
       });
       raf = requestAnimationFrame(draw);

@@ -649,7 +649,7 @@ export default function AreaWeServeGlobe() {
           font-weight: 900;
           letter-spacing: 5px;
           text-transform: uppercase;
-          background: linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878);
+          background: linear-gradient(145deg, #c9b78c, #eae2cc, #d9cca9);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
@@ -691,12 +691,12 @@ export default function AreaWeServeGlobe() {
         .globe-legend-item { display: flex; align-items: center; gap: 10px; }
         .globe-legend-dot { width: 10px; height: 10px; border-radius: 50%; }
         .globe-legend-dot.current {
-          background: linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878);
-          box-shadow: 0 0 12px rgba(201,168,76,0.8);
+          background: linear-gradient(145deg, #c9b78c, #eae2cc, #d9cca9);
+          box-shadow: 0 0 12px rgba(201, 183, 140,0.8);
         }
         .globe-legend-dot.expansion {
-          background: transparent; border: 2px solid #c9a84c;
-          box-shadow: 0 0 10px rgba(201,168,76,0.5), inset 0 0 4px rgba(201,168,76,0.2);
+          background: transparent; border: 2px solid #c9b78c;
+          box-shadow: 0 0 10px rgba(201, 183, 140,0.5), inset 0 0 4px rgba(201, 183, 140,0.2);
           animation: expansionPulse 2.5s ease-in-out infinite;
         }
         .globe-legend-dot.past {
@@ -705,8 +705,8 @@ export default function AreaWeServeGlobe() {
           box-shadow: 0 0 14px rgba(111,176,224,0.85);
         }
         @keyframes expansionPulse {
-          0%, 100% { box-shadow: 0 0 10px rgba(201,168,76,0.5), inset 0 0 4px rgba(201,168,76,0.2); transform: scale(1); }
-          50% { box-shadow: 0 0 16px rgba(201,168,76,0.7), inset 0 0 6px rgba(201,168,76,0.3); transform: scale(1.15); }
+          0%, 100% { box-shadow: 0 0 10px rgba(201, 183, 140,0.5), inset 0 0 4px rgba(201, 183, 140,0.2); transform: scale(1); }
+          50% { box-shadow: 0 0 16px rgba(201, 183, 140,0.7), inset 0 0 6px rgba(201, 183, 140,0.3); transform: scale(1.15); }
         }
         .globe-zoom-hint {
           font-size: 17px; color: rgba(255,255,255,0.75); letter-spacing: 0.5px; font-style: italic;
@@ -734,7 +734,7 @@ export default function AreaWeServeGlobe() {
         }
         .globe-tooltip .tooltip-close:hover { opacity: 1; }
         .globe-tooltip.active-location .tooltip-close { color: #0a1628; }
-        .globe-tooltip.expansion-location .tooltip-close { color: #e8d5a0; }
+        .globe-tooltip.expansion-location .tooltip-close { color: #eae2cc; }
         .globe-tooltip .tooltip-link {
           display: block; margin-top: 10px; padding: 10px 0 2px;
           border-top: 1px solid rgba(19, 36, 58, 0.2);
@@ -743,7 +743,7 @@ export default function AreaWeServeGlobe() {
         }
         .globe-tooltip .tooltip-link:hover { text-decoration: underline; text-underline-offset: 4px; }
         .globe-tooltip.active-location {
-          background: linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878); color: #0a1628;
+          background: linear-gradient(145deg, #c9b78c, #eae2cc, #d9cca9); color: #0a1628;
           box-shadow: 0 4px 20px rgba(184,154,62,0.4);
         }
         .globe-tooltip.past-location {
@@ -793,7 +793,7 @@ export default function AreaWeServeGlobe() {
           inset: 0;
           pointer-events: none;
           background:
-            radial-gradient(ellipse 60% 50% at 18% 25%, rgba(229,203,135,0.04) 0%, transparent 60%),
+            radial-gradient(ellipse 60% 50% at 18% 25%, rgba(234, 226, 204,0.04) 0%, transparent 60%),
             radial-gradient(ellipse 55% 45% at 82% 75%, rgba(14,30,60,0.55) 0%, transparent 55%),
             linear-gradient(180deg, #1A3251 0%, #15293F 55%, #13243A 100%);
         }

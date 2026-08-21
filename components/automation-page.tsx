@@ -27,28 +27,28 @@ const benefits = [
     tagline: "",
     desc: "Make better decisions with up-to-date information in one place.",
     img: DATA_IMG,
-    accent: "linear-gradient(90deg, #c9a84c, #e8d5a0)",
+    accent: "linear-gradient(90deg, #c9b78c, #eae2cc)",
   },
   {
     title: "Efficiency",
     tagline: "",
     desc: "Achieve goals in less time.",
     img: WORKFLOW_IMG,
-    accent: "linear-gradient(90deg, #d4b878, #c9a84c)",
+    accent: "linear-gradient(90deg, #d9cca9, #c9b78c)",
   },
   {
     title: "Prioritization",
     tagline: "",
     desc: "Prioritize problem-solving, decision-making, and creativity rather than repetitive work.",
     img: AI_IMG,
-    accent: "linear-gradient(90deg, #e8d5a0, #c9a84c)",
+    accent: "linear-gradient(90deg, #eae2cc, #c9b78c)",
   },
   {
     title: "Innovation",
     tagline: "",
     desc: "Accelerate the pace of innovation.",
     img: CAPABILITY_IMG,
-    accent: "linear-gradient(90deg, #c9a84c, #d4b878)",
+    accent: "linear-gradient(90deg, #c9b78c, #d9cca9)",
   },
 ];
 
@@ -303,7 +303,7 @@ export default function AutomationPage() {
               const isPlaying = activeVideo === i;
               const hasVideo = !!c.videoUrl;
               return (
-              <div key={i} className="reveal" style={{ borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(201,168,76,0.1)", transition: "all 0.3s" }}>
+              <div key={i} className="reveal" style={{ borderRadius: "12px", overflow: "hidden", border: "1px solid rgba(201, 183, 140,0.1)", transition: "all 0.3s" }}>
                 {/* Image/Video — always visible */}
                 {hasVideo && isPlaying ? (
                   <div style={{ position: "relative", paddingTop: "56.25%", background: "#000" }}>

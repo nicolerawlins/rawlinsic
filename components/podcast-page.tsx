@@ -176,12 +176,12 @@ export default function PodcastPage() {
               <svg width="32" height="32" viewBox="0 0 24 24" fill="none" strokeWidth="1.5">
                 <defs>
                   <linearGradient id="iconGoldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#c9a84c" />
-                    <stop offset="50%" stopColor="#e8d5a0" />
-                    <stop offset="100%" stopColor="#d4b878" />
+                    <stop offset="0%" stopColor="#c9b78c" />
+                    <stop offset="50%" stopColor="#eae2cc" />
+                    <stop offset="100%" stopColor="#d9cca9" />
                   </linearGradient>
                   <linearGradient id="iconGoldFill" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="rgba(201,168,76,0.25)" />
+                    <stop offset="0%" stopColor="rgba(201, 183, 140,0.25)" />
                     <stop offset="100%" stopColor="rgba(232,213,160,0.15)" />
                   </linearGradient>
                 </defs>

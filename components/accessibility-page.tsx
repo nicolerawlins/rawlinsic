@@ -111,9 +111,9 @@ export default function AccessibilityPage() {
             <p>We welcome your feedback on the accessibility of our website. If you encounter any accessibility barriers or have suggestions for improvement, please contact us:</p>
             <p style={{ marginTop: 12 }}>
               <strong style={{ color: "#fff" }}>Rawlins Infra Consult, LLC</strong><br />
-              Email: <a href="mailto:info@rawlinsic.com" style={{ color: "#c9a84c" }}>info@rawlinsic.com</a><br />
-              Phone: <a href="tel:+17758433822" style={{ color: "#c9a84c" }}>(775) 843-3822</a><br />
-              Website: <span style={{ color: "#c9a84c" }}>rawlinsic.com</span>
+              Email: <a href="mailto:info@rawlinsic.com" style={{ color: "#c9b78c" }}>info@rawlinsic.com</a><br />
+              Phone: <a href="tel:+17758433822" style={{ color: "#c9b78c" }}>(775) 843-3822</a><br />
+              Website: <span style={{ color: "#c9b78c" }}>rawlinsic.com</span>
             </p>
             <p style={{ marginTop: 12 }}>We will make reasonable efforts to respond to your feedback within 5 business days and to address any accessibility concerns.</p>
           </div>
