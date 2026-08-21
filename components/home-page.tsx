@@ -469,7 +469,7 @@ export default function HomePage() {
               <p className="section-text" style={{ marginTop: "16px" }}>
                 This is where we come in. We don&rsquo;t just advise &mdash; we deliver. From strategy and proven frameworks to the systems and products that put them to work, we help you turn decisions into action.
               </p>
-              <p style={{ marginTop: "20px", fontWeight: 600, color: "#d0b86c" }}>
+              <p style={{ marginTop: "20px", fontWeight: 600, color: "#fff" }}>
                 We bring clarity to complexity, and stay through execution, to deliver measurable, long-term outcomes.
               </p>
               <a href="#story" className="about-us-link" style={{ marginTop: "28px", display: "inline-flex", alignItems: "center", gap: "12px", fontSize: "0.85rem", fontWeight: 600, letterSpacing: "3px", textTransform: "uppercase" as const, color: "#fff", transition: "all 0.3s" }}>

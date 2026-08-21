@@ -313,7 +313,7 @@ export default function TeamPage() {
           <div className="team-hero-content">
             <span className="hero-label"><span className="gold-text">Our People</span></span>
             <h1 className="hero-title">
-              Meet the <span className="gold-text"><em>Experts</em></span>
+              Meet the <em>Experts</em>
             </h1>
             <div className={`team-hero-para-wrap${heroParaExpanded ? " expanded" : ""}`}>
               <p className="hero-sub team-hero-para">

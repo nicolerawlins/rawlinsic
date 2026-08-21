@@ -917,9 +917,8 @@ const AAMPage = () => {
                   <circle cx="400" cy="400" r="100" fill="url(#centerGrad)" />
                   <circle cx="400" cy="400" r="68" fill="none" stroke="#c9a84c" strokeWidth="0.8" className="eco-center-pulse" opacity="0.2" />
 
-                  {/* Center hub — light-blue palette (#C4D8F2) with
-                      dark navy stroke + black text. */}
-                  <circle cx="400" cy="400" r="80" fill="#C4D8F2" stroke="#1A3251" strokeWidth="1.5" />
+                  {/* Center hub — white with dark navy stroke + black text. */}
+                  <circle cx="400" cy="400" r="80" fill="#fff" stroke="#1A3251" strokeWidth="1.5" />
                   <text x="400" y="390" textAnchor="middle" fill="#000" fontFamily="'DM Sans', sans-serif" fontSize="16" fontWeight="800" letterSpacing="4" style={{ textTransform: 'uppercase' }}>RAWLINS</text>
                   <text x="400" y="412" textAnchor="middle" fill="#000" fontFamily="'DM Sans', sans-serif" fontSize="14" fontWeight="700" letterSpacing="3" style={{ textTransform: 'uppercase' }}>AERO TEAM</text>
 

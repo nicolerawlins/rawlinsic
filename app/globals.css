@@ -1843,6 +1843,7 @@ font-size: 11px;
   max-width: 700px; margin: 0 auto 60px;
   text-align: center;
 }
+.story-header .section-text { margin-left: auto; margin-right: auto; }
 
 /* Sticky pin (used by the AAM lifecycle and Automation value sections):
    scroll through .ei-pin drives the track sideways. */
@@ -2013,7 +2014,7 @@ font-size: 11px;
   font-size: clamp(4rem, 6vw, 6rem);
   font-weight: 700;
   font-style: italic;
-  color: rgba(201, 168, 76, 0.28);
+  color: rgba(255, 255, 255, 0.92);
   line-height: 1;
   letter-spacing: -4px;
   flex-shrink: 0;
@@ -2021,7 +2022,7 @@ font-size: 11px;
   z-index: 1;
   transition: color 0.3s;
 }
-.story-card:hover .story-card-num { color: rgba(201, 168, 76, 0.52); }
+.story-card:hover .story-card-num { color: #fff; }
 /* Ensure all card content stays above ghost */
 .story-card .timeline-phase,
 .story-card .story-card-divider,
@@ -4939,15 +4940,14 @@ color: #fff;
   font-size: 18px;
   font-weight: 600;
   line-height: 1.85;
-  /* Gold-gradient intro panel with black text — kept gold on case
-     study pages per spec (other "feature tile" bottoms across the
-     site are white). Navy left-border for accent. */
-  color: #000;
+  /* Light-blue intro panel with navy text and a gold accent bar
+     on the left. */
+  color: #1A3251;
   margin: 0 0 56px;
   padding: 28px 32px;
   border-left: 3px solid;
-  border-image: linear-gradient(180deg, #1A3251, #2A4870, #1A3251) 1;
-  background: linear-gradient(135deg, #c9a84c 0%, #e8d5a0 50%, #d4b878 100%);
+  border-image: linear-gradient(180deg, #c9a84c, #e8d5a0, #d4b878) 1;
+  background: #C4D8F2;
   border-radius: 0 8px 8px 0;
 }
 .csd-wide-section {
@@ -6766,10 +6766,9 @@ color: #fff;
 .cap-hero-img { object-fit: cover; object-position: center 30%; }
 .cap-hero-overlay {
   position: absolute; inset: 0; z-index: 1;
-  /* Middle-ground brand-tinted overlay — darker than the previous
-     too-light pass but still letting the underlying photograph
-     show through. */
-  background: linear-gradient(180deg, rgba(19, 36, 58, 0.65) 0%, rgba(19, 36, 58, 0.82) 60%, rgba(19, 36, 58, 0.92) 100%);
+  /* Heavy brand-tinted overlay so the hero copy stays readable
+     over the photograph. */
+  background: linear-gradient(180deg, rgba(19, 36, 58, 0.8) 0%, rgba(19, 36, 58, 0.9) 60%, rgba(19, 36, 58, 0.96) 100%);
 }
 .cap-grid-canvas {
   position: absolute; inset: 0; z-index: 2; pointer-events: none; width: 100%; height: 100%;
