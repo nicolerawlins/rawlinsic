@@ -993,7 +993,7 @@ body:has(.rai-root) .intro-expand-btn{cursor:pointer}
 .rai-modal-subtitle{font-size:17px;color:var(--muted);font-style:italic;margin:0}
 /* ---- story player ---- */
 .rai-story{display:grid;grid-template-columns:1.05fr 1fr;gap:26px;align-items:center;margin:26px 0 20px;min-height:250px}
-.rai-kicker{font-size:13px;font-weight:800;letter-spacing:2px;text-transform:uppercase;background:linear-gradient(145deg,#c9b78c,#eae2cc,#d9cca9);-webkit-background-clip:text;background-clip:text;color:transparent}
+.rai-kicker{font-size:13px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:transparent}
 .rai-step-title{font-family:var(--font-dm-sans),'DM Sans',sans-serif;font-size:30px;font-weight:800;color:var(--navy);margin:8px 0 16px;letter-spacing:-.2px}
 .rai-step-cap{font-size:17px;font-weight:700;color:var(--navy);margin:0 0 14px}
 .rai-step-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}

@@ -138,7 +138,7 @@ export default function InsightsPage() {
             <span>Explore Our Insights</span>
           </a>
         </div>
-        <div className="hero-scroll"><span style={{ background: "linear-gradient(145deg, #c9b78c, #eae2cc, #d9cca9)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent", fontSize: "0.6rem", letterSpacing: "3px", textTransform: "uppercase" as const }}>Scroll</span><div className="scroll-line" /></div>
+        <div className="hero-scroll"><span style={{ color: "#fff", fontSize: "0.6rem", letterSpacing: "3px", textTransform: "uppercase" as const }}>Scroll</span><div className="scroll-line" /></div>
       </section>
 
       {/* ── Channel Cards ── */}

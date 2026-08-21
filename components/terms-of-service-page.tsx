@@ -116,7 +116,7 @@ export default function TermsOfServicePage() {
 
           <div>
             <h2 style={h2Style}>11. Privacy</h2>
-            <p>Your use of the Site is also governed by our <a href="/privacy-policy" style={{ color: "#c9b78c" }}>Privacy Policy</a>, which is incorporated into these Terms by reference. Please review our Privacy Policy to understand our practices regarding the collection and use of your personal information.</p>
+            <p>Your use of the Site is also governed by our <a href="/privacy-policy" style={{ color: "#fff" }}>Privacy Policy</a>, which is incorporated into these Terms by reference. Please review our Privacy Policy to understand our practices regarding the collection and use of your personal information.</p>
           </div>
 
           <div>
@@ -149,9 +149,9 @@ export default function TermsOfServicePage() {
             <p>If you have any questions about these Terms of Service, please contact us at:</p>
             <p style={{ marginTop: 12 }}>
               <strong style={{ color: "#fff" }}>Rawlins Infra Consult, LLC</strong><br />
-              Email: <a href="mailto:info@rawlinsic.com" style={{ color: "#c9b78c" }}>info@rawlinsic.com</a><br />
-              Phone: <a href="tel:+17758433822" style={{ color: "#c9b78c" }}>(775) 843-3822</a><br />
-              Website: <span style={{ color: "#c9b78c" }}>rawlinsic.com</span>
+              Email: <a href="mailto:info@rawlinsic.com" style={{ color: "#fff" }}>info@rawlinsic.com</a><br />
+              Phone: <a href="tel:+17758433822" style={{ color: "#fff" }}>(775) 843-3822</a><br />
+              Website: <span style={{ color: "#fff" }}>rawlinsic.com</span>
             </p>
           </div>
         </div>

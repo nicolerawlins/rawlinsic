@@ -362,7 +362,7 @@ export default function TeamPage() {
                 </div>
                 <div className="team-card-info">
                   <span className="team-card-name">Scott Rawlins, P.E.</span>
-                  <span className="team-card-title-label" style={{ background: "linear-gradient(135deg, #c9b78c, #eae2cc, #d9cca9)", WebkitBackgroundClip: "text", backgroundClip: "text", color: "transparent" }}>Founder</span>
+                  <span className="team-card-title-label" style={{ color: "#fff" }}>Founder</span>
                 </div>
               </button>
             </div>

@@ -644,15 +644,12 @@ export default function AreaWeServeGlobe() {
         }
         /* Match hero-label styling used on other pages */
         .globe-eyebrow {
+  color: #fff;
           display: block;
           font-size: 14px;
           font-weight: 900;
           letter-spacing: 5px;
           text-transform: uppercase;
-          background: linear-gradient(145deg, #c9b78c, #eae2cc, #d9cca9);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
           margin-bottom: 20px;
         }
         /* Match hero-title styling used on other pages */
@@ -734,7 +731,7 @@ export default function AreaWeServeGlobe() {
         }
         .globe-tooltip .tooltip-close:hover { opacity: 1; }
         .globe-tooltip.active-location .tooltip-close { color: #0a1628; }
-        .globe-tooltip.expansion-location .tooltip-close { color: #eae2cc; }
+        .globe-tooltip.expansion-location .tooltip-close { color: #fff; }
         .globe-tooltip .tooltip-link {
           display: block; margin-top: 10px; padding: 10px 0 2px;
           border-top: 1px solid rgba(19, 36, 58, 0.2);
