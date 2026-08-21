@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     description:
       "Meet the team driving strategic, operational, and technology transformation across the transportation industry.",
     images: [
-      "/images/pages/hero-bg.webp",
+      "/images/pages/rawlinslogo-blue-wordmark.png",
     ],
   },
 };

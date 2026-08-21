@@ -2,14 +2,14 @@ import Image from "next/image";
 import Link from "next/link";
 
 const LOGO_URL =
-  "/images/pages/hero-bg.webp";
+  "/images/pages/rawlinslogo-white-wordmark.png";
 
 export default function SiteFooter() {
   return (
     <footer className="footer">
       <div className="footer-grid">
         <div>
-          <Image src={LOGO_URL} alt="Rawlins" width={160} height={40} className="footer-logo-img" />
+          <Image src={LOGO_URL} alt="Rawlins" width={415} height={100} className="footer-logo-img" />
           <p className="footer-brand-desc">
             A global professional services firm that pairs consulting
             services with digital solutions to help organizations solve

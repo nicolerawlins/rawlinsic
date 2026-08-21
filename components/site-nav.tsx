@@ -6,7 +6,7 @@ import { useState, useEffect, useRef } from "react";
 import SiteSearch from "@/components/site-search";
 
 const LOGO_URL =
-  "/images/pages/hero-bg.webp";
+  "/images/pages/rawlinslogo-white-wordmark.png";
 
 interface SiteNavProps {
   /** href for the "Get In Touch" CTA button. Defaults to /contact */
@@ -178,7 +178,7 @@ export default function SiteNav({ ctaHref = "/contact", homeMode = false }: Site
       {/* Navigation */}
       <nav className={`nav${homeMode ? " home-mode" : ""}`} id="mainNav" ref={navRef}>
         <a href="/" className="nav-logo" aria-label="Rawlins home">
-          <Image src={LOGO_URL} alt="Rawlins" width={160} height={40} className="nav-logo-img" priority fetchPriority="high" />
+          <Image src={LOGO_URL} alt="Rawlins" width={415} height={100} className="nav-logo-img" priority fetchPriority="high" />
         </a>
 
         <div className="nav-center">

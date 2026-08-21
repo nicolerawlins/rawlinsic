@@ -268,7 +268,7 @@ export default function ThoughtLeadershipArticlePage({ article }: Props) {
       url: siteUrl,
       logo: {
         "@type": "ImageObject",
-        url: `${siteUrl}/images/pages/rawlins-logo.png`,
+        url: `${siteUrl}/images/pages/rawlinslogo-square.png`,
       },
     },
     image: article.image?.startsWith("http")

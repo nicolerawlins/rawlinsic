@@ -9,7 +9,7 @@ import SiteFooter from "@/components/site-footer";
 
 
 const LOGO_URL =
-  "/images/pages/hero-bg.webp";
+  "/images/pages/rawlinslogo-white-wordmark.png";
 
 const VIDEO_URL =
   "/images/pages/hero-video.mp4";
@@ -377,10 +377,10 @@ export default function HomePage() {
         <div className="hero-grid" />
         <div className="hero-content">
           <Image
-            src="/images/pages/hero-bg.webp"
+            src="/images/pages/rawlinslogo-white-wordmark.png"
             alt="Rawlins Infra Consult"
-            width={520}
-            height={130}
+            width={519}
+            height={125}
             className="hero-logo-mark"
             priority
             fetchPriority="high"

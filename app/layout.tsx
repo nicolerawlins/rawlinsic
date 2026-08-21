@@ -64,7 +64,7 @@ const ORGANIZATION_SCHEMA = {
   name: "Rawlins Infra Consult",
   alternateName: "Rawlins IC",
   url: SITE_URL,
-  logo: `${SITE_URL}/images/pages/rawlins-logo.png`,
+  logo: `${SITE_URL}/images/pages/rawlinslogo-square.png`,
   description:
     "A global professional services firm that pairs consulting services with digital solutions to help organizations solve complex challenges at the intersection of strategy, operations, and technology.",
   email: "info@rawlinsic.com",
@@ -110,7 +110,7 @@ const LOCAL_BUSINESS_SCHEMA = {
   alternateName: "Rawlins IC",
   url: SITE_URL,
   image: `${SITE_URL}/images/pages/og-image.png`,
-  logo: `${SITE_URL}/images/pages/rawlins-logo.png`,
+  logo: `${SITE_URL}/images/pages/rawlinslogo-square.png`,
   description:
     "A global professional services firm that pairs consulting services with digital solutions to help organizations solve complex challenges at the intersection of strategy, operations, and technology.",
   email: "info@rawlinsic.com",
