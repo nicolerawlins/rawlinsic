@@ -1852,6 +1852,11 @@ font-size: 11px;
 }
 .ei-viewport { overflow: hidden; }
 
+/* Inside the pin the container becomes a flex item; without an explicit width
+   its side auto-margins shrink it to fit-content and center it, so the header
+   loses its normal left alignment. */
+.ei-sticky > .aam-container { width: 100%; }
+
 
 /* Pin content fits the visible viewport on phones too (dvh tracks the address bar). */
 @media (max-width: 768px) {
