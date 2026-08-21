@@ -442,7 +442,7 @@ body.has-custom-cursor .cursor-ring {
   background: rgba(255,255,255,0.04);
 }
 .nav-dropdown-sub:hover .nav-dropdown-sub-label {
-  color: #fff;
+  color: #c9b78c;
 }
 .nav-dropdown-sub-label {
   display: flex; align-items: center; justify-content: space-between; gap: 10px;
@@ -477,7 +477,7 @@ body.has-custom-cursor .cursor-ring {
   border-bottom: 1px solid rgba(234, 226, 204,0.18);
 }
 .nav-sub-dropdown a:hover {
-  color: #fff;
+  color: #c9b78c;
 }
 .nav-dropdown {
   position: absolute; top: calc(100% + 8px); left: 0;
@@ -505,7 +505,7 @@ body.has-custom-cursor .cursor-ring {
   border-bottom: 1px solid rgba(234, 226, 204,0.18);
 }
 .nav-dropdown a:hover {
-  color: #fff;
+  color: #c9b78c;
 }
 .nav-right { display: flex; align-items: center; }
 .nav-cta {
@@ -1087,8 +1087,7 @@ text-align: center;
   font-size: 0.95rem; color: #fff;
   transition: color 0.3s;
 }
-.footer-links a:hover { color: #fff;
-}
+.footer-links a:hover { color: #c9b78c; }
 .footer-bottom {
   max-width: 1300px; margin: 0 auto;
   padding-top: 30px;
@@ -1178,11 +1177,9 @@ text-align: center;
   cursor: pointer;
 }
 .mobile-menu-link:hover,
-.mobile-menu-parent:hover { color: #fff;
-}
+.mobile-menu-parent:hover { color: #c9b78c; }
 .mobile-menu-link.active,
-.mobile-menu-parent.active { color: #fff;
-}
+.mobile-menu-parent.active { color: #c9b78c; }
 .mobile-menu-group {
   border-bottom: 1px solid rgba(201, 183, 140,0.15);
 }
@@ -1219,8 +1216,7 @@ text-align: center;
   transition: all 0.3s !important;
 }
 .mobile-menu-sub a:last-child { border-bottom: none !important; }
-.mobile-menu-sub a:hover { color: #fff !important;
-}
+.mobile-menu-sub a:hover { color: #c9b78c !important; }
 /* Nested mobile submenu (e.g. Technology under Capabilities) */
 .mobile-menu-group-nested {
   margin: 0;
@@ -1255,7 +1251,7 @@ text-align: center;
 }
 .mobile-menu-split-link:hover,
 .mobile-menu-split-link:active {
-  color: #fff !important;
+  color: #c9b78c !important;
 }
 .mobile-menu-split-toggle {
   flex-shrink: 0;
