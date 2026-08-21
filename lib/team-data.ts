@@ -628,12 +628,10 @@ Her achievements reflect a deep commitment to innovation, collaboration, and pur
 
 Until recently Andy led the Smart Cities and Innovation practice at Parsons in Dubai, where he managed a variety of advanced technology and smart‑city projects across the Middle East and Africa. Earlier he served as Ford Motor Company's Head of Mobility Engagements for the U.S. Midwest and Canada and was the business owner of the City Insights data platform, overseeing the development and delivery of this analytics platform for cities.
 
-Before joining Ford, Andy spent nearly fifteen years supporting federal initiatives at the U.S. Department of Transportation and NASA's Jet Propulsion Laboratory. He is recognized for his contributions to the USDOT's pioneering Intelligent Transportation Systems program and to the Federal Highway Administration's Connected Automated Vehicle research program at the Turner‑Fairbank Highway Research Center.
+Before joining Ford, Andy spent nearly fifteen years supporting federal initiatives at the U.S. Department of Transportation and NASA's Jet Propulsion Laboratory.
 
 Andy holds a Master's degree in Public Administration from Harvard Kennedy School and a Bachelor of Civil Engineering.`,
-    achievements: `Before joining Ford, Andy spent nearly fifteen years supporting various Federal initiatives at the U.S. Department of Transportation (USDOT) and the NASA Jet Propulsion Laboratory. As an industry thought leader, Andy is recognized for his contributions to the USDOT's pioneering Intelligent Transportation Systems program and various projects at the Federal Highway Administration's Connected Automated Vehicle research program at the Turner Fairbank Highway Research Center.
-
-Andy holds a Master in Public Administration from Harvard Kennedy School and a Bachelor in Civil Engineering.Andy Palanisamy is a seasoned technologist and public policy professional with over twenty-five years of public and private sector experience, delivering complex projects in mobility innovations and smart city technologies. Andy has managed a variety of advance technology/smart city projects globally; he holds a Master in Public Administration from Harvard Kennedy School and a Bachelor in Civil Engineering.`,
+    achievements: `As an industry thought leader, Andy is recognized for his contributions to the USDOT's pioneering Intelligent Transportation Systems program and to the Federal Highway Administration's Connected Automated Vehicle research program at the Turner‑Fairbank Highway Research Center.`,
     categories: ['strategy', 'technology'],
   },
   {
