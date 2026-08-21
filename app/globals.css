@@ -1219,7 +1219,7 @@ text-align: center;
   transition: all 0.3s !important;
 }
 .mobile-menu-sub a:last-child { border-bottom: none !important; }
-.mobile-menu-sub a:hover {!important;!important; color: #fff !important;
+.mobile-menu-sub a:hover { color: #fff !important;
 }
 /* Nested mobile submenu (e.g. Technology under Capabilities) */
 .mobile-menu-group-nested {
