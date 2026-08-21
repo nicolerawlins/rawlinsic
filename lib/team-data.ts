@@ -277,18 +277,6 @@ Lauren's passion is providing a meaningful impact to organizations through colla
     categories: ['operations'],
   },
   {
-    id: 7,
-    name: `Ann Scott`,
-    photo: `/images/team/ann-1.webp`,
-    role: `Administrative Analyst`,
-    location: `Nevada`,
-    phone: `+1 775-721-1396`,
-    email: `ann@rawlinsic.com`,
-    background: `Ann Scott has over 20 years of service working extensively with the State of Nevada's accounting and personnel systems. Ann's knowledge consists of budget building, analysis, job costing and AR/AP, grant and contract review, monitoring and reporting, along with personnel administration.`,
-    achievements: `Throughout her career, Ann was responsible for developing and implementing policies and procedures to streamline fiscal and personnel administration, thus increasing organizational efficiency. Ann is committed to driving positive change and continuous improvement for an organization to achieve their goals.`,
-    categories: ['administration'],
-  },
-  {
     id: 2,
     name: `Alicia McConnell, P.E.`,
     photo: `/images/team/alicia.webp`,

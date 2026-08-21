@@ -7,7 +7,7 @@ const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://rawlinsic.com";
 export const metadata: Metadata = {
   title: "Our People",
   description:
-    "Meet the 53 accomplished professionals at Rawlins — a global management consulting firm at the intersection of strategy, operations, and technology.",
+    "Meet the 52 accomplished professionals at Rawlins — a global management consulting firm at the intersection of strategy, operations, and technology.",
   openGraph: {
     title: "Our People",
     description:
