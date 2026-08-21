@@ -2338,9 +2338,8 @@ body nextjs-portal { display: none; }
   align-items: center;
 }
 .scott-featured-quote-card {
-  /* Light-blue palette (#C4D8F2) quote panel with black/navy text —
-     same key-takeaway treatment as the TL "Final Thought" callout. */
-  background: #C4D8F2;
+  /* Transparent on the navy page, white text, gold accent bar left. */
+  background: transparent;
   border: none;
   border-left: 4px solid;
   border-image: linear-gradient(180deg, #c9b78c, #eae2cc, #d9cca9) 1;
@@ -2349,14 +2348,14 @@ body nextjs-portal { display: none; }
   position: relative;
 }
 .scott-quote-icon {
-  color: rgba(26, 50, 81, 0.55);
+  color: rgba(255, 255, 255, 0.5);
   margin-bottom: 16px;
 }
 .scott-featured-quote-text {
   font-family: var(--font-playfair), 'Playfair Display', serif;
   font-size: 1.15rem;
   line-height: 1.7;
-  color: #000;
+  color: #fff;
   font-style: italic;
   font-weight: 600;
   margin: 0 0 24px;
@@ -2370,14 +2369,7 @@ body nextjs-portal { display: none; }
   font-weight: 700;
   letter-spacing: 0.05em;
   text-transform: uppercase;
-  color: #000;
-}
-.scott-featured-quote-attribution .gold-text {
-  color: #000;
-  background: none;
-  -webkit-background-clip: initial;
-  background-clip: initial;
-  -webkit-text-fill-color: #000;
+  color: #fff;
 }
 .scott-featured-quote-dash {
   font-size: 1.1rem;

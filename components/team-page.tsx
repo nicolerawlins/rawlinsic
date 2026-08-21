@@ -14,7 +14,7 @@ const FILTERS: { label: string; value: FilterCategory }[] = [
   { label: "Strategy", value: "strategy" },
   { label: "Operations", value: "operations" },
   { label: "Technology", value: "technology" },
-  { label: "Communication, Brand & Design", value: "communication-brand-design" },
+  { label: "Design", value: "communication-brand-design" },
   { label: "Administration", value: "administration" },
 ];
 

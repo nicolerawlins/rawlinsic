@@ -849,4 +849,24 @@ Prior to his work in the life sciences industry, Rory held leadership and operat
 Rory earned a Bachelor of Science in Psychology from William Jessup University and an Associate of Arts in General Sciences from Yuba College. He brings a collaborative, service-oriented approach to every project and is committed to supporting clients and team members through effective communication, organization, and problem-solving.`,
     categories: ['administration'],
   },
+  {
+    id: 58,
+    name: `Jacob Michaels`,
+    photo: `/images/team/jacob.webp`,
+    role: `Infrastructure Advisor`,
+    location: `Florida`,
+    phone: `(315) 730-9651`,
+    email: ``,
+    background: `Jacob Michaels is a proposal and business development professional specializing in strategic pursuit management, grant development, and proposal operations. Throughout his career, he has supported consulting firms, nonprofit organizations, and public-sector clients by leading complex competitive proposals, developing winning grant applications, and implementing structured pursuit processes that improve quality, efficiency, and win rates. His experience spans workforce and economic development, nonprofit fundraising, enterprise technology consulting, and now transportation infrastructure, providing a unique perspective on how organizations position themselves to secure public and private sector opportunities.
+
+Prior to joining Rawlins Infra Consult, Jacob served as Manager of Proposal Strategy for HSO, a global Microsoft business transformation partner, where he led proposal development across public sector, manufacturing, architecture, engineering, construction, financial services, nonprofit, and professional services markets. During his tenure, he supported proposal efforts that contributed to more than $190 million in awarded work while leading initiatives that modernized proposal operations through standardized governance, reusable content libraries, AI-supported workflows, and structured proposal management processes.
+
+Earlier in his career, Jacob managed competitive proposals and grant-funded initiatives supporting workforce development organizations, nonprofit institutions, and community-based organizations. His background includes federal grant administration, grant compliance, major gift fundraising, prospect research, donor strategy, and competitive grant writing, providing firsthand experience with both pursuing and managing publicly funded programs.
+
+At Rawlins Infra Consult, Jacob supports the firm's transportation and infrastructure growth by leading proposal development, coordinating strategic pursuits, supporting discretionary grant opportunities, and strengthening business development operations. He is committed to applying proposal best practices, strategic communications, and continuous process improvement to help clients and the firm successfully compete for complex infrastructure and transportation opportunities.`,
+    achievements: `Throughout his career, Jacob has contributed to more than $190 million in awarded work through strategic proposal leadership, competitive positioning, and evaluator-focused messaging. His experience includes developing proposal and grant narratives that have secured more than $10 million in competitive funding during critical organizational growth and recovery initiatives, while also supporting recurring grant portfolios exceeding $600,000 annually.
+
+In addition to leading complex pursuit efforts, Jacob has built scalable proposal operations that improve organizational performance. He established governance frameworks, standardized templates, reusable content libraries, AI-enabled workflows, and proposal management processes that reduced proposal development effort by approximately 50 percent, improved consistency across more than 225 proposal submissions, and laid the foundation for a Proposal Center of Excellence focused on continuous improvement, knowledge management, and strategic business development support.`,
+    categories: ['strategy', 'operations'],
+  },
 ];
