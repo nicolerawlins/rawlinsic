@@ -5,7 +5,6 @@ import Image from "next/image";
 import Link from "next/link";
 import SiteNav from "@/components/site-nav";
 import SiteFooter from "@/components/site-footer";
-import { usePinnedScroll } from "@/components/use-pinned-scroll";
 
 
 
@@ -135,7 +134,6 @@ export default function HomePage() {
   const [activePillar, setActivePillar] = useState<string | null>(null);
   const [activeStory, setActiveStory] = useState<number | null>(null);
   const [activeExplore, setActiveExplore] = useState<string | null>(null);
-  const [storyProgress, setStoryProgress] = useState(0);
   const [pillarsProgress, setPillarsProgress] = useState(0);
   /* Render the static poster first; only swap to the looping video
      once the client has confirmed the user isn't on a slow connection
@@ -174,46 +172,6 @@ export default function HomePage() {
       prev.includes(idx) ? prev.filter((i) => i !== idx) : [...prev, idx]
     );
   };
-
-  // Story horizontal scroll
-  const storyTrackRef = useRef<HTMLDivElement>(null);
-  const eiPinRef = useRef<HTMLDivElement>(null);
-  const eiViewportRef = useRef<HTMLDivElement>(null);
-  const storyDragging = useRef(false);
-  const storyDragStart = useRef(0);
-  const storyScrollStart = useRef(0);
-
-  const onStoryScroll = () => {
-    const el = eiViewportRef.current;
-    if (!el) return;
-    const max = el.scrollWidth - el.clientWidth;
-    setStoryProgress(max > 0 ? el.scrollLeft / max : 0);
-  };
-  const onStoryMouseDown = (e: React.MouseEvent) => {
-    storyDragging.current = true;
-    storyDragStart.current = e.clientX;
-    storyScrollStart.current = storyTrackRef.current?.scrollLeft ?? 0;
-  };
-  const onStoryMouseMove = (e: React.MouseEvent) => {
-    if (!storyDragging.current || !storyTrackRef.current) return;
-    e.preventDefault();
-    const dx = e.clientX - storyDragStart.current;
-    storyTrackRef.current.scrollLeft = storyScrollStart.current - dx;
-  };
-  const onStoryMouseUp = () => { storyDragging.current = false; };
-  const storyScrollPrev = () => {
-    const pin = eiPinRef.current; if (!pin) return;
-    const step = (pin.offsetHeight - window.innerHeight) / Math.max(1, journey.length - 1);
-    window.scrollBy({ top: -step, behavior: "smooth" });
-  };
-  const storyScrollNext = () => {
-    const pin = eiPinRef.current; if (!pin) return;
-    const step = (pin.offsetHeight - window.innerHeight) / Math.max(1, journey.length - 1);
-    window.scrollBy({ top: step, behavior: "smooth" });
-  };
-
-  // Evolving Impact — sticky-pin horizontal scroll (desktop + touch).
-  usePinnedScroll(eiPinRef, eiViewportRef, storyTrackRef, setStoryProgress);
 
   // Pillars horizontal scroll
   const pillarsTrackRef = useRef<HTMLDivElement>(null);
@@ -618,57 +576,38 @@ export default function HomePage() {
       </div>
 
 
-      {/* ── Our Journey (Evolving Impact) — pinned horizontal scroll ── */}
+      {/* ── Our Journey (Evolving Impact) — 2×2 grid ── */}
       <section className="section-story" id="story">
-        <div className="ei-pin" ref={eiPinRef}>
-          <div className="ei-sticky">
-            <div className="story-header reveal">
-              <p className="section-label">
-                <span className="gold-text">from our story to yours</span>
-              </p>
-              <h2 className="section-title">
-                <em>Evolving</em> Impact
-              </h2>
-              <p className="section-text" style={{ marginTop: "20px" }}>
-                Anchored by a vision to serve as a trusted advisor to transportation agencies across the United States, our firm has continued to evolve since 2017 into a global consultancy.
-              </p>
-            </div>
-            <div className="story-scroll-controls">
-              <div className="story-scroll-progress-bar">
-                <div className="story-scroll-progress-fill" style={{ width: `${storyProgress * 100}%` }} />
+        <div className="story-header reveal">
+          <p className="section-label">
+            <span className="gold-text">from our story to yours</span>
+          </p>
+          <h2 className="section-title">
+            <em>Evolving</em> Impact
+          </h2>
+          <p className="section-text" style={{ marginTop: "20px" }}>
+            Anchored by a vision to serve as a trusted advisor to transportation agencies across the United States, our firm has continued to evolve since 2017 into a global consultancy.
+          </p>
+        </div>
+        <div className="story-grid">
+          {journey.map((item, i) => (
+            <div className={`story-card${activeStory === i ? " active" : ""}`} key={item.phase}>
+              <Image src={item.bg} alt={item.phase} fill sizes="(max-width: 900px) 100vw, 600px" className="story-card-bg" />
+              <div className="story-card-overlay" />
+              <div className="story-card-header">
+                <span className="story-card-num">0{i + 1}</span>
+                <span className="timeline-phase">{item.phase}</span>
               </div>
-              <div className="story-scroll-arrows">
-                <button className="story-arrow-btn" onClick={storyScrollPrev} aria-label="Previous">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M15 18l-6-6 6-6" /></svg>
-                </button>
-                <button className="story-arrow-btn" onClick={storyScrollNext} aria-label="Next">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M9 18l6-6-6-6" /></svg>
-                </button>
-              </div>
-            </div>
-            <div className="ei-viewport" ref={eiViewportRef} onScroll={onStoryScroll}>
-              <div className="story-scroll-track" ref={storyTrackRef}>
-                {journey.map((item, i) => (
-              <div className={`story-card${activeStory === i ? " active" : ""}`} key={item.phase}>
-                <Image src={item.bg} alt={item.phase} fill sizes="(max-width: 768px) 80vw, 400px" className="story-card-bg" />
-                <div className="story-card-overlay" />
-                <div className="story-card-header">
-                  <span className="story-card-num">0{i + 1}</span>
-                  <span className="timeline-phase">{item.phase}</span>
-                </div>
-                <div className="story-card-divider" />
-                <h3 className="story-card-title">{item.title}</h3>
-                <button className="card-expand-btn" aria-label="Expand description" aria-expanded={activeStory === i} onClick={(e) => { e.stopPropagation(); setActiveStory((prev) => (prev === i ? null : i)); }}>
-                  <svg width="14" height="8" viewBox="0 0 16 10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 1.5l7 7 7-7" /></svg>
-                </button>
-                <div className="story-card-body-wrap">
-                  <p className="story-card-body">{item.text}</p>
-                </div>
-              </div>
-            ))}
+              <div className="story-card-divider" />
+              <h3 className="story-card-title">{item.title}</h3>
+              <button className="card-expand-btn" aria-label="Expand description" aria-expanded={activeStory === i} onClick={(e) => { e.stopPropagation(); setActiveStory((prev) => (prev === i ? null : i)); }}>
+                <svg width="14" height="8" viewBox="0 0 16 10" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 1.5l7 7 7-7" /></svg>
+              </button>
+              <div className="story-card-body-wrap">
+                <p className="story-card-body">{item.text}</p>
               </div>
             </div>
-          </div>
+          ))}
         </div>
       </section>
 

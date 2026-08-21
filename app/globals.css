@@ -696,9 +696,6 @@ color: #fff;
 
 .hero-title em {
   font-style: italic;
-  background: linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878);
-  -webkit-background-clip: text; background-clip: text;
-  color: transparent;
 }
 .hero-sub {
   font-size: 1.1rem;
@@ -1099,9 +1096,6 @@ text-align: center;
 }
 .parallax-text em, .parallax-text1 em {
   font-style: italic;
-  background: linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878);
-  -webkit-background-clip: text; background-clip: text;
-  color: transparent;
 }
 
 /* ── Footer ──────────────────────────────────── */
@@ -1413,19 +1407,10 @@ text-align: center;
 }
 
 /* ── Section Title Italic Accent ─────────────── */
+/* The accent word stays italic but inherits the title's color (white on
+   this site) instead of painting itself gold. */
 .section-title em {
   font-style: italic;
-  color: #c9a84c;
-  background: linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878);
-  -webkit-background-clip: text; background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-@supports not ((-webkit-background-clip: text) or (background-clip: text)) {
-  .section-title em {
-    background: none;
-    color: #c9a84c;
-    -webkit-text-fill-color: #c9a84c;
-  }
 }
 
 /* ── Homepage Hero ───────────────────────────── */
@@ -1853,16 +1838,14 @@ font-size: 11px;
 .about-us-link:hover svg { stroke: #c9a84c; }
 
 /* ── Our Journey / Story ─────────────────────── */
-.section-story { padding: 120px 0px 0px; }
+.section-story { padding: 120px 60px; }
 .story-header {
   max-width: 700px; margin: 0 auto 60px;
-  text-align: center; padding: 0 60px;
+  text-align: center;
 }
 
-/* ── Horizontal Scroll ────────────────────────── */
-.story-scroll-outer { position: relative; }
-
-/* Evolving Impact — sticky pin: scroll through .ei-pin drives the track sideways. */
+/* Sticky pin (used by the AAM lifecycle and Automation value sections):
+   scroll through .ei-pin drives the track sideways. */
 .ei-pin { position: relative; }
 .ei-sticky {
   position: sticky; top: 0; height: 100vh; height: 100dvh; overflow: hidden;
@@ -1874,19 +1857,19 @@ font-size: 11px;
 /* Pin content fits the visible viewport on phones too (dvh tracks the address bar). */
 @media (max-width: 768px) {
   .ei-sticky { justify-content: center; }
-  .section-story .story-header { margin-bottom: 22px; }
-  .section-story { padding-top: 90px; }
 }
 
-.story-scroll-track {
-  display: flex;
-  gap: 20px;
-  width: max-content;
-  padding: 16px 60px 40px;
-  will-change: transform;
+/* ── Story Grid — the four journey tiles, two by two ── */
+.story-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
 }
-.story-scroll-track:active { cursor: grabbing; }
-.story-scroll-track::-webkit-scrollbar { display: none; }
+@media (max-width: 900px) {
+  .story-grid { grid-template-columns: 1fr; }
+}
 
 /* ── Story Cards ──────────────────────────────── */
 /* Background image layer */
@@ -1918,8 +1901,6 @@ font-size: 11px;
 }
 
 .story-card {
-  flex: 0 0 clamp(460px, 34vw, 520px);
-  scroll-snap-align: start;
   border: 1px solid rgba(201, 168, 76, 0.1);
   border-left: 3px solid rgba(201, 168, 76, 0.3);
   border-radius: 6px;
@@ -1928,7 +1909,7 @@ font-size: 11px;
   flex-direction: column;
   position: relative;
   overflow: hidden;
-  min-height: 320px;
+  min-height: 360px;
   transition: border-left-color 0.45s ease, transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s ease;
 }
 .story-card:hover {
@@ -2294,10 +2275,10 @@ background: linear-gradient(to top, rgba(13, 13, 13, 0.92) 20%, rgba(13, 13, 13,
   .pillars-header { padding: 0 24px; margin-bottom: 40px; flex-direction: column; align-items: flex-start; gap: 16px; }
   .pillars-track { flex-direction: column; }
   .pillar-card { flex: none; width: 100%; height: 420px; }
-  .section-story { padding: 80px 0 34px; }
-  .story-header { padding: 0 24px; margin-bottom: 40px; }
-  .story-scroll-track { padding: 12px 24px 32px; gap: 14px; }
-  .story-card { flex: 0 0 84vw; min-width: 300px; min-height: 380px; padding: 36px 28px; }
+  .section-story { padding: 80px 24px; }
+  .story-header { padding: 0; margin-bottom: 40px; }
+  .story-grid { gap: 16px; }
+  .story-card { min-height: 340px; padding: 36px 28px; }
   .story-scroll-controls { padding: 0 24px; }
   .section-explore { padding: 80px 24px; }
   .section-team { padding: 80px 24px; }
@@ -2389,9 +2370,6 @@ body nextjs-portal { display: none; }
 }
 .team-hero-title em {
   font-style: italic;
-  background: linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878);
-  background-clip: text;
-  color: transparent;
 }
 .team-hero-sub {
   font-size: 1.1rem;
@@ -5900,11 +5878,7 @@ color: #fff;
   font-size: 32px;
   line-height: 1.2;
   font-weight: 500;
-  background: linear-gradient(135deg, #c9a84c, #e8d5a0, #d4b878);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
-  -webkit-text-fill-color: transparent;
+  color: #fff;
   margin: 0 0 18px;
 }
 .tla-final-thought-quote {
@@ -6503,10 +6477,6 @@ color: #fff;
 }
 .pod-hero-tagline em {
   font-style: italic;
-  background: linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878);
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
 }
 
 /* ── Main: About + Player ── */
@@ -6827,8 +6797,6 @@ color: #fff;
 }
 .cap-hero-title em {
   font-style: italic;
-  background: linear-gradient(145deg, #b89a3e, #d4be78, #c9a84c, #e0cfa0, #b89a3e);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 .cap-hero-subtitle {
   font-family: var(--font-dm-sans), 'DM Sans', sans-serif;
@@ -7276,8 +7244,6 @@ color: #fff;
 }
 .ins-hero-title em {
   font-style: italic;
-  background: linear-gradient(145deg, #b89a3e, #d4be78, #c9a84c, #e0cfa0, #b89a3e);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 .ins-hero-subtitle {
   font-family: var(--font-dm-sans), 'DM Sans', sans-serif;

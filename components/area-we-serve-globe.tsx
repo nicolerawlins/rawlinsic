@@ -667,10 +667,6 @@ export default function AreaWeServeGlobe() {
         }
         .globe-heading em {
           font-style: italic;
-          background: linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
         }
         /* Match cs-hero .hero-sub styling used on other pages */
         .globe-subtext {
