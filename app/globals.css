@@ -2341,7 +2341,7 @@ body nextjs-portal { display: none; }
   /* Transparent on the navy page, white text, gold accent bar left. */
   background: transparent;
   border: none;
-  border-left: 4px solid;
+  border-left: 2px solid;
   border-image: linear-gradient(180deg, #c9b78c, #eae2cc, #d9cca9) 1;
   border-radius: 0 12px 12px 0;
   padding: 40px 36px;
