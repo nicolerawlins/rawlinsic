@@ -182,7 +182,7 @@ export default function PodcastPage() {
                   </linearGradient>
                   <linearGradient id="iconGoldFill" x1="0%" y1="0%" x2="100%" y2="100%">
                     <stop offset="0%" stopColor="rgba(201, 183, 140,0.25)" />
-                    <stop offset="100%" stopColor="rgba(232,213,160,0.15)" />
+                    <stop offset="100%" stopColor="rgba(234, 226, 204,0.15)" />
                   </linearGradient>
                 </defs>
                 <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z" fill="url(#iconGoldFill)" stroke="url(#iconGoldGrad)" />

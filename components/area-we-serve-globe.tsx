@@ -744,7 +744,7 @@ export default function AreaWeServeGlobe() {
         .globe-tooltip .tooltip-link:hover { text-decoration: underline; text-underline-offset: 4px; }
         .globe-tooltip.active-location {
           background: linear-gradient(145deg, #c9b78c, #eae2cc, #d9cca9); color: #0a1628;
-          box-shadow: 0 4px 20px rgba(184,154,62,0.4);
+          box-shadow: 0 4px 20px rgba(174, 156, 114,0.4);
         }
         .globe-tooltip.past-location {
           background: linear-gradient(145deg, #1D3759, #1A3251, #13243A);
