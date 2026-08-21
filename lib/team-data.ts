@@ -856,7 +856,8 @@ Rory earned a Bachelor of Science in Psychology from William Jessup University a
     role: `Infrastructure Advisor`,
     location: `Florida`,
     phone: `(315) 730-9651`,
-    email: ``,
+    email: `jacob@rawlinsic.com`,
+    linkedin: `https://www.linkedin.com/in/jwmmichaels/`,
     background: `Jacob Michaels is a proposal and business development professional specializing in strategic pursuit management, grant development, and proposal operations. Throughout his career, he has supported consulting firms, nonprofit organizations, and public-sector clients by leading complex competitive proposals, developing winning grant applications, and implementing structured pursuit processes that improve quality, efficiency, and win rates. His experience spans workforce and economic development, nonprofit fundraising, enterprise technology consulting, and now transportation infrastructure, providing a unique perspective on how organizations position themselves to secure public and private sector opportunities.
 
 Prior to joining Rawlins Infra Consult, Jacob served as Manager of Proposal Strategy for HSO, a global Microsoft business transformation partner, where he led proposal development across public sector, manufacturing, architecture, engineering, construction, financial services, nonprofit, and professional services markets. During his tenure, he supported proposal efforts that contributed to more than $190 million in awarded work while leading initiatives that modernized proposal operations through standardized governance, reusable content libraries, AI-supported workflows, and structured proposal management processes.
