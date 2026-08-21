@@ -135,7 +135,7 @@ const CSS = `
   --eco-num:rgba(29,55,89,.5);--eco-num-on:#1D3759;--eco-art:rgba(29,55,89,.22);
   --eco-pip:rgba(29,55,89,.28);--eco-pip-on:#1D3759;--eco-edge:rgba(29,55,89,.22)}
 .eco-bar.ink-white{--eco-fg:#fff;--eco-body:#e6edf6;--eco-accent:#c9a84c;
-  --eco-num:rgba(230,205,134,.55);--eco-num-on:#E6CD86;--eco-art:rgba(255,255,255,.18);
+  --eco-num:rgba(255,255,255,.55);--eco-num-on:#fff;--eco-art:rgba(255,255,255,.18);
   --eco-pip:rgba(255,255,255,.3);--eco-pip-on:#E6CD86;--eco-edge:rgba(196,216,242,.18)}
 .eco-bar.active.ink-black{border-color:rgba(29,55,89,.45)}
 .eco-bar.active.ink-white{border-color:rgba(200,162,76,.55)}

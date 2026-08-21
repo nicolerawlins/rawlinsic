@@ -825,9 +825,7 @@ color: #fff;
 .contact-detail-label {
   font-size: 0.75rem; font-weight: 600;
   letter-spacing: 3px; text-transform: uppercase;
-  background: linear-gradient(145deg, #c9a84c, #e8d5a0, #d4b878);
-  -webkit-background-clip: text; background-clip: text;
-  color: transparent;
+  color: #fff;
   margin-bottom: 4px;
 }
 .contact-detail-value {
