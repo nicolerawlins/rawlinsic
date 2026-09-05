@@ -685,9 +685,15 @@ function PrdFig({ fig }: { fig: string }) {
     </div>
   );
   return (
-    <div className="prd-panel prd-apply-img">
-      {/* the actual graphic from the briefing, per Nicole */}
-      <img src="/images/pages/where-this-applies.png" alt="Where this applies: process mapping, workflow rebuilds, integration, data governance, and training & handover" />
+    <div className="prd-panel prd-apply-img" role="img" aria-label="Where this applies: process mapping, workflow rebuilds, integration, data governance, and training & handover">
+      {/* the actual graphic from the briefing; on phones it splits into its
+          five cards, stacked, so the text stays readable */}
+      <img className="prd-wta-wide" src="/images/pages/where-this-applies.png" alt="" aria-hidden="true" />
+      <div className="prd-wta-stack">
+        {[1, 2, 3, 4, 5].map((k) => (
+          <img key={k} src={`/images/pages/where-this-applies-${k}.png`} alt="" aria-hidden="true" />
+        ))}
+      </div>
     </div>
   );
 }
@@ -1122,8 +1128,8 @@ export default function AutomationIntegrationInteractive({ embedded = false, eye
                 <p className="rai-modal-subtitle">{active.popupSubtitle}</p>
               </div>
 
-              <div className={"rai-story" + (STEPS[step].stacked ? " prd-stacked" : "")} key={step}>
-                {STEPS[step].stacked && STEPS[step].fig ? (
+              <div className={"rai-story" + (STEPS[step].fig ? (STEPS[step].stacked ? " prd-stacked" : " prd-side") : "")} key={step}>
+                {STEPS[step].fig ? (
                   <>
                     <div className="rai-stage-text prd-above">
                       <div className="rai-kicker">Step {step + 1} of {STEPS.length}</div>
@@ -1146,9 +1152,7 @@ export default function AutomationIntegrationInteractive({ embedded = false, eye
                   </>
                 ) : (
                   <>
-                    {STEPS[step].fig
-                      ? <PrdFig fig={STEPS[step].fig as string} />
-                      : <StoryScene3D sceneId={active.id} tone={STEPS[step].tone} />}
+                    <StoryScene3D sceneId={active.id} tone={STEPS[step].tone} />
                     <div className="rai-stage-text">
                       <div className="rai-kicker">Step {step + 1} of {STEPS.length}</div>
                       <h3 className="rai-step-title">{STEPS[step].k}</h3>
@@ -1263,7 +1267,12 @@ const CSS = `
 
 /* stacked steps: heading above, bullets below */
 .rai-story.prd-stacked{gap:16px}
+.rai-story.prd-side{grid-template-columns:1.05fr 1fr;grid-template-areas:"fig head" "fig list";column-gap:26px;row-gap:4px;align-items:center}
+.prd-side .prd-above{grid-area:head;align-self:end}
+.prd-side .prd-panel{grid-area:fig;align-self:center}
+.prd-side .rai-step-list.prd-below{grid-area:list;align-self:start}
 .prd-above{text-align:left}
+.prd-panel{overflow:hidden}
 .rai-step-list.prd-below{margin-top:2px}
 .prd-web{position:absolute;inset:0;width:100%;height:100%;z-index:0}
 .prd-scatter{position:relative}
@@ -1283,18 +1292,29 @@ const CSS = `
 /* where this applies — the slide's own graphic */
 .prd-apply-img{padding:12px}
 .prd-apply-img img{display:block;width:100%;height:auto;border-radius:10px}
+.prd-wta-stack{display:none}
 
-@media (max-width: 700px){
+@media (max-width: 760px){
+  .rai-story.prd-side{display:flex;flex-direction:column;gap:14px}
   .prd-chevrow{grid-template-columns:repeat(4,1fr)}
   .prd-vs{grid-template-columns:1fr}
   .prd-vs-mid{margin:2px auto}
-  .prd-vs-banner.dark{clip-path:polygon(0 0,calc(100% - 18px) 0,100% 50%,calc(100% - 18px) 100%,0 100%);padding-left:16px;padding-right:28px;justify-content:flex-start;text-align:left;flex-direction:row-reverse}
-  .prd-vs-list.right li{flex-direction:row-reverse;justify-content:flex-start;text-align:left}
+  .prd-vs-col{min-width:0}
+  .prd-vs-banner{max-width:100%}
+  .prd-vs-banner.dark{clip-path:polygon(0 0,calc(100% - 18px) 0,100% 50%,calc(100% - 18px) 100%,0 100%);padding:11px 28px 11px 16px;justify-content:flex-end;text-align:left;flex-direction:row-reverse}
+  .prd-vs-list.right li{flex-direction:row-reverse;justify-content:flex-end;text-align:left}
   .prd-built{grid-template-columns:1fr}
   .prd-built-arrow{margin:6px auto;transform:rotate(90deg)}
+  .prd-built-col{text-align:center}
+  .prd-built-col .prd-underline{margin-left:auto;margin-right:auto}
+  .prd-chain{margin:0 auto}
+  .prd-note{text-align:center}
   .prd-arch-row{grid-template-columns:1fr;gap:6px}
   .prd-arch-arrows{margin-left:0}
   .prd-tiles{grid-template-columns:1fr}
+  .prd-wta-wide{display:none}
+  .prd-wta-stack{display:flex;flex-direction:column;gap:10px}
+  .prd-wta-stack img{width:100%;height:auto;border-radius:10px}
 }
 
 /* The site hides the native cursor and each page draws its own dot+ring. This
