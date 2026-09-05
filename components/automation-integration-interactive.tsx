@@ -465,12 +465,12 @@ function storyScene(id: string, tone: string): THREE.Group {
    slide of the capability briefing (markup, not images). Steps
    whose graphic needs the full width stack figure over text.
    ────────────────────────────────────────────────────────────── */
-const PRD_CHEV: { n: string; lines: string[]; fill: string; dashed?: boolean; dark?: boolean }[] = [
+const PRD_CHEV: { n: string; lines: string[]; fill: string; dashed?: boolean; dark?: boolean; fs?: number }[] = [
   { n: "01", lines: ["Entity-State", "Agreement"], fill: "#1F3864" },
-  { n: "02", lines: ["Projected", "Advertisements"], fill: "#2E4A77" },
+  { n: "02", lines: ["Projected", "Advertisements"], fill: "#2E4A77", fs: 10.5 },
   { n: "03", lines: ["Advertisement"], fill: "#46618C" },
   { n: "04", lines: ["Selection"], fill: "#60779E" },
-  { n: "05", lines: ["Contract Execution", "& Review"], fill: "#8FA6C0" },
+  { n: "05", lines: ["Contract Execution", "& Review"], fill: "#8FA6C0", fs: 10.5 },
   { n: "06", lines: ["Task Orders", "& POs"], fill: "#BDD0E9", dark: true },
   { n: "07", lines: ["Invoicing"], fill: "#E2ECF6", dashed: true, dark: true },
   { n: "08", lines: ["Closeout"], fill: "#E2ECF6", dashed: true, dark: true },
@@ -486,7 +486,7 @@ function PrdChevron({ c, first }: { c: (typeof PRD_CHEV)[number]; first: boolean
       <circle cx="20" cy="15" r="13" fill={c.dashed ? "#fff" : "#1F3864"} stroke={c.dashed ? "#E1524A" : "#fff"} strokeWidth="2" strokeDasharray={c.dashed ? "4.5 3.5" : undefined} />
       <text x="20" y="19.5" textAnchor="middle" fontSize="11.5" fontWeight="800" fill={c.dashed ? "#1F3864" : "#fff"}>{c.n}</text>
       {c.lines.map((l, k) => (
-        <text key={l} x="80" y={c.lines.length === 1 ? 69 : 61 + k * 16} textAnchor="middle" fontSize="12.5" fontWeight="700" fill={c.dark ? "#16233A" : "#fff"}>{l}</text>
+        <text key={l} x="80" y={c.lines.length === 1 ? 69 : 61 + k * 16} textAnchor="middle" fontSize={c.fs ?? 12.5} fontWeight="700" fill={c.dark ? "#16233A" : "#fff"}>{l}</text>
       ))}
     </svg>
   );
@@ -541,8 +541,7 @@ const PRD_STEPS: PrdStep[] = [
     items: ["More than twenty agency staff across three divisions completed the full working walkthrough", "Contracting, research & technology transfer, and internal IT were all represented", "One working session per step, staffed with the people who perform it rather than with managers"] },
   { k: "Governance & Handover", cap: "Designed to be handed over — and to hold up to scrutiny", tone: "result", fig: "gov",
     items: ["How data is handled is decided before anything is built, not after", "The record retains the consensus outcome, never an individual evaluator's score", "The platform is chosen for maintainability — agency staff can be trained to run it", "We expect the work to outlast our engagement"] },
-  { k: "Where This Applies", cap: "What we do", tone: "result", fig: "apply", stacked: true,
-    items: ["Process mapping conducted with the staff who perform the work", "Workflow rebuilds on platforms the agency can maintain independently", "Integration with existing financial & records systems", "Data governance designed in from the outset", "Training & structured handover"] },
+  { k: "Where This Applies", cap: "What we do", tone: "result", fig: "apply", stacked: true, items: [] },
 ];
 
 function PrdFig({ fig }: { fig: string }) {
@@ -594,6 +593,11 @@ function PrdFig({ fig }: { fig: string }) {
           <p className="prd-sub">Separate tools, stitched together by hand</p>
           <span className="prd-underline" />
           <div className="prd-scatter">
+            <svg className="prd-web" viewBox="0 0 300 300" preserveAspectRatio="none" aria-hidden="true">
+              {([[50, 50, 150, 150], [150, 50, 50, 150], [150, 50, 250, 150], [250, 50, 150, 150], [50, 50, 250, 50], [50, 150, 150, 250], [150, 150, 50, 250], [150, 150, 250, 250], [250, 150, 150, 250], [50, 150, 150, 50], [250, 150, 250, 50], [150, 150, 150, 50], [50, 250, 250, 150]] as [number, number, number, number][]).map(([x1, y1, x2, y2], k) => (
+                <line key={k} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#a7b5c7" strokeWidth="1.6" strokeDasharray="5 6" opacity="0.9" />
+              ))}
+            </svg>
             {PRD_TOOLS.map((tool) => (
               <div className="prd-tool" key={tool.l}>
                 <svg viewBox="0 0 24 24" fill="none" stroke="#A98B5F" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">{tool.ic}</svg>
@@ -664,7 +668,27 @@ function PrdFig({ fig }: { fig: string }) {
   );
   if (fig === "gov") return (
     <div className="prd-panel prd-gov">
-      <p>&ldquo;How data is handled is decided <b>before anything is built</b>, not after. The record retains the <b>consensus outcome</b> &mdash; never the individual evaluator&rsquo;s score. The platform is chosen for <b>maintainability</b>. <b>We expect the work to outlast our engagement.</b>&rdquo;</p>
+      <svg viewBox="0 0 400 260" role="img" aria-label="A governed record, protected by design, handed over to be run by the agency">
+        <rect x="42" y="52" width="132" height="132" rx="12" fill="#fff" stroke="#1F3864" strokeWidth="2" />
+        <rect x="58" y="72" width="72" height="10" rx="5" fill="#1F3864" />
+        <rect x="58" y="92" width="100" height="8" rx="4" fill="#C9D7EC" />
+        <rect x="58" y="108" width="88" height="8" rx="4" fill="#C9D7EC" />
+        <rect x="58" y="124" width="96" height="8" rx="4" fill="#C9D7EC" />
+        <g transform="translate(136 128) scale(2.6)">
+          <path d="M12 3l8 3v5c0 4.6-3.2 8.2-8 10-4.8-1.8-8-5.4-8-10V6z" fill="#1F3864" stroke="#fbfcfe" strokeWidth="1.4" />
+          <path d="M9 12l2 2 4-4" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        </g>
+        <text x="108" y="222" textAnchor="middle" fontSize="11" fontWeight="700" fill="#44546A">governed by design</text>
+        <path d="M212 118 h52 M254 106 l14 12 -14 12" fill="none" stroke="#C9A85E" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" />
+        <circle cx="330" cy="118" r="46" fill="#D3E0F0" stroke="#1F3864" strokeWidth="2" />
+        <g fill="none" stroke="#1F3864" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="330" cy="103" r="11" />
+          <path d="M308 143 c0-12 10-19 22-19 s22 7 22 19" />
+        </g>
+        <circle cx="362" cy="86" r="13" fill="#C9A85E" />
+        <path d="M356 86 l4 4 8-8" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
+        <text x="330" y="222" textAnchor="middle" fontSize="11" fontWeight="700" fill="#44546A">run by the agency</text>
+      </svg>
     </div>
   );
   if (fig === "proof") return (
@@ -1123,24 +1147,49 @@ export default function AutomationIntegrationInteractive({ embedded = false, eye
               </div>
 
               <div className={"rai-story" + (STEPS[step].stacked ? " prd-stacked" : "")} key={step}>
-                {STEPS[step].fig
-                  ? <PrdFig fig={STEPS[step].fig as string} />
-                  : <StoryScene3D sceneId={active.id} tone={STEPS[step].tone} />}
-                <div className="rai-stage-text">
-                  <div className="rai-kicker">Step {step + 1} of {STEPS.length}</div>
-                  <h3 className="rai-step-title">{STEPS[step].k}</h3>
-                  {STEPS[step].cap ? <p className="rai-step-cap">{STEPS[step].cap}</p> : null}
-                  <ul className="rai-step-list">
-                    {STEPS[step].items.map((tx, k) => (
-                      <li key={k} style={{ animationDelay: `${0.12 + k * 0.09}s` }}>
-                        {STEPS[step].tone === "problem"
-                          ? <XMark color="#e05656" />
-                          : <CheckMark color="#c9b78c" />}
-                        <span>{tx}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
+                {STEPS[step].stacked && STEPS[step].fig ? (
+                  <>
+                    <div className="rai-stage-text prd-above">
+                      <div className="rai-kicker">Step {step + 1} of {STEPS.length}</div>
+                      <h3 className="rai-step-title">{STEPS[step].k}</h3>
+                      {STEPS[step].cap ? <p className="rai-step-cap">{STEPS[step].cap}</p> : null}
+                    </div>
+                    <PrdFig fig={STEPS[step].fig as string} />
+                    {STEPS[step].items.length > 0 && (
+                      <ul className="rai-step-list prd-below">
+                        {STEPS[step].items.map((tx, k) => (
+                          <li key={k} style={{ animationDelay: `${0.12 + k * 0.09}s` }}>
+                            {STEPS[step].tone === "problem"
+                              ? <XMark color="#e05656" />
+                              : <CheckMark color="#c9b78c" />}
+                            <span>{tx}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {STEPS[step].fig
+                      ? <PrdFig fig={STEPS[step].fig as string} />
+                      : <StoryScene3D sceneId={active.id} tone={STEPS[step].tone} />}
+                    <div className="rai-stage-text">
+                      <div className="rai-kicker">Step {step + 1} of {STEPS.length}</div>
+                      <h3 className="rai-step-title">{STEPS[step].k}</h3>
+                      {STEPS[step].cap ? <p className="rai-step-cap">{STEPS[step].cap}</p> : null}
+                      <ul className="rai-step-list">
+                        {STEPS[step].items.map((tx, k) => (
+                          <li key={k} style={{ animationDelay: `${0.12 + k * 0.09}s` }}>
+                            {STEPS[step].tone === "problem"
+                              ? <XMark color="#e05656" />
+                              : <CheckMark color="#c9b78c" />}
+                            <span>{tx}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </>
+                )}
               </div>
 
               <div className="rai-nav">
@@ -1202,7 +1251,7 @@ const CSS = `
 .prd-built{display:grid;grid-template-columns:1fr 40px 1fr;gap:12px;align-items:start}
 .prd-built-arrow{align-self:center;justify-self:center;width:36px;height:36px;border-radius:50%;border:2px solid #1F3864;background:#fff;display:flex;align-items:center;justify-content:center;margin-top:110px}
 .prd-built-arrow svg{width:19px;height:19px}
-.prd-scatter{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 10px;padding:6px 2px}
+.prd-scatter{display:grid;grid-template-columns:repeat(3,1fr);gap:22px 18px;padding:8px 6px}
 .prd-tool{display:flex;flex-direction:column;align-items:center;gap:6px;background:#F7F1E7;border:1px solid #E3D5BC;border-radius:8px;box-shadow:0 4px 10px rgba(90,70,40,.12);padding:11px 6px;text-align:center}
 .prd-tool svg{width:23px;height:23px}
 .prd-tool span{font-size:10.5px;font-weight:800;color:#4a3f2f;line-height:1.25}
@@ -1236,10 +1285,18 @@ const CSS = `
 .prd-arch-arrows{display:flex;justify-content:space-around;padding:2px 0;margin-left:134px}
 .prd-arch-arrows svg{width:10px;height:18px}
 
-/* governance — the statement, plain */
-.prd-gov{display:flex;align-items:center;justify-content:center;min-height:210px}
-.prd-gov p{margin:0;max-width:520px;text-align:center;font-size:14.5px;line-height:1.9;color:#33415c;font-weight:500}
-.prd-gov b{color:#16233A}
+/* stacked steps: heading above, bullets below */
+.rai-story.prd-stacked{gap:16px}
+.prd-above{text-align:center}
+.prd-above .rai-step-cap{margin-left:auto;margin-right:auto}
+.rai-step-list.prd-below{margin-top:2px}
+.prd-web{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.prd-scatter{position:relative}
+.prd-scatter .prd-tool{position:relative;z-index:1}
+
+/* governance — the visual */
+.prd-gov{display:flex;align-items:center;justify-content:center}
+.prd-gov svg{width:100%;max-width:400px;height:auto}
 
 /* proof — stat tiles */
 .prd-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
