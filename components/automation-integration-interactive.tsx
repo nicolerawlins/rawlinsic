@@ -513,19 +513,6 @@ const PRD_CHAIN: { l: string; note?: string }[] = [
   { l: "Invoicing", note: "everything filed in one place" },
 ];
 
-const PRD_APPLY: { n: string; ti: string; tx: string; fill: string; dark?: boolean; ic: React.ReactNode }[] = [
-  { n: "01", ti: "Process Mapping", tx: "Process mapping conducted with the staff who perform the work", fill: "#1F3864",
-    ic: <><circle cx="6" cy="6" r="2" /><circle cx="18" cy="10" r="2" /><circle cx="9" cy="18" r="2" /><path d="M8 6h6a3 3 0 0 1 0 6h-4a3 3 0 0 0 0 6" /></> },
-  { n: "02", ti: "Workflow Rebuilds", tx: "Workflow rebuilds on platforms the agency can maintain independently", fill: "#46618C",
-    ic: <><rect x="9" y="3" width="6" height="5" rx="1" /><path d="M12 8v3M12 11l-6 3v2M12 11l6 3v2" /><rect x="3" y="16" width="6" height="5" rx="1" /><rect x="15" y="16" width="6" height="5" rx="1" /></> },
-  { n: "03", ti: "Integration", tx: "Integration with existing financial & records systems", fill: "#BDD0E9", dark: true,
-    ic: <><circle cx="9" cy="9" r="4" /><circle cx="16" cy="15" r="4" /><path d="M9 5v-2M9 15v-2M5 9h-2M15 9h-2M16 11v-2M16 21v-2M12 15h-2M22 15h-2" /></> },
-  { n: "04", ti: "Data Governance", tx: "Data governance designed in from the outset", fill: "#D6E2F1", dark: true,
-    ic: <><path d="M12 3l8 3v5c0 4.6-3.2 8.2-8 10-4.8-1.8-8-5.4-8-10V6z" /><path d="M9 12l2 2 4-4" /></> },
-  { n: "05", ti: "Training & Handover", tx: "Training & structured handover", fill: "#E7E9EC", dark: true,
-    ic: <><circle cx="9" cy="7" r="2.5" /><path d="M4 19c0-2.8 2.2-5 5-5" /><path d="M13 13l3 3 5-5" /><path d="M14 19h7" /></> },
-];
-
 type PrdStep = { k: string; cap: string; items: string[]; tone: "problem" | "built" | "result"; fig: string; stacked?: boolean };
 
 const PRD_STEPS: PrdStep[] = [
@@ -535,8 +522,7 @@ const PRD_STEPS: PrdStep[] = [
     items: ["The process map was developed in working sessions with the staff who carry out each step — not those who oversee it", "That distinction separates a workflow that is adopted from one that is worked around", "It brings forward the undocumented exceptions that decide whether a process initiative succeeds"] },
   { k: "What We Built", cap: "One connected workflow instead of eight disconnected ones", tone: "built", fig: "built", stacked: true,
     items: ["One intake form — the only place work enters", "The first six steps rebuilt as one connected workflow", "Status carries the work forward; documents are built from the record", "Everything files to one place — nothing crosses a boundary by hand"] },
-  { k: "The Architecture", cap: "Work management, integration layer, existing systems", tone: "built", fig: "arch", stacked: true,
-    items: ["monday.com holds the record of where every project stands, and what moves it to the next stage", "Make is the only place the platforms hand work to one another", "The systems already in place stay where they are — the layers above reach into them", "Departmental systems connect once access is approved"] },
+  { k: "The Architecture", cap: "Work management, integration layer, existing systems", tone: "built", fig: "arch", stacked: true, items: [] },
   { k: "Proof", cap: "Validated by the people who will operate it", tone: "result", fig: "proof",
     items: ["More than twenty agency staff across three divisions completed the full working walkthrough", "Contracting, research & technology transfer, and internal IT were all represented", "One working session per step, staffed with the people who perform it rather than with managers"] },
   { k: "Governance & Handover", cap: "Designed to be handed over — and to hold up to scrutiny", tone: "result", fig: "gov",
@@ -678,7 +664,6 @@ function PrdFig({ fig }: { fig: string }) {
           <path d="M12 3l8 3v5c0 4.6-3.2 8.2-8 10-4.8-1.8-8-5.4-8-10V6z" fill="#1F3864" stroke="#fbfcfe" strokeWidth="1.4" />
           <path d="M9 12l2 2 4-4" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
         </g>
-        <text x="108" y="222" textAnchor="middle" fontSize="11" fontWeight="700" fill="#44546A">governed by design</text>
         <path d="M212 118 h52 M254 106 l14 12 -14 12" fill="none" stroke="#C9A85E" strokeWidth="3.4" strokeLinecap="round" strokeLinejoin="round" />
         <circle cx="330" cy="118" r="46" fill="#D3E0F0" stroke="#1F3864" strokeWidth="2" />
         <g fill="none" stroke="#1F3864" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round">
@@ -687,7 +672,6 @@ function PrdFig({ fig }: { fig: string }) {
         </g>
         <circle cx="362" cy="86" r="13" fill="#C9A85E" />
         <path d="M356 86 l4 4 8-8" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" />
-        <text x="330" y="222" textAnchor="middle" fontSize="11" fontWeight="700" fill="#44546A">run by the agency</text>
       </svg>
     </div>
   );
@@ -701,17 +685,9 @@ function PrdFig({ fig }: { fig: string }) {
     </div>
   );
   return (
-    <div className="prd-panel">
-      <div className="prd-apply">
-        {PRD_APPLY.map((a) => (
-          <div className={"prd-apply-card" + (a.dark ? " dark" : "")} style={{ background: a.fill }} key={a.n}>
-            <b className="n">{a.n}</b>
-            <span className="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#1F3864" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">{a.ic}</svg></span>
-            <b className="ti">{a.ti}</b>
-            <p>{a.tx}</p>
-          </div>
-        ))}
-      </div>
+    <div className="prd-panel prd-apply-img">
+      {/* the actual graphic from the briefing, per Nicole */}
+      <img src="/images/pages/where-this-applies.png" alt="Where this applies: process mapping, workflow rebuilds, integration, data governance, and training & handover" />
     </div>
   );
 }
@@ -1304,16 +1280,9 @@ const CSS = `
 .prd-tile span{font-size:12px;font-weight:700;line-height:1.5;display:block}
 .prd-tile.dark{color:#16233A}
 
-/* where this applies — five cards */
-.prd-apply{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
-.prd-apply-card{position:relative;border-radius:12px;padding:15px 11px 16px;color:#fff;display:flex;flex-direction:column;align-items:center;text-align:center;gap:9px;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%)}
-.prd-apply-card:last-child{clip-path:none}
-.prd-apply-card.dark{color:#16233A}
-.prd-apply-card .n{font-size:14px;font-weight:800}
-.prd-apply-card .ic{width:42px;height:42px;border-radius:50%;background:#fff;box-shadow:0 4px 10px rgba(16,34,61,.2);display:flex;align-items:center;justify-content:center}
-.prd-apply-card .ic svg{width:22px;height:22px}
-.prd-apply-card .ti{font-size:12px;font-weight:800;line-height:1.25}
-.prd-apply-card p{margin:0;font-size:10.5px;line-height:1.45;font-weight:600;opacity:.94}
+/* where this applies — the slide's own graphic */
+.prd-apply-img{padding:12px}
+.prd-apply-img img{display:block;width:100%;height:auto;border-radius:10px}
 
 @media (max-width: 700px){
   .prd-chevrow{grid-template-columns:repeat(4,1fr)}
@@ -1326,8 +1295,6 @@ const CSS = `
   .prd-arch-row{grid-template-columns:1fr;gap:6px}
   .prd-arch-arrows{margin-left:0}
   .prd-tiles{grid-template-columns:1fr}
-  .prd-apply{grid-template-columns:1fr 1fr}
-  .prd-apply-card{clip-path:none !important}
 }
 
 /* The site hides the native cursor and each page draws its own dot+ring. This
