@@ -16,55 +16,63 @@ type Node = {
   /* descLines: forced line breaks for the hub label (desc stays the plain
      string for the mobile list). labDy: nudge the label up/down in px. */
   descLines?: string[]; labDy?: number;
-  icon: "chart" | "gauge" | "db" | "flow" | "pin" | "handoff"; ang: number;
+  icon: "chart" | "gauge" | "db" | "flow" | "pin" | "handoff" | "steps"; ang: number;
   example: string; popupTitle: string; popupSubtitle: string;
   before: string; after: string;
   problem: string[]; built: string[]; result: string[]; stack: string[]; quote: string;
 };
 
 const NODES: Node[] = [
-  { id: "reporting", title: "Reporting", desc: "Real-time insights that drive action.", descLines: ["Real-time insights", "that drive action."], labDy: -34, accent: "#3a83d6", icon: "chart", ang: 210,
-    example: "Example 01", popupTitle: "Project Accounting & Reporting", popupSubtitle: "Project-based technical services firm",
+  { id: "process-rebuild", title: "Process Rebuild", desc: "One connected workflow, end to end.", descLines: ["One connected workflow,", "end to end."], labDy: 34, accent: "#7a68cf", icon: "steps", ang: 0,
+    example: "Example 01", popupTitle: "Rebuilding an Agency Process End to End", popupSubtitle: "Consultant contracting at a state DOT",
+    before: "Eight steps, four divisions, email in between", after: "One intake, one path forward",
+    problem: ["Consultant contracting ran across eight steps and four divisions — procurement, legal, engineering, and accounting", "Handoffs between steps relied on email, spreadsheets, and scanned paper", "The same information was re-entered at every stage, from entity agreement through closeout", "Status lived in calendar reminders, verbal follow-ups, and a manual log"],
+    built: ["Mapped the process in working sessions with the staff who perform each step — not those who oversee it", "Rebuilt the first six steps as one connected workflow in Monday.com, with one intake form as the only place work enters", "A Make.com integration layer builds documents from the record, files them to storage, and sends notices — nothing crosses a boundary by hand", "Data governance decided before the build: the record keeps the consensus outcome, never an individual evaluator's score"],
+    result: ["More than twenty agency staff across three divisions completed a full working walkthrough", "One working session per step, staffed with the people who perform it rather than with managers", "Chosen for maintainability — agency staff can be trained to run it with no prior knowledge of the system"],
+    stack: ["Monday.com", "Make.com"],
+    quote: "The platform choice is driven by maintainability, so someone at the agency with no prior knowledge of the system can be trained to run it. We expect the work to outlast our engagement." },
+  { id: "reporting", title: "Reporting", desc: "Real-time insights that drive action.", descLines: ["Real-time insights", "that drive action."], labDy: -34, accent: "#3a83d6", icon: "chart", ang: 206,
+    example: "Example 02", popupTitle: "Project Accounting & Reporting", popupSubtitle: "Project-based technical services firm",
     before: "Data everywhere, no operating picture", after: "One view, drill-down on demand",
     problem: ["Project, accounting, CRM, time & reporting data lived in separate systems", "Teams manually pushed data into spreadsheets to get usable views", "Leaders needed both high-level and department-level visibility", "Field staff had no easy mobile access to site maps, photos & docs"],
     built: ["Migrated core data from Zoho into Monday.com", "Connected platforms with Make.com so data moved reliably", "Built dashboards that drill from high-level to project detail", "Shipped a mobile micro-app for project files from the field"],
     result: ["Leaders got a clean operating view without rebuilding reports", "Project teams reached records and files from the field", "Reliable data flow cut manual handling and lifted confidence"],
     stack: ["Monday.com", "Make.com", "QuickBooks", "QuickBooks Time", "Looker Studio", "Google Drive"],
     quote: "We already had the information — it was just spread across too many places. Once the systems were connected, we could finally see the project picture without rebuilding it every time." },
-  { id: "capacity", title: "Capacity", desc: "See capacity before it becomes a bottleneck.", descLines: ["See capacity before it", "becomes a bottleneck."], labDy: -34, accent: "#e0a63c", icon: "gauge", ang: 150,
-    example: "Example 04", popupTitle: "Capacity Planning", popupSubtitle: "Field services / drilling organization",
+  { id: "capacity", title: "Capacity", desc: "See capacity before it becomes a bottleneck.", descLines: ["See capacity before it", "becomes a bottleneck."], labDy: -34, accent: "#e0a63c", icon: "gauge", ang: 154,
+    example: "Example 05", popupTitle: "Capacity Planning", popupSubtitle: "Field services / drilling organization",
     before: "Capacity run on guesswork", after: "Capacity you can actually see",
     problem: ["Capacity depended on scattered updates and local knowledge", "No view of equipment location, booking length or downtime", "People & equipment constraints managed inconsistently", "Service windows — PTO for machines — were invisible in the plan"],
     built: ["Built one capacity system in Monday.com + Make.com", "Templatized it to manage people and equipment together", "Tracked locations, booking windows, utilization & downtime", "Made unavailable equipment visible before it caused conflicts"],
     result: ["See capacity before bottlenecks become emergencies", "Know what's booked, available or out of service", "Specialized assets scheduled right alongside people"],
     stack: ["Monday.com", "Make.com"],
     quote: "We stopped relying on scattered updates to understand capacity. We could finally see what was available, what was booked, and where the constraint was coming from." },
-  { id: "single-source", title: "Single Source", desc: "One source of truth across your team.", descLines: ["One source of truth", "across your team."], accent: "#33b07a", icon: "db", ang: 90,
-    example: "Example 05", popupTitle: "Single Source of Truth", popupSubtitle: "100+ employee manufacturing firm",
+  { id: "single-source", title: "Single Source", desc: "One source of truth across your team.", descLines: ["One source of truth", "across your team."], accent: "#33b07a", icon: "db", ang: 103,
+    example: "Example 06", popupTitle: "Single Source of Truth", popupSubtitle: "100+ employee manufacturing firm",
     before: "Workshops siloed, data unused", after: "One system, full-company view",
     problem: ["Manufacturing spread across workshops with poor office↔floor comms", "No reliable way to record time against a specific item built", "Data sat unused — no dashboards on production, staffing or capacity", "Heavy manual entry to match materials, time and cost"],
     built: ["Rebuilt everything around a core Monday.com board structure", "One source of truth with per-workshop permission levels", "Formulas + Make.com auto-calculate cost, materials, hours & assignment", "Added Tracket time tracking and DocuSign work orders inside Monday.com"],
     result: ["Estimated time, actual time, team, cost & price all in one place", "Leaders track workshop speed, profitability, staffing & capacity", "Quotes and invoices automated; jobs assigned by capacity, not phone calls"],
     stack: ["Monday.com", "Make.com", "Tracket", "DocuSign"],
     quote: "Transformed from multiple software solutions into a streamlined, easy-to-use single source of truth — full visibility over what's happening across the entire company." },
-  { id: "sales-project", title: "Sales → Project", desc: "From opportunity to execution — connected.", descLines: ["From opportunity to", "execution — connected."], labDy: 34, accent: "#8FB9E8", icon: "flow", ang: 30,
-    example: "Example 06", popupTitle: "Business Development → Project Handover", popupSubtitle: "130-person professional services firm",
+  { id: "sales-project", title: "Sales → Project", desc: "From opportunity to execution — connected.", descLines: ["From opportunity to", "execution — connected."], labDy: 34, accent: "#8FB9E8", icon: "flow", ang: 51,
+    example: "Example 07", popupTitle: "Business Development → Project Handover", popupSubtitle: "130-person professional services firm",
     before: "Closed-won ran on memory", after: "Billing-ready in days, not weeks",
     problem: ["Handoff from Business Development to delivery & finance ran on email and memory", "Scope, fee, billing terms & owner moved late or incomplete", "Finance and PMs chased Business Development for info that should be settled at close", "Project setup dragged on for one to two weeks"],
     built: ["Locked the few fields required before an opportunity can close-won", "Required scope, fee, terms, owner & kickoff date in Salesforce", "Automation pushes the project record into Monday.com at close", "Notified finance & delivery instantly with a standardized kickoff checklist"],
     result: ["Setup went from 1–2 weeks of back-and-forth to billing-ready in days", "Finance stopped chasing Business Development for basic setup information", "PMs walked into kickoffs with everything they needed"],
     stack: ["Salesforce", "Monday.com", "Make.com", "QuickBooks", "SharePoint", "Teams"],
     quote: "Project setup went from one to two weeks of back-and-forth to billing-ready in a few business days. Finance stopped chasing Business Development, and PMs walked into kickoffs with what they needed." },
-  { id: "field-reporting", title: "Field Reporting", desc: "Capture field data that fuels better decisions.", descLines: ["Capture field data that", "fuels better decisions."], labDy: 34, accent: "#e07a3c", icon: "pin", ang: 330,
-    example: "Example 03", popupTitle: "Field Reporting", popupSubtitle: "Field-service / project delivery firm",
+  { id: "field-reporting", title: "Field Reporting", desc: "Capture field data that fuels better decisions.", descLines: ["Capture field data that", "fuels better decisions."], labDy: 34, accent: "#e07a3c", icon: "pin", ang: 309,
+    example: "Example 04", popupTitle: "Field Reporting", popupSubtitle: "Field-service / project delivery firm",
     before: "Records that vanished after the visit", after: "Captured on site, filed automatically",
     problem: ["Site-visit info existed but wasn't structured for later use", "Attachments and field details were hard to retrieve afterward", "Office staff had to chase individuals to see what happened"],
     built: ["Added form links directly into Google Calendar events", "Monday.com forms create board items the moment field staff submit", "Attachments auto-file into the right Google Drive structure", "Connected field capture back into the project record"],
     result: ["Field information became easy to find, reuse and report on", "Attachments landed in the right place automatically", "The office gained clean visibility into every site visit"],
     stack: ["Monday.com", "Make.com", "Google Calendar", "Google Drive"],
     quote: "Our team was already capturing the information. The value came from making sure it landed somewhere useful without another person having to chase it down." },
-  { id: "service-handoff", title: "Service Handoff", desc: "Seamless transitions. No dropped information.", descLines: ["Seamless transitions.", "No dropped information."], accent: "#2ab0ab", icon: "handoff", ang: 270,
-    example: "Example 02", popupTitle: "Project → Service Handoff", popupSubtitle: "Install & service / maintenance firm",
+  { id: "service-handoff", title: "Service Handoff", desc: "Seamless transitions. No dropped information.", descLines: ["Seamless transitions.", "No dropped information."], accent: "#2ab0ab", icon: "handoff", ang: 257,
+    example: "Example 03", popupTitle: "Project → Service Handoff", popupSubtitle: "Install & service / maintenance firm",
     before: "Service teams starting from zero", after: "History follows the work",
     problem: ["Completed projects moved to service, but the handoff was siloed", "Service teams had limited insight into what install had done", "Staff often started from scratch to understand project history", "PMs had no time to walk service through each project"],
     built: ["Moved the workflow into Monday.com + Google Suite", "Tracked every client visit against the project history", "Google Calendar sync & on-site forms captured what was done", "Filed attachments and records into a supporting Drive structure"],
@@ -144,6 +152,13 @@ function bObj(kind: string, accent: string): THREE.Group {
     const ck = new THREE.Group(); ck.position.set(0.42, 0.38, 0); g.add(ck);
     const c1 = P(new THREE.BoxGeometry(0.1, 0.2, 0.16), acc, ck); c1.rotation.z = Math.PI / 4; c1.position.set(-0.06, 0, 0);
     const c2 = P(new THREE.BoxGeometry(0.1, 0.44, 0.16), acc, ck); c2.rotation.z = -0.58; c2.position.set(0.1, 0.13, 0);
+  } else if (kind === "steps") {
+    /* end-to-end process: three rising steps carried by one continuous rail */
+    ([0.28, 0.5, 0.72]).forEach((y, k) => {
+      M(new RoundedBoxGeometry(0.34, 0.12, 0.3, 3, 0.03), k === 2 ? acc : white).position.set(-0.3 + k * 0.3, y, 0);
+    });
+    const rail = M(new THREE.BoxGeometry(0.78, 0.045, 0.045), navy); rail.rotation.z = 0.63; rail.position.set(0, 0.52, 0.12);
+    const hd = M(new THREE.ConeGeometry(0.09, 0.16, 18), acc); hd.rotation.z = -0.94; hd.position.set(0.38, 0.8, 0.12);
   }
   return g;
 }
@@ -260,6 +275,40 @@ function storyScene(id: string, tone: string): THREE.Group {
       /* clear of the card's yawed front-right corner (x 1.358 / z 0.763), which
          was swallowing the tick */
       tick(green, 0.9).position.set(1.56, 0.5, 0.95);
+    }
+  } else if (id === "process-rebuild") {
+    if (tone === "problem") {
+      /* eight steps across four divisions — every handoff is a gap */
+      ([[-1.5, 0.98, -0.1, -0.16], [-0.5, 0.78, 0.1, 0.12], [0.5, 1.05, -0.06, -0.1], [1.5, 0.8, 0.05, 0.18]] as [number, number, number, number][])
+        .forEach(([x, y, z, rz], k) => { const c = card(0.6, 0.72); c.position.set(x, y, z); c.rotation.set(0.05, rz * 0.6, rz);
+          [0.2, 0.04, -0.12].forEach((ry, i) => row(c, 0.34 - i * 0.05, ry, i === 0 ? navy : k % 2 ? slate : lblue, -0.05)); });
+      dashed(0.5, red, 3).position.set(-1.0, 0.9, 0.12);
+      dashed(0.5, red, 3).position.set(0, 0.92, 0.12);
+      dashed(0.5, red, 3).position.set(1.0, 0.94, 0.12);
+      cross(red, 0.8).position.set(-1.0, 1.32, 0.3);
+      cross(red, 0.8).position.set(1.0, 1.36, 0.3);
+      label("Four divisions").position.set(0, 0.28, 0.3);
+    } else if (tone === "built") {
+      /* one intake; one gold path carries the record step to step */
+      const f = card(0.62, 0.8); f.position.set(-1.5, 1.0, 0);
+      row(f, 0.36, 0.2, navy, -0.1); row(f, 0.3, 0.04, lblue, -0.13); row(f, 0.34, -0.12, lblue, -0.11);
+      funnel(slate, 0.9).position.set(-1.5, 1.58, -0.04);
+      const rail = pipe(2.4, gold, 0.055); rail.position.set(0.15, 0.62, 0);
+      ([-0.55, 0.35, 1.25] as number[]).forEach((x) => { const c = card(0.56, 0.6); c.position.set(x, 1.0, 0);
+        row(c, 0.32, 0.12, navy, -0.07); row(c, 0.26, -0.04, lblue, -0.1);
+        const tk = tick(gold, 0.4); tk.position.set(x + 0.18, 0.68, 0.22); });
+      const a = arrow(0.3, gold, 0.05); a.position.set(1.62, 0.62, 0.06);
+      label("One intake").position.set(-1.5, 0.42, 0.3);
+    } else {
+      /* walked through by the people who will run it — built to hand over */
+      const c = card(1.4, 1.2); c.position.set(-0.4, 1.06, 0);
+      ([0.36, 0.16, -0.04, -0.24] as number[]).forEach((y, k) => { row(c, 0.6 - k * 0.05, y, k === 0 ? navy : lblue, -0.18);
+        const tk = tick(green, 0.46); tk.position.set(0.14, 1.06 + y, 0.1); });
+      const base = A(new RoundedBoxGeometry(1.6, 0.14, 0.5, 3, 0.05), green); base.position.set(-0.4, 0.36, 0);
+      label("20+ staff").position.set(1.05, 1.42, 0.3);
+      const hand = card(0.6, 0.72); hand.position.set(1.05, 0.92, 0.3); hand.rotation.set(0.04, -0.28, 0.03);
+      row(hand, 0.32, 0.18, navy, -0.08); row(hand, 0.26, 0.02, lblue, -0.11);
+      tick(green, 0.7).position.set(1.32, 0.42, 0.46);
     }
   } else if (id === "capacity") {
     if (tone === "problem") {
@@ -611,8 +660,8 @@ export default function AutomationIntegrationInteractive({ embedded = false, eye
          corner at icon-top height where nothing exists, so the fit reserved a
          band of empty air above the hub. The platform is wide but low; only the
          icon's middle is tall.
-         Sampled across a 60deg sweep as well: the hub is 6-fold symmetric, so
-         that covers every angle you can drag it to. Fitting only the rest pose
+         Sampled across a 60deg sweep as well: with seven nodes the hub repeats
+         every ~51deg, so that covers every angle you can drag it to. Fitting only the rest pose
          let nodes swing outside the frame and clip once you started rotating. */
       for (let s = 0; s < 6; s++) {
         const th = (s * 10 * Math.PI) / 180, sx = Math.sin(a + th) * R, sz = Math.cos(a + th) * R;
@@ -838,7 +887,7 @@ export default function AutomationIntegrationInteractive({ embedded = false, eye
           </div>
         ))}
       </div>
-      {/* mobile only — the hub stays tappable, this just names the six */}
+      {/* mobile only — the hub stays tappable, this just names the examples */}
       <ul className="rai-mlist">
         {NODES.map((n, i) => (
           <li key={n.id}>
