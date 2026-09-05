@@ -16,14 +16,14 @@ type Node = {
   /* descLines: forced line breaks for the hub label (desc stays the plain
      string for the mobile list). labDy: nudge the label up/down in px. */
   descLines?: string[]; labDy?: number;
-  icon: "chart" | "gauge" | "db" | "flow" | "pin" | "handoff" | "steps"; ang: number;
+  icon: "chart" | "gauge" | "db" | "flow" | "pin" | "handoff" | "chevrons"; ang: number;
   example: string; popupTitle: string; popupSubtitle: string;
   before: string; after: string;
   problem: string[]; built: string[]; result: string[]; stack: string[]; quote: string;
 };
 
 const NODES: Node[] = [
-  { id: "process-rebuild", title: "Process Rebuild", desc: "One connected workflow, end to end.", descLines: ["One connected workflow,", "end to end."], labDy: 34, accent: "#7a68cf", icon: "steps", ang: 0,
+  { id: "process-rebuild", title: "Process Rebuild", desc: "One connected workflow, end to end.", descLines: ["One connected workflow,", "end to end."], labDy: 34, accent: "#7a68cf", icon: "chevrons", ang: 0,
     example: "Example 01", popupTitle: "Rebuilding an Agency Process End to End", popupSubtitle: "Consultant contracting at a state DOT",
     before: "Eight steps, four divisions, email in between", after: "One intake, one path forward",
     problem: ["Consultant contracting ran across eight steps and four divisions — procurement, legal, engineering, and accounting", "Handoffs between steps relied on email, spreadsheets, and scanned paper", "The same information was re-entered at every stage, from entity agreement through closeout", "Status lived in calendar reminders, verbal follow-ups, and a manual log"],
@@ -152,13 +152,17 @@ function bObj(kind: string, accent: string): THREE.Group {
     const ck = new THREE.Group(); ck.position.set(0.42, 0.38, 0); g.add(ck);
     const c1 = P(new THREE.BoxGeometry(0.1, 0.2, 0.16), acc, ck); c1.rotation.z = Math.PI / 4; c1.position.set(-0.06, 0, 0);
     const c2 = P(new THREE.BoxGeometry(0.1, 0.44, 0.16), acc, ck); c2.rotation.z = -0.58; c2.position.set(0.1, 0.13, 0);
-  } else if (kind === "steps") {
-    /* end-to-end process: three rising steps carried by one continuous rail */
-    ([0.28, 0.5, 0.72]).forEach((y, k) => {
-      M(new RoundedBoxGeometry(0.34, 0.12, 0.3, 3, 0.03), k === 2 ? acc : white).position.set(-0.3 + k * 0.3, y, 0);
+  } else if (kind === "chevrons") {
+    /* the process strip from the briefing: three chevrons marching forward,
+       the last one accented — end-to-end, step by step */
+    const ex = { depth: 0.14, bevelEnabled: true, bevelThickness: 0.014, bevelSize: 0.014, bevelSegments: 2 };
+    const ch = new THREE.Shape();
+    ch.moveTo(-0.16, 0.24); ch.lineTo(0.0, 0.24); ch.lineTo(0.17, 0);
+    ch.lineTo(0.0, -0.24); ch.lineTo(-0.16, -0.24); ch.lineTo(0.01, 0); ch.closePath();
+    ([-0.36, 0, 0.36]).forEach((x, k) => {
+      const m = M(new THREE.ExtrudeGeometry(ch, ex), k === 2 ? acc : k === 1 ? navy : white);
+      m.position.set(x, 0.52, -0.07);
     });
-    const rail = M(new THREE.BoxGeometry(0.78, 0.045, 0.045), navy); rail.rotation.z = 0.63; rail.position.set(0, 0.52, 0.12);
-    const hd = M(new THREE.ConeGeometry(0.09, 0.16, 18), acc); hd.rotation.z = -0.94; hd.position.set(0.38, 0.8, 0.12);
   }
   return g;
 }
@@ -275,40 +279,6 @@ function storyScene(id: string, tone: string): THREE.Group {
       /* clear of the card's yawed front-right corner (x 1.358 / z 0.763), which
          was swallowing the tick */
       tick(green, 0.9).position.set(1.56, 0.5, 0.95);
-    }
-  } else if (id === "process-rebuild") {
-    if (tone === "problem") {
-      /* eight steps across four divisions — every handoff is a gap */
-      ([[-1.5, 0.98, -0.1, -0.16], [-0.5, 0.78, 0.1, 0.12], [0.5, 1.05, -0.06, -0.1], [1.5, 0.8, 0.05, 0.18]] as [number, number, number, number][])
-        .forEach(([x, y, z, rz], k) => { const c = card(0.6, 0.72); c.position.set(x, y, z); c.rotation.set(0.05, rz * 0.6, rz);
-          [0.2, 0.04, -0.12].forEach((ry, i) => row(c, 0.34 - i * 0.05, ry, i === 0 ? navy : k % 2 ? slate : lblue, -0.05)); });
-      dashed(0.5, red, 3).position.set(-1.0, 0.9, 0.12);
-      dashed(0.5, red, 3).position.set(0, 0.92, 0.12);
-      dashed(0.5, red, 3).position.set(1.0, 0.94, 0.12);
-      cross(red, 0.8).position.set(-1.0, 1.32, 0.3);
-      cross(red, 0.8).position.set(1.0, 1.36, 0.3);
-      label("Four divisions").position.set(0, 0.28, 0.3);
-    } else if (tone === "built") {
-      /* one intake; one gold path carries the record step to step */
-      const f = card(0.62, 0.8); f.position.set(-1.5, 1.0, 0);
-      row(f, 0.36, 0.2, navy, -0.1); row(f, 0.3, 0.04, lblue, -0.13); row(f, 0.34, -0.12, lblue, -0.11);
-      funnel(slate, 0.9).position.set(-1.5, 1.58, -0.04);
-      const rail = pipe(2.4, gold, 0.055); rail.position.set(0.15, 0.62, 0);
-      ([-0.55, 0.35, 1.25] as number[]).forEach((x) => { const c = card(0.56, 0.6); c.position.set(x, 1.0, 0);
-        row(c, 0.32, 0.12, navy, -0.07); row(c, 0.26, -0.04, lblue, -0.1);
-        const tk = tick(gold, 0.4); tk.position.set(x + 0.18, 0.68, 0.22); });
-      const a = arrow(0.3, gold, 0.05); a.position.set(1.62, 0.62, 0.06);
-      label("One intake").position.set(-1.5, 0.42, 0.3);
-    } else {
-      /* walked through by the people who will run it — built to hand over */
-      const c = card(1.4, 1.2); c.position.set(-0.4, 1.06, 0);
-      ([0.36, 0.16, -0.04, -0.24] as number[]).forEach((y, k) => { row(c, 0.6 - k * 0.05, y, k === 0 ? navy : lblue, -0.18);
-        const tk = tick(green, 0.46); tk.position.set(0.14, 1.06 + y, 0.1); });
-      const base = A(new RoundedBoxGeometry(1.6, 0.14, 0.5, 3, 0.05), green); base.position.set(-0.4, 0.36, 0);
-      label("20+ staff").position.set(1.05, 1.42, 0.3);
-      const hand = card(0.6, 0.72); hand.position.set(1.05, 0.92, 0.3); hand.rotation.set(0.04, -0.28, 0.03);
-      row(hand, 0.32, 0.18, navy, -0.08); row(hand, 0.26, 0.02, lblue, -0.11);
-      tick(green, 0.7).position.set(1.32, 0.42, 0.46);
     }
   } else if (id === "capacity") {
     if (tone === "problem") {
@@ -486,6 +456,102 @@ function storyScene(id: string, tone: string): THREE.Group {
 }
 
 /* Renders one story tableau in its own WebGL view; rebuilds on step change. */
+
+/* ── Example 01 figures — the DOT capability briefing's slides, remade as
+   crisp SVG in the site's own language. This node's popup uses these
+   instead of the 3D vignettes. ── */
+function ProcessRebuildFigure({ tone }: { tone: string }) {
+  const F = "var(--font-dm-sans), 'DM Sans', sans-serif";
+  const chev = (x: number, y: number, w: number, h: number, n: number) =>
+    `M${x} ${y} h${w - n} l${n} ${h / 2} l${-n} ${h / 2} h${-(w - n)} l${n} ${-h / 2} z`;
+  const xmark = (x: number, y: number) => (
+    <path d={`M${x - 5} ${y - 5} l10 10 M${x + 5} ${y - 5} l-10 10`} stroke="#e05656" strokeWidth="2.4" strokeLinecap="round" fill="none" />
+  );
+  if (tone === "problem") {
+    const ramp = ["#1D3759", "#2C4667", "#3E5778", "#4F6787", "#5d7392", "#8FA4C1", "#A6BBD6", "#C4D8F2"];
+    const steps = ["Agreement", "Projected Ads", "Advertisement", "Selection", "Execution", "Task Orders", "Invoicing", "Closeout"];
+    return (
+      <div className="rai-vis rai-fig">
+        <svg viewBox="0 0 560 250" style={{ width: "100%", height: "100%", fontFamily: F }} role="img"
+          aria-label="Eight contracting steps across four divisions, stitched together by email and spreadsheets">
+          {steps.map((s, k) => {
+            const row = k < 4 ? 0 : 1, col = k % 4;
+            const x = 18 + col * 132, y = row === 0 ? 28 : 152;
+            const dark = k < 5;
+            return (
+              <g key={s}>
+                <path d={chev(x, y, 122, 52, 14)} fill={ramp[k]} />
+                <text x={x + 54} y={y + 22} textAnchor="middle" fontSize="11" fontWeight="800" fill={dark ? "#fff" : "#16233A"}>{`0${k + 1}`}</text>
+                <text x={x + 54} y={y + 38} textAnchor="middle" fontSize="9.5" fontWeight="600" fill={dark ? "#e6edf6" : "#16233A"}>{s}</text>
+              </g>
+            );
+          })}
+          <rect x="70" y="104" width="420" height="30" rx="15" fill="none" stroke="#e05656" strokeWidth="1.5" strokeDasharray="6 5" />
+          <text x="280" y="123" textAnchor="middle" fontSize="10.5" fontWeight="700" fill="#c94b4b">handoffs: email &#183; spreadsheets &#183; scanned paper &#183; re-keyed data</text>
+          {xmark(46, 119)}
+          {xmark(514, 119)}
+          <text x="280" y="238" textAnchor="middle" fontSize="10" fontWeight="600" fill="#4F6787">one process, owned across four divisions &#8212; procurement &#183; legal &#183; engineering &#183; accounting</text>
+        </svg>
+      </div>
+    );
+  }
+  if (tone === "built") {
+    const band = (y: number, fill: string, dark: boolean, title: string, chips: string[]) => (
+      <g>
+        <rect x="20" y={y} width="520" height="56" rx="10" fill={fill} />
+        <text x="32" y={y + 19} fontSize="11" fontWeight="800" fill={dark ? "#fff" : "#16233A"}>{title}</text>
+        {chips.map((c, k) => (
+          <g key={c}>
+            <rect x={32 + k * 128} y={y + 27} width="116" height="20" rx="10" fill="#fff" opacity="0.94" />
+            <text x={32 + k * 128 + 58} y={y + 41} textAnchor="middle" fontSize="9.5" fontWeight="700" fill="#1D3759">{c}</text>
+          </g>
+        ))}
+      </g>
+    );
+    const varrow = (x: number, y: number) => (
+      <path d={`M${x} ${y} v8 m-4 -4 l4 5 l4 -5`} stroke="#4F6787" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+    );
+    return (
+      <div className="rai-vis rai-fig">
+        <svg viewBox="0 0 560 250" style={{ width: "100%", height: "100%", fontFamily: F }} role="img"
+          aria-label="One intake form feeding a layered system: monday.com work management, a Make integration layer, and the systems already in place">
+          <rect x="115" y="6" width="330" height="26" rx="13" fill="#1D3759" />
+          <text x="280" y="23" textAnchor="middle" fontSize="10.5" fontWeight="800" fill="#fff" letterSpacing="0.5">ONE INTAKE FORM &#8212; the only place work enters</text>
+          {varrow(280, 34)}
+          {band(46, "#C4D8F2", false, "Work management \u2014 monday.com", ["Intake form", "Boards & status", "Approvals", "Dashboards"])}
+          {varrow(150, 104)}
+          {varrow(410, 104)}
+          {band(114, "#4F6787", true, "Integration layer \u2014 Make", ["Documents", "Filing", "Notices", "System sync"])}
+          {varrow(150, 172)}
+          {varrow(410, 172)}
+          {band(182, "#e8ecf3", false, "Systems already in place \u2014 left where they are", ["Storage", "Email", "Reporting", "e-Signature"])}
+        </svg>
+      </div>
+    );
+  }
+  const tile = (x: number, fill: string, dark: boolean, num: string, l1: string, l2: string) => (
+    <g>
+      <rect x={x} y="24" width="160" height="140" rx="12" fill={fill} />
+      <text x={x + 80} y="92" textAnchor="middle" fontSize="40" fontWeight="800" fill={dark ? "#fff" : "#16233A"}>{num}</text>
+      <text x={x + 80} y="120" textAnchor="middle" fontSize="9.5" fontWeight="700" fill={dark ? "#e6edf6" : "#16233A"}>{l1}</text>
+      <text x={x + 80} y="134" textAnchor="middle" fontSize="9.5" fontWeight="700" fill={dark ? "#e6edf6" : "#16233A"}>{l2}</text>
+    </g>
+  );
+  return (
+    <div className="rai-vis rai-fig">
+      <svg viewBox="0 0 560 250" style={{ width: "100%", height: "100%", fontFamily: F }} role="img"
+        aria-label="Validated by more than twenty agency staff across three divisions, one working session per step, and built to be handed over">
+        {tile(20, "#1D3759", true, "20+", "agency staff completed", "the full walkthrough")}
+        {tile(200, "#4F6787", true, "3", "divisions represented,", "contracting through IT")}
+        {tile(380, "#C4D8F2", false, "1", "working session per step,", "with the staff who do it")}
+        <rect x="60" y="192" width="440" height="34" rx="17" fill="#eaf5ef" stroke="#33b07a" strokeWidth="1.3" />
+        <path d="M84 209 l6 7 l11 -13" stroke="#1e7a52" strokeWidth="2.6" fill="none" strokeLinecap="round" strokeLinejoin="round" />
+        <text x="292" y="213" textAnchor="middle" fontSize="10.5" fontWeight="700" fill="#1e7a52">Built to be handed over &#8212; designed to outlast the engagement</text>
+      </svg>
+    </div>
+  );
+}
+
 function StoryScene3D({ sceneId, tone }: { sceneId: string; tone: string }) {
   const host = useRef<HTMLDivElement | null>(null);
   useEffect(() => {
@@ -915,7 +981,9 @@ export default function AutomationIntegrationInteractive({ embedded = false, eye
               </div>
 
               <div className="rai-story" key={step}>
-                <StoryScene3D sceneId={active.id} tone={STEPS[step].tone} />
+                {active.id === "process-rebuild"
+                  ? <ProcessRebuildFigure tone={STEPS[step].tone} />
+                  : <StoryScene3D sceneId={active.id} tone={STEPS[step].tone} />}
                 <div className="rai-stage-text">
                   <div className="rai-kicker">Step {step + 1} of 3</div>
                   <h3 className="rai-step-title">{STEPS[step].k}</h3>
