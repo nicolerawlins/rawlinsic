@@ -467,10 +467,10 @@ function storyScene(id: string, tone: string): THREE.Group {
    ────────────────────────────────────────────────────────────── */
 const PRD_CHEV: { n: string; lines: string[]; fill: string; dashed?: boolean; dark?: boolean; fs?: number }[] = [
   { n: "01", lines: ["Entity-State", "Agreement"], fill: "#1F3864" },
-  { n: "02", lines: ["Projected", "Advertisements"], fill: "#2E4A77", fs: 10.5 },
+  { n: "02", lines: ["Projected", "Advertisements"], fill: "#2E4A77", fs: 11.5 },
   { n: "03", lines: ["Advertisement"], fill: "#46618C" },
   { n: "04", lines: ["Selection"], fill: "#60779E" },
-  { n: "05", lines: ["Contract Execution", "& Review"], fill: "#8FA6C0", fs: 10.5 },
+  { n: "05", lines: ["Contract Execution", "& Review"], fill: "#8FA6C0", fs: 11.5 },
   { n: "06", lines: ["Task Orders", "& POs"], fill: "#BDD0E9", dark: true },
   { n: "07", lines: ["Invoicing"], fill: "#E2ECF6", dashed: true, dark: true },
   { n: "08", lines: ["Closeout"], fill: "#E2ECF6", dashed: true, dark: true },
@@ -486,7 +486,7 @@ function PrdChevron({ c, first }: { c: (typeof PRD_CHEV)[number]; first: boolean
       <circle cx="20" cy="15" r="13" fill={c.dashed ? "#fff" : "#1F3864"} stroke={c.dashed ? "#E1524A" : "#fff"} strokeWidth="2" strokeDasharray={c.dashed ? "4.5 3.5" : undefined} />
       <text x="20" y="19.5" textAnchor="middle" fontSize="11.5" fontWeight="800" fill={c.dashed ? "#1F3864" : "#fff"}>{c.n}</text>
       {c.lines.map((l, k) => (
-        <text key={l} x="80" y={c.lines.length === 1 ? 69 : 61 + k * 16} textAnchor="middle" fontSize={c.fs ?? 12.5} fontWeight="700" fill={c.dark ? "#16233A" : "#fff"}>{l}</text>
+        <text key={l} x="80" y={c.lines.length === 1 ? 70 : 60 + k * 17} textAnchor="middle" fontSize={c.lines.length === 1 ? 14.5 : (c.fs ?? 14)} fontWeight="700" fill={c.dark ? "#16233A" : "#fff"}>{l}</text>
       ))}
     </svg>
   );
@@ -1198,8 +1198,9 @@ const CSS = `
 .prd-underline{display:block;width:52px;height:2.5px;background:#8096B4;margin:8px 0 14px}
 
 /* problem — the eight-chevron strip */
-.prd-chevrow{display:grid;grid-template-columns:repeat(8,1fr);gap:2px 0;margin:2px 0 12px}
-.prd-chev{width:100%;height:auto;display:block}
+.prd-chevrow{display:flex;flex-wrap:wrap;margin:2px 0 12px}
+.prd-chev{flex:0 0 calc(12.5% + 12.25px);min-width:0;height:auto;display:block;margin-left:-14px}
+.prd-chev:first-child{margin-left:0}
 .prd-legend{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
 .prd-leg-item{display:flex;align-items:center;gap:10px;white-space:nowrap}
 .prd-leg-item + .prd-leg-item{margin-left:14px}
@@ -1291,7 +1292,8 @@ const CSS = `
 
 @media (max-width: 760px){
   .rai-story.prd-side{display:flex;flex-direction:column;gap:14px}
-  .prd-chevrow{grid-template-columns:repeat(4,1fr)}
+  .prd-chev{flex-basis:calc(25% + 10.5px)}
+  .prd-chev:nth-child(5){margin-left:0}
   .prd-vs{grid-template-columns:1fr}
   .prd-vs-mid{margin:2px auto}
   .prd-vs-col{min-width:0}
