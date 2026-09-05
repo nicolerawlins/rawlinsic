@@ -457,97 +457,302 @@ function storyScene(id: string, tone: string): THREE.Group {
 
 /* Renders one story tableau in its own WebGL view; rebuilds on step change. */
 
-/* ── Example 01 figures — the DOT capability briefing's slides, remade as
-   crisp SVG in the site's own language. This node's popup uses these
-   instead of the 3D vignettes. ── */
-function ProcessRebuildFigure({ tone }: { tone: string }) {
-  const F = "var(--font-dm-sans), 'DM Sans', sans-serif";
-  const chev = (x: number, y: number, w: number, h: number, n: number) =>
-    `M${x} ${y} h${w - n} l${n} ${h / 2} l${-n} ${h / 2} h${-(w - n)} l${n} ${-h / 2} z`;
-  const xmark = (x: number, y: number) => (
-    <path d={`M${x - 5} ${y - 5} l10 10 M${x + 5} ${y - 5} l-10 10`} stroke="#e05656" strokeWidth="2.4" strokeLinecap="round" fill="none" />
-  );
-  if (tone === "problem") {
-    const ramp = ["#1D3759", "#2C4667", "#3E5778", "#4F6787", "#5d7392", "#8FA4C1", "#A6BBD6", "#C4D8F2"];
-    const steps = ["Agreement", "Projected Ads", "Advertisement", "Selection", "Execution", "Task Orders", "Invoicing", "Closeout"];
-    return (
-      <div className="rai-vis rai-fig">
-        <svg viewBox="0 0 560 250" style={{ width: "100%", height: "100%", fontFamily: F }} role="img"
-          aria-label="Eight contracting steps across four divisions, stitched together by email and spreadsheets">
-          {steps.map((s, k) => {
-            const row = k < 4 ? 0 : 1, col = k % 4;
-            const x = 18 + col * 132, y = row === 0 ? 28 : 152;
-            const dark = k < 5;
-            return (
-              <g key={s}>
-                <path d={chev(x, y, 122, 52, 14)} fill={ramp[k]} />
-                <text x={x + 54} y={y + 22} textAnchor="middle" fontSize="11" fontWeight="800" fill={dark ? "#fff" : "#16233A"}>{`0${k + 1}`}</text>
-                <text x={x + 54} y={y + 38} textAnchor="middle" fontSize="9.5" fontWeight="600" fill={dark ? "#e6edf6" : "#16233A"}>{s}</text>
-              </g>
-            );
-          })}
-          <rect x="70" y="104" width="420" height="30" rx="15" fill="none" stroke="#e05656" strokeWidth="1.5" strokeDasharray="6 5" />
-          <text x="280" y="123" textAnchor="middle" fontSize="10.5" fontWeight="700" fill="#c94b4b">handoffs: email &#183; spreadsheets &#183; scanned paper &#183; re-keyed data</text>
-          {xmark(46, 119)}
-          {xmark(514, 119)}
-          <text x="280" y="238" textAnchor="middle" fontSize="10" fontWeight="600" fill="#4F6787">one process, owned across four divisions &#8212; procurement &#183; legal &#183; engineering &#183; accounting</text>
-        </svg>
-      </div>
-    );
-  }
-  if (tone === "built") {
-    const band = (y: number, fill: string, dark: boolean, title: string, chips: string[]) => (
-      <g>
-        <rect x="20" y={y} width="520" height="56" rx="10" fill={fill} />
-        <text x="32" y={y + 19} fontSize="11" fontWeight="800" fill={dark ? "#fff" : "#16233A"}>{title}</text>
-        {chips.map((c, k) => (
-          <g key={c}>
-            <rect x={32 + k * 128} y={y + 27} width="116" height="20" rx="10" fill="#fff" opacity="0.94" />
-            <text x={32 + k * 128 + 58} y={y + 41} textAnchor="middle" fontSize="9.5" fontWeight="700" fill="#1D3759">{c}</text>
-          </g>
-        ))}
-      </g>
-    );
-    const varrow = (x: number, y: number) => (
-      <path d={`M${x} ${y} v8 m-4 -4 l4 5 l4 -5`} stroke="#4F6787" strokeWidth="1.8" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-    );
-    return (
-      <div className="rai-vis rai-fig">
-        <svg viewBox="0 0 560 250" style={{ width: "100%", height: "100%", fontFamily: F }} role="img"
-          aria-label="One intake form feeding a layered system: monday.com work management, a Make integration layer, and the systems already in place">
-          <rect x="115" y="6" width="330" height="26" rx="13" fill="#1D3759" />
-          <text x="280" y="23" textAnchor="middle" fontSize="10.5" fontWeight="800" fill="#fff" letterSpacing="0.5">ONE INTAKE FORM &#8212; the only place work enters</text>
-          {varrow(280, 34)}
-          {band(46, "#C4D8F2", false, "Work management \u2014 monday.com", ["Intake form", "Boards & status", "Approvals", "Dashboards"])}
-          {varrow(150, 104)}
-          {varrow(410, 104)}
-          {band(114, "#4F6787", true, "Integration layer \u2014 Make", ["Documents", "Filing", "Notices", "System sync"])}
-          {varrow(150, 172)}
-          {varrow(410, 172)}
-          {band(182, "#e8ecf3", false, "Systems already in place \u2014 left where they are", ["Storage", "Email", "Reporting", "e-Signature"])}
-        </svg>
-      </div>
-    );
-  }
-  const tile = (x: number, fill: string, dark: boolean, num: string, l1: string, l2: string) => (
-    <g>
-      <rect x={x} y="24" width="160" height="140" rx="12" fill={fill} />
-      <text x={x + 80} y="92" textAnchor="middle" fontSize="40" fontWeight="800" fill={dark ? "#fff" : "#16233A"}>{num}</text>
-      <text x={x + 80} y="120" textAnchor="middle" fontSize="9.5" fontWeight="700" fill={dark ? "#e6edf6" : "#16233A"}>{l1}</text>
-      <text x={x + 80} y="134" textAnchor="middle" fontSize="9.5" fontWeight="700" fill={dark ? "#e6edf6" : "#16233A"}>{l2}</text>
-    </g>
-  );
+
+/* ──────────────────────────────────────────────────────────────
+   Example 01 — the "Rebuilding an Agency Process End to End"
+   capability briefing, every slide remade as real markup (no
+   images of the deck). Two-column slides stack on narrow screens.
+   ────────────────────────────────────────────────────────────── */
+const PRD_LOGO = "/images/pages/rawlinslogo-square.png";
+
+function PrdChrome() {
   return (
-    <div className="rai-vis rai-fig">
-      <svg viewBox="0 0 560 250" style={{ width: "100%", height: "100%", fontFamily: F }} role="img"
-        aria-label="Validated by more than twenty agency staff across three divisions, one working session per step, and built to be handed over">
-        {tile(20, "#1D3759", true, "20+", "agency staff completed", "the full walkthrough")}
-        {tile(200, "#4F6787", true, "3", "divisions represented,", "contracting through IT")}
-        {tile(380, "#C4D8F2", false, "1", "working session per step,", "with the staff who do it")}
-        <rect x="60" y="192" width="440" height="34" rx="17" fill="#eaf5ef" stroke="#33b07a" strokeWidth="1.3" />
-        <path d="M84 209 l6 7 l11 -13" stroke="#1e7a52" strokeWidth="2.6" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-        <text x="292" y="213" textAnchor="middle" fontSize="10.5" fontWeight="700" fill="#1e7a52">Built to be handed over &#8212; designed to outlast the engagement</text>
-      </svg>
+    <div className="prd-chrome">
+      <img className="prd-chrome-logo" src={PRD_LOGO} alt="" aria-hidden="true" />
+      <span className="prd-chrome-trap" />
+    </div>
+  );
+}
+
+function PrdHead({ t, s }: { t: string; s: string }) {
+  return (
+    <div className="prd-head">
+      <h3>{t}</h3>
+      <p>{s}</p>
+      <span className="prd-rule" />
+    </div>
+  );
+}
+
+const PRD_CHEV: { n: string; lines: string[]; fill: string; dashed?: boolean; dark?: boolean }[] = [
+  { n: "01", lines: ["Entity-State", "Agreement"], fill: "#1F3864" },
+  { n: "02", lines: ["Projected", "Advertisements"], fill: "#2E4A77" },
+  { n: "03", lines: ["Advertisement"], fill: "#46618C" },
+  { n: "04", lines: ["Selection"], fill: "#60779E" },
+  { n: "05", lines: ["Contract Execution", "& Review"], fill: "#8FA6C0" },
+  { n: "06", lines: ["Task Orders", "& POs"], fill: "#BDD0E9", dark: true },
+  { n: "07", lines: ["Invoicing"], fill: "#E2ECF6", dashed: true, dark: true },
+  { n: "08", lines: ["Closeout"], fill: "#E2ECF6", dashed: true, dark: true },
+];
+
+function PrdChevron({ c, first }: { c: (typeof PRD_CHEV)[number]; first: boolean }) {
+  const d = first
+    ? "M2 30 H124 L148 64 L124 98 H2 Z"
+    : "M2 30 H124 L148 64 L124 98 H2 L26 64 Z";
+  return (
+    <svg className="prd-chev" viewBox="0 0 152 102" role="presentation">
+      <path d={d} fill={c.fill} stroke={c.dashed ? "#E1524A" : "none"} strokeWidth={c.dashed ? 2.2 : 0} strokeDasharray={c.dashed ? "7 5" : undefined} />
+      <circle cx="20" cy="15" r="13" fill={c.dashed ? "#fff" : "#1F3864"} stroke={c.dashed ? "#E1524A" : "#fff"} strokeWidth="2" strokeDasharray={c.dashed ? "4.5 3.5" : undefined} />
+      <text x="20" y="19.5" textAnchor="middle" fontSize="11.5" fontWeight="800" fill={c.dashed ? "#1F3864" : "#fff"}>{c.n}</text>
+      {c.lines.map((l, k) => (
+        <text key={l} x="80" y={c.lines.length === 1 ? 69 : 61 + k * 16} textAnchor="middle" fontSize="12.5" fontWeight="700" fill={c.dark ? "#16233A" : "#fff"}>{l}</text>
+      ))}
+    </svg>
+  );
+}
+
+const PRD_TOOLS: { l: string; ic: React.ReactNode }[] = [
+  { l: "Email", ic: <><rect x="3" y="5" width="18" height="14" rx="2" /><path d="M3 7l9 6 9-6" /></> },
+  { l: "Spreadsheets", ic: <><rect x="3" y="4" width="18" height="16" rx="1.5" /><path d="M3 9h18M3 14h18M9 4v16M15 4v16" /></> },
+  { l: "Word Documents", ic: <><path d="M6 3h9l4 4v14H6z" /><path d="M9 11h7M9 14h7M9 17h5" /></> },
+  { l: "PDF Forms", ic: <><path d="M6 3h9l4 4v14H6z" /><path d="M9 12h4M9 15h6" /><circle cx="10" cy="8" r="1.2" /></> },
+  { l: "Shared Drive", ic: <><path d="M3 8a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" /></> },
+  { l: "Scanned Paper", ic: <><path d="M7 4h8l3 3v13H7z" /><path d="M5 7h2M5 11h2M5 15h2" /><path d="M10 10h5M10 13h5" /></> },
+  { l: "Calendar Reminders", ic: <><rect x="3" y="5" width="18" height="16" rx="2" /><path d="M3 10h18M8 3v4M16 3v4" /><circle cx="12" cy="15" r="2" /></> },
+  { l: "Verbal Follow Up", ic: <><path d="M4 5h16v11H9l-5 4z" /><path d="M8 9h8M8 12h5" /></> },
+  { l: "Manual Status Log", ic: <><rect x="5" y="4" width="14" height="17" rx="2" /><path d="M9 3h6v3H9z" /><path d="M9 11h6M9 15h6" /></> },
+];
+
+const PRD_CHAIN: { l: string; note?: string }[] = [
+  { l: "Project Intake" },
+  { l: "Projected Advertisements", note: "status carries the work forward" },
+  { l: "Advertisement & Selection" },
+  { l: "Contract Execution", note: "documents built from the record" },
+  { l: "Task Orders & Purchase Orders" },
+  { l: "Invoicing", note: "everything filed in one place" },
+];
+
+const PRD_APPLY: { n: string; ti: string; tx: string; fill: string; dark?: boolean; ic: React.ReactNode }[] = [
+  { n: "01", ti: "Process Mapping", tx: "Process mapping conducted with the staff who perform the work", fill: "#1F3864",
+    ic: <><circle cx="6" cy="6" r="2" /><circle cx="18" cy="10" r="2" /><circle cx="9" cy="18" r="2" /><path d="M8 6h6a3 3 0 0 1 0 6h-4a3 3 0 0 0 0 6" /></> },
+  { n: "02", ti: "Workflow Rebuilds", tx: "Workflow rebuilds on platforms the agency can maintain independently", fill: "#46618C",
+    ic: <><rect x="9" y="3" width="6" height="5" rx="1" /><path d="M12 8v3M12 11l-6 3v2M12 11l6 3v2" /><rect x="3" y="16" width="6" height="5" rx="1" /><rect x="15" y="16" width="6" height="5" rx="1" /></> },
+  { n: "03", ti: "Integration", tx: "Integration with existing financial & records systems", fill: "#BDD0E9", dark: true,
+    ic: <><circle cx="9" cy="9" r="4" /><circle cx="16" cy="15" r="4" /><path d="M9 5v-2M9 15v-2M5 9h-2M15 9h-2M16 11v-2M16 21v-2M12 15h-2M22 15h-2" /></> },
+  { n: "04", ti: "Data Governance", tx: "Data governance designed in from the outset", fill: "#D6E2F1", dark: true,
+    ic: <><path d="M12 3l8 3v5c0 4.6-3.2 8.2-8 10-4.8-1.8-8-5.4-8-10V6z" /><path d="M9 12l2 2 4-4" /></> },
+  { n: "05", ti: "Training & Handover", tx: "Training & structured handover", fill: "#E7E9EC", dark: true,
+    ic: <><circle cx="9" cy="7" r="2.5" /><path d="M4 19c0-2.8 2.2-5 5-5" /><path d="M13 13l3 3 5-5" /><path d="M14 19h7" /></> },
+];
+
+function ProcessRebuildDeck() {
+  return (
+    <div className="prd-deck">
+
+      {/* ── 1 · cover ── */}
+      <section className="prd-slide prd-cover">
+        <span className="prd-stripe prd-s1" /><span className="prd-stripe prd-s2" /><span className="prd-stripe prd-s3" />
+        <img className="prd-cover-logo" src={PRD_LOGO} alt="Rawlins Infra Consult" />
+        <div className="prd-cover-band">
+          <div className="prd-cover-kicker">Capability Briefing</div>
+          <h3>Rebuilding an Agency Process End to End</h3>
+        </div>
+        <div className="prd-cover-ribbon">Consultant Contracting at a State DOT</div>
+      </section>
+
+      {/* ── 2 · the problem ── */}
+      <section className="prd-slide">
+        <PrdChrome />
+        <div className="prd-body">
+          <PrdHead t="The Problem" s="Eight Steps, Four Divisions, and Email In Between" />
+          <p className="prd-para">Consultant contracting extends from the entity agreement through advertisement, selection, protest handling, task orders, execution, invoicing, and closeout. Each step carries distinct ownership across procurement, legal, engineering, and accounting &mdash; yet the handoffs between them rely on email, spreadsheets, and information re-entered at every stage.</p>
+          <div className="prd-chevrow">
+            {PRD_CHEV.map((c, k) => <PrdChevron key={c.n} c={c} first={k === 0} />)}
+          </div>
+          <div className="prd-legend">
+            <span className="prd-leg-pill">Steps 1-6</span><span className="prd-leg-t">Built</span>
+            <span className="prd-leg-pill dashed">Steps 7-8</span><span className="prd-leg-t">Sequenced</span>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 3 · how we work ── */}
+      <section className="prd-slide">
+        <PrdChrome />
+        <div className="prd-body">
+          <PrdHead t="How We Work" s="Mapped with the People Who Perform the Work" />
+          <p className="prd-para">We developed the process map in working sessions with the staff who carry out each step &mdash; not those who oversee it. That distinction separates a workflow that is adopted from one that is worked around, and it brings forward the undocumented exceptions that decide whether a process initiative succeeds.</p>
+          <div className="prd-vs">
+            <div className="prd-vs-col">
+              <div className="prd-vs-banner light">
+                <span className="prd-vs-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#1F3864" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><circle cx="10" cy="7" r="3" /><path d="M4 19c0-3 2.7-5 6-5" /><circle cx="16.5" cy="15.5" r="3" /><path d="M16.5 13.6v-1.1M16.5 18.5v-1.1M18.4 15.5h1.1M13.6 15.5h1.1" /></svg></span>
+                <span>The Conventional Approach</span>
+              </div>
+              <ol className="prd-vs-list">
+                <li><span className="prd-vs-n light">01</span><p>The process is described by those who manage it</p></li>
+                <li><span className="prd-vs-n light">02</span><p>Only documented procedure enters the map</p></li>
+                <li><span className="prd-vs-n light">03</span><p>Exceptions emerge after implementation</p></li>
+              </ol>
+            </div>
+            <div className="prd-vs-mid">vs</div>
+            <div className="prd-vs-col right">
+              <div className="prd-vs-banner dark">
+                <span>Our Approach</span>
+                <span className="prd-vs-ic"><svg viewBox="0 0 24 24" fill="none" stroke="#1F3864" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M9 16a5.5 5.5 0 1 1 6 0v2H9z" /><path d="M10 21h4" /><path d="M12 3v1M5 6l.8.8M19 6l-.8.8" /></svg></span>
+              </div>
+              <ol className="prd-vs-list right">
+                <li><p>Working sessions with the staff who perform each step</p><span className="prd-vs-n dark">01</span></li>
+                <li><p>Undocumented exceptions identified early, by design</p><span className="prd-vs-n dark">02</span></li>
+                <li><p>A workflow that is adopted, not worked around</p><span className="prd-vs-n dark">03</span></li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 4 · what we built ── */}
+      <section className="prd-slide">
+        <PrdChrome />
+        <div className="prd-body">
+          <PrdHead t="What We Built" s="One Connected Workflow Instead of Eight Disconnected Ones" />
+          <div className="prd-built">
+            <div className="prd-built-col">
+              <h4 className="prd-h4">Today</h4>
+              <p className="prd-sub">Separate tools, stitched together by hand</p>
+              <span className="prd-underline" />
+              <div className="prd-scatter">
+                {PRD_TOOLS.map((tool) => (
+                  <div className="prd-tool" key={tool.l}>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#A98B5F" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">{tool.ic}</svg>
+                    <span>{tool.l}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="prd-built-arrow"><svg viewBox="0 0 24 24" fill="none" stroke="#1F3864" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12h14M13 6l6 6-6 6" /></svg></div>
+            <div className="prd-built-col">
+              <h4 className="prd-h4">In the system</h4>
+              <p className="prd-sub">One intake, one path forward</p>
+              <span className="prd-underline" />
+              <div className="prd-chain">
+                <div className="prd-chain-row">
+                  <div className="prd-box prd-box-intake">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="#1F3864" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"><path d="M7 3h8l3 3v15H7z" /><path d="M10 9h5M10 12h5M10 15h3" /></svg>
+                    <span><b>ONE INTAKE FORM</b><em>the only place work enters</em></span>
+                  </div>
+                </div>
+                {PRD_CHAIN.map((s) => (
+                  <div className="prd-chain-row" key={s.l}>
+                    <svg className="prd-down" viewBox="0 0 20 14" aria-hidden="true"><path d="M10 14 L2 4 h5 V0 h6 v4 h5 Z" fill="#1F3864" /></svg>
+                    <div className="prd-box">{s.l}</div>
+                    {s.note ? <span className="prd-note">{s.note}</span> : null}
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 5 · the architecture ── */}
+      <section className="prd-slide">
+        <PrdChrome />
+        <div className="prd-body">
+          <PrdHead t="The Architecture" s="Work Management, Integration Layer, Existing Systems" />
+          <div className="prd-arch-top">
+            <div>
+              <h4 className="prd-h4">How the system is layered</h4>
+              <p className="prd-sub">Work management on top, integration in the middle, the systems already in use underneath</p>
+              <span className="prd-underline" />
+            </div>
+            <div className="prd-arch-legend"><span className="prd-dash-glyph" />dashed = not yet connected, pending access approval</div>
+          </div>
+          <div className="prd-arch">
+            <div className="prd-arch-row">
+              <span className="prd-arch-side">where the work is tracked</span>
+              <div className="prd-band" style={{ background: "#D3E0F0" }}>
+                <b>Work management &mdash; monday.com</b>
+                <i>the record of where every project stands, and what moves it to the next stage</i>
+                <div className="prd-chips">{["Intake forms", "Boards & pipeline status", "Automations & approvals", "Views & dashboards"].map((c) => <span key={c}>{c}</span>)}</div>
+              </div>
+            </div>
+            <div className="prd-arch-arrows">{[0, 1, 2, 3].map((k) => <svg key={k} viewBox="0 0 12 22" aria-hidden="true"><path d="M6 1v20M6 1l-4 5M6 1l4 5M6 21l-4-5M6 21l4-5" stroke="#7d92ad" strokeWidth="1.7" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>)}</div>
+            <div className="prd-arch-row">
+              <span className="prd-arch-side">where the platforms talk to each other</span>
+              <div className="prd-band" style={{ background: "#A9C3E4" }}>
+                <b>Integration layer &mdash; Make</b>
+                <i>the only place the platforms hand work to one another; nothing crosses a boundary by hand</i>
+                <div className="prd-chips">{["Document generation", "Filing to storage", "Notices & email", "System-to-system sync"].map((c) => <span key={c}>{c}</span>)}</div>
+              </div>
+            </div>
+            <div className="prd-arch-arrows">{[0, 1, 2, 3].map((k) => <svg key={k} viewBox="0 0 12 22" aria-hidden="true"><path d="M6 1v20M6 1l-4 5M6 1l4 5M6 21l-4-5M6 21l4-5" stroke="#7d92ad" strokeWidth="1.7" fill="none" strokeLinecap="round" strokeLinejoin="round" /></svg>)}</div>
+            <div className="prd-arch-row">
+              <span className="prd-arch-side">where records already live</span>
+              <div className="prd-band" style={{ background: "#EDEEF0" }}>
+                <b>Systems already in place</b>
+                <i>left where they are &mdash; the layers above reach into them rather than replacing them</i>
+                <div className="prd-chips">
+                  {["Document storage", "Email", "Reporting exports", "Electronic signature"].map((c) => <span key={c}>{c}</span>)}
+                  <span className="dashed">Departmental systems <em>access pending</em></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 6 · proof ── */}
+      <section className="prd-slide">
+        <PrdChrome />
+        <div className="prd-body">
+          <PrdHead t="Proof" s="Validated by the People Who Will Operate It" />
+          <p className="prd-para">We ran a full working walkthrough of the built steps for more than twenty of the agency&rsquo;s staff across three divisions, the contracting team, their research and technology transfer arm, and their internal IT function. Working sessions on each individual step follow, staffed with the people who perform that step rather than with managers.</p>
+          <div className="prd-tiles">
+            <div className="prd-tile" style={{ background: "#1F3864" }}><b>20+</b><span>agency staff completed the full working walkthrough</span></div>
+            <div className="prd-tile" style={{ background: "#46618C" }}><b>3</b><span>divisions represented, contracting through internal IT</span></div>
+            <div className="prd-tile dark" style={{ background: "#BDD0E9" }}><b>1</b><span>working session per step, with the staff who perform it</span></div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── 7 · governance & handover ── */}
+      <section className="prd-slide">
+        <PrdChrome />
+        <div className="prd-body">
+          <PrdHead t="Governance & Handover" s="Designed So It Can Be Handed Over, & To Hold Up To Scrutiny" />
+          <p className="prd-para prd-para-lone">How data is handled is decided before anything is built, not after. In a consultant selection process that means the record retains the consensus outcome and never the individual evaluator&rsquo;s score, because that is what protects the people doing the evaluating. And the platform choice is driven by maintainability, so someone at the agency with no prior knowledge of the system can be trained to run it. We expect the work to outlast our engagement.</p>
+        </div>
+      </section>
+
+      {/* ── 8 · where this applies ── */}
+      <section className="prd-slide">
+        <PrdChrome />
+        <div className="prd-body">
+          <PrdHead t="Where This Applies" s="What We Do" />
+          <div className="prd-apply">
+            {PRD_APPLY.map((a) => (
+              <div className={"prd-apply-card" + (a.dark ? " dark" : "")} style={{ background: a.fill }} key={a.n}>
+                <b className="n">{a.n}</b>
+                <span className="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#1F3864" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">{a.ic}</svg></span>
+                <b className="ti">{a.ti}</b>
+                <p>{a.tx}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── 9 · thank you ── */}
+      <section className="prd-slide prd-cover prd-thanks">
+        <span className="prd-stripe prd-s1" /><span className="prd-stripe prd-s2" /><span className="prd-stripe prd-s3" />
+        <img className="prd-cover-logo" src={PRD_LOGO} alt="" aria-hidden="true" />
+        <div className="prd-cover-band"><h3>Thank you</h3></div>
+        <div className="prd-cover-ribbon prd-thanks-ribbon">
+          <span>rawlinsic.com &middot; info@rawlinsic.com</span>
+          <span>+1 (775) 843-3822 &middot; Reno, Nevada, USA</span>
+        </div>
+      </section>
+
     </div>
   );
 }
@@ -980,10 +1185,9 @@ export default function AutomationIntegrationInteractive({ embedded = false, eye
                 <p className="rai-modal-subtitle">{active.popupSubtitle}</p>
               </div>
 
+              {active.id === "process-rebuild" ? <ProcessRebuildDeck /> : <>
               <div className="rai-story" key={step}>
-                {active.id === "process-rebuild"
-                  ? <ProcessRebuildFigure tone={STEPS[step].tone} />
-                  : <StoryScene3D sceneId={active.id} tone={STEPS[step].tone} />}
+                <StoryScene3D sceneId={active.id} tone={STEPS[step].tone} />
                 <div className="rai-stage-text">
                   <div className="rai-kicker">Step {step + 1} of 3</div>
                   <h3 className="rai-step-title">{STEPS[step].k}</h3>
@@ -1006,8 +1210,9 @@ export default function AutomationIntegrationInteractive({ embedded = false, eye
                 <div className="rai-dots">{[0, 1, 2].map((k) => (<span key={k} className={"rai-dot" + (k === step ? " on" : "")} />))}</div>
                 <button className="rai-btn rai-btn-primary" onClick={() => setStep((s) => (s === 2 ? 0 : s + 1))}>{step === 2 ? "Start over" : "Next →"}</button>
               </div>
+              </>}
 
-              {step === 2 && (
+              {(step === 2 || active.id === "process-rebuild") && (
                 <div className="rai-final">
                   <blockquote className="rai-quote">{active.quote}</blockquote>
                   <div className="rai-stack">
@@ -1025,6 +1230,134 @@ export default function AutomationIntegrationInteractive({ embedded = false, eye
 }
 
 const CSS = `
+/* ── Example 01 deck (prd-) — the briefing's slides, remade ── */
+.prd-deck{display:flex;flex-direction:column;gap:18px;margin:24px 0 24px}
+.prd-slide{background:#fbfcfe;border:1px solid #dfe5ee;border-radius:16px;overflow:hidden;box-shadow:0 12px 30px rgba(16,34,61,.08)}
+.prd-body{padding:24px clamp(14px,3.4vw,36px) 30px}
+.prd-chrome{position:relative;height:42px;background:#1F3864}
+.prd-chrome-trap{position:absolute;left:50%;top:0;transform:translateX(-50%);width:46%;height:26px;background:#BDD0E9;clip-path:polygon(7% 0,93% 0,100% 100%,0 100%)}
+.prd-chrome-logo{position:absolute;left:16px;top:8px;height:26px;width:auto;z-index:1}
+.prd-head{text-align:center;margin-bottom:18px}
+.prd-head h3{margin:0;font-size:clamp(19px,2.6vw,24px);font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#1F3864}
+.prd-head p{margin:6px 0 0;font-size:clamp(14px,2vw,16.5px);font-weight:700;color:#2E4A77}
+.prd-rule{display:block;width:min(340px,70%);height:2px;background:#8096B4;margin:14px auto 0}
+.prd-para{font-size:14.5px;line-height:1.8;color:#33415c;text-align:center;max-width:760px;margin:0 auto 24px}
+.prd-para-lone{margin:26px auto 10px}
+.prd-h4{margin:0;font-size:17px;font-weight:800;color:#16233A}
+.prd-sub{margin:3px 0 0;font-size:13px;color:#44546A}
+.prd-underline{display:block;width:56px;height:2.5px;background:#8096B4;margin:9px 0 16px}
+
+/* cover + thank-you */
+.prd-cover{position:relative;background:#f4f5f7;min-height:250px;padding-bottom:34px}
+.prd-stripe{position:absolute;top:-60px;bottom:-60px;transform:rotate(13deg);pointer-events:none}
+.prd-s1{left:2%;width:74px;background:#1F3864}
+.prd-s2{left:calc(2% + 80px);width:30px;background:#C9D7EC}
+.prd-s3{left:calc(2% + 116px);width:22px;background:#2E4A77}
+.prd-cover-logo{position:absolute;right:26px;top:22px;height:52px;width:auto}
+.prd-cover-band{position:relative;margin-top:96px;background:#1F3864;padding:24px clamp(20px,6vw,48px) 28px clamp(120px,26%,240px)}
+.prd-cover-kicker{font-size:11px;font-weight:800;letter-spacing:.4em;text-transform:uppercase;color:#d8e2f2;margin-bottom:8px}
+.prd-cover-band h3{margin:0;color:#fff;font-size:clamp(20px,3.4vw,30px);font-weight:800;line-height:1.2}
+.prd-cover-ribbon{position:relative;margin-top:14px;margin-left:auto;width:fit-content;max-width:80%;background:#7387A8;color:#fff;font-weight:800;font-size:clamp(13px,2vw,16px);padding:11px 28px 11px 40px;clip-path:polygon(24px 0,100% 0,100% 100%,0 100%)}
+.prd-thanks .prd-cover-band{margin-top:88px}
+.prd-thanks-ribbon{display:flex;flex-direction:column;gap:4px;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase}
+
+/* slide 2 — chevrons */
+.prd-chevrow{display:grid;grid-template-columns:repeat(8,1fr);gap:2px 0;margin:4px 0 14px}
+.prd-chev{width:100%;height:auto;display:block}
+.prd-legend{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:10px;flex-wrap:wrap}
+.prd-leg-pill{background:#BDD0E9;color:#16233A;font-size:12px;font-weight:800;padding:6px 16px;border-radius:999px}
+.prd-leg-pill.dashed{background:#fff;border:2px dashed #E1524A}
+.prd-leg-t{font-size:13px;font-weight:800;color:#16233A;margin-right:12px}
+
+/* slide 3 — vs columns */
+.prd-vs{display:grid;grid-template-columns:1fr 44px 1fr;gap:8px;align-items:start}
+.prd-vs-banner{position:relative;display:flex;align-items:center;gap:12px;font-size:13.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:12px 18px;margin-bottom:16px}
+.prd-vs-banner.light{background:#C9D7EC;color:#16233A;clip-path:polygon(0 0,calc(100% - 18px) 0,100% 50%,calc(100% - 18px) 100%,0 100%);padding-right:30px}
+.prd-vs-banner.dark{background:#1F3864;color:#fff;clip-path:polygon(18px 0,100% 0,100% 100%,18px 100%,0 50%);padding-left:30px;justify-content:flex-end;text-align:right}
+.prd-vs-ic{flex:0 0 34px;width:34px;height:34px;border-radius:50%;background:#fff;border:3px solid #1F3864;display:flex;align-items:center;justify-content:center}
+.prd-vs-ic svg{width:19px;height:19px}
+.prd-vs-mid{align-self:center;justify-self:center;width:40px;height:40px;border-radius:10px;background:#eef2f8;color:#44546A;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;text-transform:uppercase;margin-top:64px}
+.prd-vs-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:16px}
+.prd-vs-list li{display:flex;align-items:center;gap:12px}
+.prd-vs-list.right li{justify-content:flex-end;text-align:right}
+.prd-vs-list p{margin:0;font-size:13.5px;line-height:1.55;color:#33415c;max-width:300px}
+.prd-vs-n{flex:0 0 38px;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:800}
+.prd-vs-n.light{background:#C9D7EC;color:#16233A}
+.prd-vs-n.dark{background:#1F3864;color:#fff}
+
+/* slide 4 — today vs in the system */
+.prd-built{display:grid;grid-template-columns:1fr 40px 1fr;gap:12px;align-items:start}
+.prd-built-arrow{align-self:center;justify-self:center;width:38px;height:38px;border-radius:50%;border:2px solid #1F3864;background:#fff;display:flex;align-items:center;justify-content:center;margin-top:120px}
+.prd-built-arrow svg{width:20px;height:20px}
+.prd-scatter{display:grid;grid-template-columns:repeat(3,1fr);gap:12px 10px;padding:8px 2px}
+.prd-tool{display:flex;flex-direction:column;align-items:center;gap:6px;background:#F7F1E7;border:1px solid #E3D5BC;border-radius:8px;box-shadow:0 4px 10px rgba(90,70,40,.12);padding:12px 6px;text-align:center}
+.prd-tool svg{width:24px;height:24px}
+.prd-tool span{font-size:11px;font-weight:800;color:#4a3f2f;line-height:1.25}
+.prd-scatter .prd-tool:nth-child(3n+1){transform:rotate(-3.5deg)}
+.prd-scatter .prd-tool:nth-child(3n+2){transform:rotate(2.5deg) translateY(4px)}
+.prd-scatter .prd-tool:nth-child(3n){transform:rotate(-1.5deg)}
+.prd-chain{display:flex;flex-direction:column;align-items:center;width:min(100%,240px)}
+.prd-chain-row{position:relative;display:flex;flex-direction:column;align-items:center;width:100%}
+.prd-down{width:15px;height:11px;margin:4px 0}
+.prd-box{width:100%;background:#DCE7F4;border:1.6px solid #1F3864;border-radius:10px;padding:9px 12px;text-align:center;font-size:12.5px;font-weight:700;color:#16233A}
+.prd-box-intake{display:flex;align-items:center;justify-content:center;gap:10px;background:#EAF1F9;border-width:2.2px}
+.prd-box-intake svg{width:22px;height:22px;flex:0 0 auto}
+.prd-box-intake span{display:flex;flex-direction:column;line-height:1.3}
+.prd-box-intake b{font-size:13.5px;letter-spacing:.03em}
+.prd-box-intake em{font-style:normal;font-size:11px;font-weight:600;color:#44546A}
+.prd-note{font-size:10.5px;line-height:1.35;color:#6b7891;margin-top:3px;text-align:center}
+@media (min-width: 900px){.prd-note{position:absolute;left:calc(100% + 10px);top:50%;transform:translateY(-30%);width:104px;margin:0;border-top:1.5px dashed #9FB4CB;padding-top:4px;text-align:left}}
+
+/* slide 5 — architecture */
+.prd-arch-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;margin-bottom:14px;flex-wrap:wrap}
+.prd-arch-legend{display:flex;align-items:center;gap:8px;font-size:11.5px;color:#44546A;margin-top:4px}
+.prd-dash-glyph{width:26px;height:14px;border:1.6px dashed #6b7891;border-radius:5px;flex:0 0 auto}
+.prd-arch-row{display:grid;grid-template-columns:130px 1fr;gap:14px;align-items:center}
+.prd-arch-side{font-size:12px;font-weight:700;color:#33415c;line-height:1.4}
+.prd-band{border:2px solid #1F3864;border-radius:14px;padding:12px 16px 14px}
+.prd-band b{display:block;font-size:14.5px;color:#16233A}
+.prd-band i{display:block;font-style:normal;font-size:12px;color:#2c3a52;margin:2px 0 10px}
+.prd-chips{display:flex;flex-wrap:wrap;gap:8px}
+.prd-chips span{background:#fff;border:1.4px solid #1F3864;border-radius:7px;padding:5px 12px;font-size:11.5px;font-weight:700;color:#16233A}
+.prd-chips span.dashed{border-style:dashed;border-color:#6b7891;color:#6b7891}
+.prd-chips span.dashed em{font-style:italic;font-weight:600}
+.prd-arch-arrows{display:flex;justify-content:space-around;padding:2px 0;margin-left:144px}
+.prd-arch-arrows svg{width:11px;height:20px}
+
+/* slide 6 — proof tiles */
+.prd-tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:4px}
+.prd-tile{border-radius:14px;padding:26px 18px;text-align:center;color:#fff}
+.prd-tile b{display:block;font-size:clamp(30px,5vw,44px);font-weight:800;line-height:1;margin-bottom:12px}
+.prd-tile span{font-size:12.5px;font-weight:700;line-height:1.5;display:block}
+.prd-tile.dark{color:#16233A}
+
+/* slide 8 — where this applies */
+.prd-apply{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.prd-apply-card{position:relative;border-radius:12px;padding:16px 12px 18px;color:#fff;display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,0 100%)}
+.prd-apply-card:last-child{clip-path:none}
+.prd-apply-card.dark{color:#16233A}
+.prd-apply-card .n{font-size:15px;font-weight:800}
+.prd-apply-card .ic{width:44px;height:44px;border-radius:50%;background:#fff;box-shadow:0 4px 10px rgba(16,34,61,.2);display:flex;align-items:center;justify-content:center}
+.prd-apply-card .ic svg{width:23px;height:23px}
+.prd-apply-card .ti{font-size:12.5px;font-weight:800;line-height:1.25}
+.prd-apply-card p{margin:0;font-size:10.8px;line-height:1.45;font-weight:600;opacity:.94}
+
+@media (max-width: 700px){
+  .prd-chevrow{grid-template-columns:repeat(4,1fr)}
+  .prd-vs{grid-template-columns:1fr}
+  .prd-vs-mid{margin:2px auto}
+  .prd-vs-banner.dark{clip-path:polygon(0 0,calc(100% - 18px) 0,100% 50%,calc(100% - 18px) 100%,0 100%);padding-left:18px;padding-right:30px;justify-content:flex-start;text-align:left;flex-direction:row-reverse}
+  .prd-vs-list.right li{flex-direction:row-reverse;justify-content:flex-start;text-align:left}
+  .prd-built{grid-template-columns:1fr}
+  .prd-built-arrow{margin:6px auto;transform:rotate(90deg)}
+  .prd-arch-row{grid-template-columns:1fr;gap:6px}
+  .prd-arch-arrows{margin-left:0}
+  .prd-tiles{grid-template-columns:1fr}
+  .prd-apply{grid-template-columns:1fr 1fr}
+  .prd-apply-card{clip-path:none !important}
+  .prd-cover-band{margin-top:84px;padding-left:clamp(96px,20%,150px)}
+}
+
 /* The site hides the native cursor and each page draws its own dot+ring. This
    page doesn't render that, and the hub sets its own grab/pointer cursors, so
    restore the real cursor instead of leaving none over the nav. The site sets
