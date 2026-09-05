@@ -537,8 +537,8 @@ function PrdFig({ fig }: { fig: string }) {
         {PRD_CHEV.map((c, k) => <PrdChevron key={c.n} c={c} first={k === 0} />)}
       </div>
       <div className="prd-legend">
-        <span className="prd-leg-pill">Steps 1-6</span><span className="prd-leg-t">Built</span>
-        <span className="prd-leg-pill dashed">Steps 7-8</span><span className="prd-leg-t">Sequenced</span>
+        <span className="prd-leg-item"><span className="prd-leg-pill">Steps 1-6</span><span className="prd-leg-t">Built</span></span>
+        <span className="prd-leg-item"><span className="prd-leg-pill dashed">Steps 7-8</span><span className="prd-leg-t">Sequenced</span></span>
       </div>
     </div>
   );
@@ -685,15 +685,9 @@ function PrdFig({ fig }: { fig: string }) {
     </div>
   );
   return (
-    <div className="prd-panel prd-apply-img" role="img" aria-label="Where this applies: process mapping, workflow rebuilds, integration, data governance, and training & handover">
-      {/* the actual graphic from the briefing; on phones it splits into its
-          five cards, stacked, so the text stays readable */}
-      <img className="prd-wta-wide" src="/images/pages/where-this-applies.png" alt="" aria-hidden="true" />
-      <div className="prd-wta-stack">
-        {[1, 2, 3, 4, 5].map((k) => (
-          <img key={k} src={`/images/pages/where-this-applies-${k}.png`} alt="" aria-hidden="true" />
-        ))}
-      </div>
+    <div className="prd-panel prd-apply-img">
+      {/* the actual graphic from the briefing, per Nicole */}
+      <img src="/images/pages/where-this-applies.png" alt="Where this applies: process mapping, workflow rebuilds, integration, data governance, and training & handover" />
     </div>
   );
 }
@@ -1207,9 +1201,11 @@ const CSS = `
 .prd-chevrow{display:grid;grid-template-columns:repeat(8,1fr);gap:2px 0;margin:2px 0 12px}
 .prd-chev{width:100%;height:auto;display:block}
 .prd-legend{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.prd-leg-item{display:flex;align-items:center;gap:10px;white-space:nowrap}
+.prd-leg-item + .prd-leg-item{margin-left:14px}
 .prd-leg-pill{background:#BDD0E9;color:#16233A;font-size:12px;font-weight:800;padding:6px 16px;border-radius:999px}
 .prd-leg-pill.dashed{background:#fff;border:2px dashed #E1524A}
-.prd-leg-t{font-size:13px;font-weight:800;color:#16233A;margin-right:12px}
+.prd-leg-t{font-size:13px;font-weight:800;color:#16233A}
 
 /* how we work — conventional vs ours */
 .prd-vs{display:grid;grid-template-columns:1fr 44px 1fr;gap:8px;align-items:start}
@@ -1292,7 +1288,6 @@ const CSS = `
 /* where this applies — the slide's own graphic */
 .prd-apply-img{padding:12px}
 .prd-apply-img img{display:block;width:100%;height:auto;border-radius:10px}
-.prd-wta-stack{display:none}
 
 @media (max-width: 760px){
   .rai-story.prd-side{display:flex;flex-direction:column;gap:14px}
@@ -1312,9 +1307,6 @@ const CSS = `
   .prd-arch-row{grid-template-columns:1fr;gap:6px}
   .prd-arch-arrows{margin-left:0}
   .prd-tiles{grid-template-columns:1fr}
-  .prd-wta-wide{display:none}
-  .prd-wta-stack{display:flex;flex-direction:column;gap:10px}
-  .prd-wta-stack img{width:100%;height:auto;border-radius:10px}
 }
 
 /* The site hides the native cursor and each page draws its own dot+ring. This
