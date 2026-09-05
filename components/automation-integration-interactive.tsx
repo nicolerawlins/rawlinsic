@@ -1287,8 +1287,7 @@ const CSS = `
 
 /* stacked steps: heading above, bullets below */
 .rai-story.prd-stacked{gap:16px}
-.prd-above{text-align:center}
-.prd-above .rai-step-cap{margin-left:auto;margin-right:auto}
+.prd-above{text-align:left}
 .rai-step-list.prd-below{margin-top:2px}
 .prd-web{position:absolute;inset:0;width:100%;height:100%;z-index:0}
 .prd-scatter{position:relative}
